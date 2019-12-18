@@ -55,7 +55,7 @@ class NewNoteFragment : Fragment() {
             newNoteViewModel.onNoteTitleChanged(it.toString())
         }
 
-        createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_new_note) }
+        createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
         createNote_pin.setOnClickListener { newNoteViewModel.onPin() }
         createNote_archive.setOnClickListener { newNoteViewModel.onArchive() }
     }

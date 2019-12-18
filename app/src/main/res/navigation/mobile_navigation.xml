@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_nav_home_to_nav_gallery"
-            app:destination="@id/nav_new_note" />
+            app:destination="@+id/nav_new_note" />
     </fragment>
 
     <fragment
@@ -20,28 +20,4 @@
         android:name="pw.cub3d.cub3_notes.ui.newnote.NewNoteFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_new_note" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="pw.cub3d.cub3_notes.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-
-    <fragment
-        android:id="@+id/nav_tools"
-        android:name="pw.cub3d.cub3_notes.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
-
-    <fragment
-        android:id="@+id/nav_share"
-        android:name="pw.cub3d.cub3_notes.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
-
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="pw.cub3d.cub3_notes.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
 </navigation>
