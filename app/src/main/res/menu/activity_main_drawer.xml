@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_notes"
+            android:icon="@drawable/ic_lightbulb"
+            android:title="Notes" />
+    </group>
+
+    <item android:title="Labels">
+        <menu>
+            <item
+                android:id="@+id/nav_new_label"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Create new label" />
+        </menu>
+    </item>
+
+    <group>
+        <item
+            android:id="@+id/nav_archived"
+            android:icon="@drawable/ic_package"
+            android:title="Archive"/>
+        <item
+            android:id="@+id/nav_deleted"
+            android:icon="@drawable/ic_package"
+            android:title="Deleted"/>
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Settings"/>
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Help &amp; feedback"/>
+    </group>
+
+</menu>
