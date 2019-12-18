@@ -2,6 +2,7 @@ package pw.cub3d.cub3_notes.ui.home
 
 import android.content.Context
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Note.NOTE
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -17,6 +18,7 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.RoomDB
+import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
 
@@ -135,10 +137,10 @@ class HomeFragment : Fragment() {
         })
 
         home_takeNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController()) }
-        home_new_checkNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), NewNoteNavigationController.NOTE_TYPE_CHECK) }
-        home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), NewNoteNavigationController.NOTE_TYPE_DRAW) }
-        home_new_voiceNote.setOnClickListener{ newNoteNavigationController.navigateNewNote(findNavController(), NewNoteNavigationController.NOTE_TYPE_AUDIO) }
-        home_new_imgNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), NewNoteNavigationController.NOTE_TYPE_IMAGE) }
+        home_new_checkNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
+        home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_DRAW) }
+        home_new_voiceNote.setOnClickListener{ newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_AUDIO) }
+        home_new_imgNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_IMAGE) }
     }
 
     override fun onCreateView(

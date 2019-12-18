@@ -29,10 +29,16 @@ class NoteViewHolder(
     )!!
 
     fun bind(note: Note) {
-        title.text = note.title
+        if(note.title.isNotEmpty()) {
+            title.text = note.title
+            title.visibility = View.VISIBLE
+        } else {
+            title.visibility = View.GONE
+        }
 
         if(note.text.isNotEmpty()) {
             text.text = note.text
+            text.visibility = View.VISIBLE
         } else {
             text.visibility = View.GONE
         }

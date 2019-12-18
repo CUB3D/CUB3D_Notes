@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 class NewNoteNavigationController @Inject constructor() {
-    fun navigateNewNote(nav: NavController, type: String = NOTE_TYPE_TEXT) {
+    fun navigateNewNote(nav: NavController, type: String = Note.TYPE_TEXT) {
         nav.navigate(R.id.nav_new_note, Bundle().apply {
             putString(KEY_NOTE_TYPE, type)
         })
@@ -28,12 +28,5 @@ class NewNoteNavigationController @Inject constructor() {
     companion object {
         const val KEY_NOTE_TYPE = "NOTE_TYPE"
         const val KEY_NOTE = "NOTE"
-
-        const val NOTE_TYPE_TEXT = "TEXT"
-        const val NOTE_TYPE_CHECK = "CHECK"
-        const val NOTE_TYPE_DRAW = "DRAW"
-        const val NOTE_TYPE_AUDIO = "AUDIO"
-        const val NOTE_TYPE_IMAGE = "IMAGE"
-
     }
 }

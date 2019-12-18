@@ -15,6 +15,8 @@ class NewNoteViewModel(
 
     private var note = Note()
 
+    var type = MutableLiveData<String>()
+
     private fun saveNote() {
         println("Note: $note")
         GlobalScope.launch {
@@ -51,6 +53,12 @@ class NewNoteViewModel(
     }
 
     fun setNoteType(it: String) {
-        note.type = Note.TYPE_CHECKBOX
+        note.type = it
+        type.value = it
+        saveNote()
+    }
+
+    fun save() {
+        saveNote()
     }
 }

@@ -22,6 +22,11 @@ abstract class NotesDao {
     abstract fun updateNote(note: Note)
 
     fun save(note: Note) {
+        if(note.title.isEmpty() && note.text.isEmpty() && note.checkboxEntry.isEmpty()) {
+            println("Attempt to save empty note")
+            return
+        }
+
         // If the note dose't exist yet
         if(note.id == 0L) {
             println("Inserted note: $note")

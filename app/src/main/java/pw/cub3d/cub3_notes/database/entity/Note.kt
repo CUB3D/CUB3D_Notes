@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Month
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -37,10 +38,16 @@ data class Note(
     )
 
     fun getLocalModificationTime(): String {
-        return ZonedDateTime.parse(this.modificationTime, DateTimeFormatter.ISO_ZONED_DATE_TIME)
-            .toLocalDateTime().format(
-            DateTimeFormatter.ofPattern("HH:mm")
-        )
+        try {
+            return ZonedDateTime.parse(this.modificationTime, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                .toLocalDateTime().format(
+                    DateTimeFormatter.ofPattern("HH:mm")
+                )
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            return LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+        }
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -59,10 +66,11 @@ data class Note(
     }
 
     companion object CREATOR : Parcelable.Creator<Note> {
-        const val TYPE_TEXT = "text"
-        const val TYPE_CHECKBOX = "checkbox"
-        const val TYPE_DRAW = "draw"
-        const val TYPE_AUDIO = "audio"
+        const val TYPE_TEXT = "TEXT"
+        const val TYPE_CHECKBOX = "CHECK"
+        const val TYPE_DRAW = "DRAW"
+        const val TYPE_AUDIO = "AUDIO"
+        const val TYPE_IMAGE = "IMAGE"
 
         override fun createFromParcel(parcel: Parcel): Note {
             return Note(parcel)
