@@ -1,5 +1,6 @@
 package pw.cub3d.cub3_notes.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -8,30 +9,27 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.selection.*
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.RoomDB
+import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
+import javax.inject.Inject
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
+    @Inject lateinit var homeViewModelFactory: NotesViewModelFactory
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val factory = NotesViewModelFactory(RoomDB.getDatabase(requireContext()).notesDao())
+    @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
 
-        homeViewModel =
-            ViewModelProviders.of(this, factory).get(HomeViewModel::class.java)
-
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         homeViewModel.pinnedNotes.observe(this, Observer {
             if(it.isEmpty()) {
@@ -46,12 +44,8 @@ class HomeFragment : Fragment() {
             home_othersTitle.visibility = View.VISIBLE
 
             home_pinnedNotes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            val adapter = NotesAdapter(requireContext(), it) {
-                // On note clicked
-                findNavController(this).navigate(R.id.nav_new_note, Bundle().apply {
-                    putParcelable("NOTE_ID", it)
-                })
-            }
+
+            val adapter = NotesAdapter(requireContext(), it) { note -> newNoteNavigationController.editNote(findNavController(), note) }
 
             home_pinnedNotes.adapter = adapter
 
@@ -87,12 +81,7 @@ class HomeFragment : Fragment() {
         homeViewModel.unpinnedNotes.observe(this, Observer {
             home_notes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-            val adapter =  NotesAdapter(requireContext(), it) {
-                // On note clicked
-                findNavController(this).navigate(R.id.nav_new_note, Bundle().apply {
-                    putParcelable("NOTE_ID", it)
-                })
-            }
+            val adapter = NotesAdapter(requireContext(), it) { note -> newNoteNavigationController.editNote(findNavController(), note) }
 
             home_notes.adapter = adapter
 
@@ -145,6 +134,28 @@ class HomeFragment : Fragment() {
             })
         })
 
-        return root
+        home_takeNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController()) }
+        home_new_checkNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), NewNoteNavigationController.NOTE_TYPE_CHECK) }
+        home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), NewNoteNavigationController.NOTE_TYPE_DRAW) }
+        home_new_voiceNote.setOnClickListener{ newNoteNavigationController.navigateNewNote(findNavController(), NewNoteNavigationController.NOTE_TYPE_AUDIO) }
+        home_new_imgNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), NewNoteNavigationController.NOTE_TYPE_IMAGE) }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        homeViewModelFactory = NotesViewModelFactory(RoomDB.getDatabase(requireContext()).notesDao())
+
+        homeViewModel =
+            ViewModelProviders.of(this, homeViewModelFactory).get(HomeViewModel::class.java)
+
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 }

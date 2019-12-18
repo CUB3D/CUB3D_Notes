@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_new_note.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
 
 class NewNoteFragment : Fragment() {
@@ -36,15 +39,13 @@ class NewNoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-            it.getParcelable<Note>("NOTE_ID")?.let {
-                newNoteViewModel.setNote(it)
-                createNote_text.setText(it.text)
-                createNote_title.setText(it.title)
+            it.getParcelable<Note>(NewNoteNavigationController.KEY_NOTE)?.let { note ->
+                newNoteViewModel.setNote(note)
+                createNote_text.setText(note.text)
+                createNote_title.setText(note.title)
             }
 
-            it.getString("NOTE_TYPE")?.let {
-                newNoteViewModel.setNoteType(it)
-            }
+            it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> newNoteViewModel.setNoteType(type) }
         }
 
         createNote_text.doAfterTextChanged {

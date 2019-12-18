@@ -1,18 +1,18 @@
 package pw.cub3d.cub3_notes.activity
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import android.view.Menu
-import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.activity_main.*
 import pw.cub3d.cub3_notes.R
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,11 +21,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -33,39 +30,19 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.nav_home,
                 R.id.nav_new_note
-            ), drawerLayout
+            ), drawer_layout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        nav_view.setupWithNavController(navController)
 
-        home_takeNote.setOnClickListener {
-            navController.navigate(R.id.nav_new_note, Bundle().apply {
-                putString("NOTE_TYPE", "text")
-            })
-        }
-
-        home_new_checkNote.setOnClickListener {
-            navController.navigate(R.id.nav_new_note, Bundle().apply {
-                putString("NOTE_TYPE", "check")
-            })
-        }
-
-        home_new_penNote.setOnClickListener {
-            navController.navigate(R.id.nav_new_note, Bundle().apply {
-                putString("NOTE_TYPE", "draw")
-            })
-        }
-
-        home_new_voiceNote.setOnClickListener {
-            navController.navigate(R.id.nav_new_note, Bundle().apply {
-                putString("NOTE_TYPE", "audio")
-            })
-        }
-
-        home_new_imgNote.setOnClickListener {
-            navController.navigate(R.id.nav_new_note, Bundle().apply {
-                putString("NOTE_TYPE", "image")
-            })
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.nav_new_note) {
+                main_appBar.visibility = View.GONE
+                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            } else {
+                main_appBar.visibility = View.VISIBLE
+                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            }
         }
     }
 
