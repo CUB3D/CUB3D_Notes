@@ -1,27 +1,34 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
+import android.provider.Settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pw.cub3d.cub3_notes.database.NotesDao
+import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
+import pw.cub3d.cub3_notes.database.dao.NotesDao
+import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Note
+import java.time.ZonedDateTime
 
 class NewNoteViewModel(
-    private val dao: NotesDao
+    private val dao: NotesDao,
+    private val checkboxEntryDao: CheckboxEntryDao
 ) : ViewModel() {
 
     private var note = Note()
 
-    var type = MutableLiveData<String>()
+    var checkboxes: LiveData<List<CheckboxEntry>> = MutableLiveData<List<CheckboxEntry>>()
+
+    var type = MutableLiveData<String>().apply { value = Note.TYPE_TEXT }
+    var modificationTime = MutableLiveData<String>().apply { value = note.getLocalModificationTime() }
 
     private fun saveNote() {
         println("Note: $note")
-        GlobalScope.launch {
-            dao.save(note)
-        }
+        GlobalScope.launch { dao.save(note) }
+        modificationTime.value = note.getLocalModificationTime()
+        checkboxes = checkboxEntryDao.getByNoteLive(note.id)
     }
 
     fun onNoteTextChanged(text: String) {
@@ -50,6 +57,8 @@ class NewNoteViewModel(
 
     fun setNote(note: Note) {
         this.note = note
+
+        checkboxes = checkboxEntryDao.getByNoteLive(note.id)
     }
 
     fun setNoteType(it: String) {
@@ -59,6 +68,14 @@ class NewNoteViewModel(
     }
 
     fun save() {
+        saveNote()
+    }
+
+    fun addCheckbox() {
+        val chk = CheckboxEntry(noteId = note.id)
+        note.checkboxEntry.add(chk)
+        GlobalScope.launch { checkboxEntryDao.insert(chk) }
+
         saveNote()
     }
 }

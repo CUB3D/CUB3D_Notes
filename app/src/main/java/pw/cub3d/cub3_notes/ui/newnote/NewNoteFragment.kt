@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_new_note.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
-import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
 
@@ -36,10 +34,10 @@ class NewNoteFragment : Fragment() {
     ): View? {
         newNoteViewModel =
             ViewModelProviders.of(this, newNoteViewModelFactory).get(NewNoteViewModel::class.java)
-
-        val binding: FragmentNewNoteBinding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
-
-        binding.newNoteViewModel = newNoteViewModel
+//
+//        val binding: FragmentNewNoteBinding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
+//
+//        binding.newNoteViewModel = newNoteViewModel
 
         return inflater.inflate(R.layout.fragment_new_note, container, false)
     }
@@ -52,11 +50,14 @@ class NewNoteFragment : Fragment() {
                 newNoteViewModel.setNote(note)
                 createNote_text.setText(note.text)
                 createNote_title.setText(note.title)
-                createNote_lastEdited.text = note.getLocalModificationTime()
             }
 
             it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> newNoteViewModel.setNoteType(type) }
         }
+
+        newNoteViewModel.modificationTime.observe(this, Observer {
+            createNote_lastEdited.text = it
+        })
 
         createNote_text.doAfterTextChanged {
             newNoteViewModel.onNoteTextChanged(it.toString())
@@ -70,14 +71,18 @@ class NewNoteFragment : Fragment() {
             if(type == Note.TYPE_CHECKBOX) {
                 createNote_text.visibility = View.GONE
                 createNote_checkBoxes.visibility = View.VISIBLE
+                createNote_newItem.visibility = View.VISIBLE
             } else if(type == Note.TYPE_TEXT) {
                 createNote_text.visibility = View.VISIBLE
                 createNote_checkBoxes.visibility = View.GONE
+                createNote_newItem.visibility = View.GONE
             }
         })
 
-        createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-        createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext())
+        newNoteViewModel.checkboxes.observe(this, Observer {
+            createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
+            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it)
+        })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
         createNote_pin.setOnClickListener { newNoteViewModel.onPin() }
@@ -85,6 +90,8 @@ class NewNoteFragment : Fragment() {
             newNoteViewModel.onArchive()
             findNavController().popBackStack()
         }
+
+        createNote_newItem.setOnClickListener { newNoteViewModel.addCheckbox() }
     }
 
     override fun onPause() {

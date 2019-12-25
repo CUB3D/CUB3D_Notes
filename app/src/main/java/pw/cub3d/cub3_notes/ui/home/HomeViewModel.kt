@@ -1,7 +1,7 @@
 package pw.cub3d.cub3_notes.ui.home
 
 import androidx.lifecycle.ViewModel
-import pw.cub3d.cub3_notes.database.NotesDao
+import pw.cub3d.cub3_notes.database.dao.NotesDao
 
 class HomeViewModel(
     private val notesDao: NotesDao

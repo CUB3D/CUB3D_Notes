@@ -24,7 +24,7 @@ data class Note(
     var modificationTime: String = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
     var type: String = TYPE_TEXT,
 
-    @Ignore val checkboxEntry: List<CheckboxEntry> = emptyList()
+    @Ignore val checkboxEntry: MutableList<CheckboxEntry> = mutableListOf()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
@@ -34,19 +34,19 @@ data class Note(
         parcel.readByte() != 0.toByte(),
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readArrayList(ClassLoader.getSystemClassLoader()) as List<CheckboxEntry>
+        parcel.readArrayList(ClassLoader.getSystemClassLoader()) as MutableList<CheckboxEntry>
     )
 
     fun getLocalModificationTime(): String {
-        try {
-            return ZonedDateTime.parse(this.modificationTime, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+        return try {
+            ZonedDateTime.parse(this.modificationTime, DateTimeFormatter.ISO_ZONED_DATE_TIME)
                 .toLocalDateTime().format(
                     DateTimeFormatter.ofPattern("HH:mm")
                 )
         } catch (e: Exception) {
             e.printStackTrace()
 
-            return LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
         }
     }
 
@@ -58,11 +58,15 @@ data class Note(
         parcel.writeByte(if (archived) 1 else 0)
         parcel.writeString(modificationTime)
         parcel.writeString(type)
-        parcel.writeList(checkboxEntry)
+        parcel.writeList(checkboxEntry.toList())
     }
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    fun updateModificationTime() {
+        modificationTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
     }
 
     companion object CREATOR : Parcelable.Creator<Note> {

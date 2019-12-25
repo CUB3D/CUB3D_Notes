@@ -11,6 +11,11 @@ class DatabaseModule {
     @Singleton
     @Provides
     fun provideNotesDao(database: RoomDB) = database.notesDao()
+    @Singleton
+    @Provides
+    fun provideCheckboxEntityDao(database: RoomDB) = database.checkboxEntryDao()
+
+
 
     @Singleton
     @Provides

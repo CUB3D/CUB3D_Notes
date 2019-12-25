@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
+import pw.cub3d.cub3_notes.database.dao.NotesDao
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Note
 
@@ -47,6 +49,7 @@ object Migrations {
 )
 abstract class RoomDB: RoomDatabase() {
     abstract fun notesDao(): NotesDao
+    abstract fun checkboxEntryDao(): CheckboxEntryDao
 
     companion object {
         @Volatile

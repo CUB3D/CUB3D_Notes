@@ -1,4 +1,4 @@
-package pw.cub3d.cub3_notes.database
+package pw.cub3d.cub3_notes.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -26,6 +26,8 @@ abstract class NotesDao {
             println("Attempt to save empty note")
             return
         }
+
+        note.updateModificationTime()
 
         // If the note dose't exist yet
         if(note.id == 0L) {
