@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
@@ -28,6 +29,8 @@ class NoteViewHolder(
         R.id.note_root
     )!!
 
+    private val checkboxes = view.findViewById<RecyclerView>(R.id.note_checks)!!
+
     fun bind(note: Note) {
         if(note.title.isNotEmpty()) {
             title.text = note.title
@@ -43,6 +46,14 @@ class NoteViewHolder(
             text.visibility = View.GONE
         }
 
+        if(note.type == Note.TYPE_CHECKBOX) {
+            println("Drawing checkbox note $note")
+            checkboxes.layoutManager = LinearLayoutManager(view.context)
+            checkboxes.adapter = HomeCheckboxAdapter(view.context, note.checkboxEntry)
+            checkboxes.visibility = View.VISIBLE
+        } else {
+            checkboxes.visibility = View.GONE
+        }
 
 
         root.setOnClickListener { callback.invoke(note) }

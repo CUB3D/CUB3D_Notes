@@ -1,19 +1,19 @@
 package pw.cub3d.cub3_notes.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 
 @Dao
 abstract class NotesDao {
+    @Transaction
     @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0")
-    abstract fun getAllUnpinnedNotes(): LiveData<List<Note>>
+    abstract fun getAllUnpinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
+    @Transaction
     @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0")
-    abstract fun getAllPinnedNotes(): LiveData<List<Note>>
+    abstract fun getAllPinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Insert
     abstract fun insert(note: Note): Long
@@ -37,6 +37,8 @@ abstract class NotesDao {
             updateNote(note)
             println("Updated note: $note")
         }
+
+        note.checkboxEntry.forEach { it.noteId = note.id }
     }
 
     @Query("SELECT * FROM notes WHERE id = :noteId")

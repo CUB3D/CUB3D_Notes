@@ -17,6 +17,11 @@ class NewNoteViewModel(
     private val checkboxEntryDao: CheckboxEntryDao
 ) : ViewModel() {
 
+    fun onCheckboxChecked(checkboxEntry: CheckboxEntry) {
+        checkboxEntry.checked = !checkboxEntry.checked
+        GlobalScope.launch { checkboxEntryDao.save(checkboxEntry) }
+    }
+
     private var note = Note()
 
     var checkboxes: LiveData<List<CheckboxEntry>> = MutableLiveData<List<CheckboxEntry>>()
@@ -26,7 +31,10 @@ class NewNoteViewModel(
 
     private fun saveNote() {
         println("Note: $note")
-        GlobalScope.launch { dao.save(note) }
+        GlobalScope.launch {
+            dao.save(note)
+            checkboxEntryDao.saveAll(note.checkboxEntry)
+        }
         modificationTime.value = note.getLocalModificationTime()
         checkboxes = checkboxEntryDao.getByNoteLive(note.id)
     }
@@ -57,8 +65,8 @@ class NewNoteViewModel(
 
     fun setNote(note: Note) {
         this.note = note
-
         checkboxes = checkboxEntryDao.getByNoteLive(note.id)
+        type.value = note.type
     }
 
     fun setNoteType(it: String) {
@@ -77,5 +85,13 @@ class NewNoteViewModel(
         GlobalScope.launch { checkboxEntryDao.insert(chk) }
 
         saveNote()
+    }
+
+    fun onCheckboxDelete(entry: CheckboxEntry) {
+        GlobalScope.launch { checkboxEntryDao.delete(entry.id) }
+    }
+
+    fun onCheckboxChanged(entry: CheckboxEntry) {
+        GlobalScope.launch { checkboxEntryDao.save(entry) }
     }
 }

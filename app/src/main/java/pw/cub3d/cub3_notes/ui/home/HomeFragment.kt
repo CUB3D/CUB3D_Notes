@@ -26,8 +26,8 @@ import javax.inject.Inject
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
-    @Inject lateinit var homeViewModelFactory: NotesViewModelFactory
 
+    @Inject lateinit var homeViewModelFactory: NotesViewModelFactory
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -148,7 +148,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModelFactory = NotesViewModelFactory(RoomDB.getDatabase(requireContext()).notesDao())
 
         homeViewModel =
             ViewModelProviders.of(this, homeViewModelFactory).get(HomeViewModel::class.java)

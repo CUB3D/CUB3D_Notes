@@ -5,9 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "checkbox_entry")
 data class CheckboxEntry(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val noteId: Long = 0,
-    val content: String = "",
-    val checked: Boolean = false,
+    @PrimaryKey(autoGenerate = true) var id: Long = 0,
+    var noteId: Long = 0,
+    var content: String = "",
+    var checked: Boolean = false,
     val indentLevel: Int = 0
 )

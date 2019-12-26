@@ -47,6 +47,7 @@ class NewNoteFragment : Fragment() {
 
         arguments?.let {
             it.getParcelable<Note>(NewNoteNavigationController.KEY_NOTE)?.let { note ->
+                println("Editing note: $note")
                 newNoteViewModel.setNote(note)
                 createNote_text.setText(note.text)
                 createNote_title.setText(note.title)
@@ -80,8 +81,9 @@ class NewNoteFragment : Fragment() {
         })
 
         newNoteViewModel.checkboxes.observe(this, Observer {
+            println("Updating checkboxes: $it")
             createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it)
+            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { newNoteViewModel.onCheckboxChecked(it) }, { newNoteViewModel.onCheckboxDelete(it) }, { newNoteViewModel.onCheckboxChanged(it) })
         })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
