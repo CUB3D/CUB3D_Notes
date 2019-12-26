@@ -36,7 +36,7 @@ class NewNoteViewModel(
             checkboxEntryDao.saveAll(note.checkboxEntry)
         }
         modificationTime.value = note.getLocalModificationTime()
-        checkboxes = checkboxEntryDao.getByNoteLive(note.id)
+//        checkboxes = checkboxEntryDao.getByNoteLive(note.id)
     }
 
     fun onNoteTextChanged(text: String) {
@@ -77,6 +77,7 @@ class NewNoteViewModel(
 
     fun save() {
         saveNote()
+        GlobalScope.launch { checkboxEntryDao.saveAll(checkboxes.value!!) }
     }
 
     fun addCheckbox() {
@@ -89,9 +90,5 @@ class NewNoteViewModel(
 
     fun onCheckboxDelete(entry: CheckboxEntry) {
         GlobalScope.launch { checkboxEntryDao.delete(entry.id) }
-    }
-
-    fun onCheckboxChanged(entry: CheckboxEntry) {
-        GlobalScope.launch { checkboxEntryDao.save(entry) }
     }
 }

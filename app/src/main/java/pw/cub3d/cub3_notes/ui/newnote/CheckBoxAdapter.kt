@@ -16,16 +16,14 @@ class CheckBoxAdapter(
     ctx: Context,
     private val checkboxEntries: List<CheckboxEntry>,
     private val checkedCallback: (CheckboxEntry)->Unit,
-    private val deleteCallback: (CheckboxEntry)->Unit,
-    private val textChangeCallback: (CheckboxEntry)->Unit
+    private val deleteCallback: (CheckboxEntry)->Unit
 ) : RecyclerView.Adapter<CheckBoxViewHolder>() {
     private val layoutInflater = LayoutInflater.from(ctx)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CheckBoxViewHolder(
         layoutInflater.inflate(R.layout.checkbox_entry, parent, false),
         checkedCallback,
-        deleteCallback,
-        textChangeCallback
+        deleteCallback
     )
 
     override fun getItemCount() = checkboxEntries.size
@@ -38,8 +36,7 @@ class CheckBoxAdapter(
 class CheckBoxViewHolder(
     view: View,
     private val checkedCallback: (CheckboxEntry) -> Unit,
-    private val deleteCallback: (CheckboxEntry) -> Unit,
-    private val textChangeCallback: (CheckboxEntry) -> Unit
+    private val deleteCallback: (CheckboxEntry) -> Unit
 ): RecyclerView.ViewHolder(view) {
     private val check = view.findViewById<CheckBox>(R.id.checkboxEntry_check)!!
     private val delete = view.findViewById<ImageView>(R.id.checkboxEntry_delete)!!
@@ -52,6 +49,6 @@ class CheckBoxViewHolder(
         delete.setOnClickListener {  deleteCallback(checkboxEntry) }
         text.setText(checkboxEntry.content)
         text.doAfterTextChanged { checkboxEntry.content = text.text.toString(); }
-//        text.setOnFocusChangeListener { v, hasFocus -> if(!hasFocus) textChangeCallback(checkboxEntry) }
+        text.setOnFocusChangeListener { _, hasFocus -> if(!hasFocus) println("Focus lost") }
     }
 }

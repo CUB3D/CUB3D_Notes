@@ -83,7 +83,7 @@ class NewNoteFragment : Fragment() {
         newNoteViewModel.checkboxes.observe(this, Observer {
             println("Updating checkboxes: $it")
             createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { newNoteViewModel.onCheckboxChecked(it) }, { newNoteViewModel.onCheckboxDelete(it) }, { newNoteViewModel.onCheckboxChanged(it) })
+            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { newNoteViewModel.onCheckboxChecked(it) }, { newNoteViewModel.onCheckboxDelete(it) })
         })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
