@@ -6,6 +6,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
 class NoteViewHolder(
@@ -15,17 +16,17 @@ class NoteViewHolder(
     private val selectionTracker: SelectionTracker<Long>
 ): RecyclerView.ViewHolder(view.root) {
 
-    fun bind(note: Note) {
+    fun bind(note: NoteAndCheckboxes) {
 
-        view.note = note
+        view.note = note.note
 
-        if(note.type == Note.TYPE_CHECKBOX) {
+        if(note.note.type == Note.TYPE_CHECKBOX) {
             println("Drawing checkbox note $note")
             view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
-            view.noteChecks.adapter = HomeCheckboxAdapter(view.root.context, note.checkboxEntry)
+            view.noteChecks.adapter = HomeCheckboxAdapter(view.root.context, note.checkboxes)
         }
 
-        view.root.setOnClickListener { callback.invoke(note) }
+        view.root.setOnClickListener { callback.invoke(note.note) }
     }
 
     fun getItemDetails(idd: Long?): ItemDetailsLookup.ItemDetails<Long>? {

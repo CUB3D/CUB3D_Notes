@@ -7,22 +7,25 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
+import pw.cub3d.cub3_notes.databinding.CheckboxEntryBinding
 
 class CheckBoxAdapter(
     ctx: Context,
     private val checkboxEntries: List<CheckboxEntry>,
-    private val checkedCallback: (CheckboxEntry)->Unit,
+    private val saveCallback: (CheckboxEntry)->Unit,
     private val deleteCallback: (CheckboxEntry)->Unit
 ) : RecyclerView.Adapter<CheckBoxViewHolder>() {
     private val layoutInflater = LayoutInflater.from(ctx)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CheckBoxViewHolder(
-        layoutInflater.inflate(R.layout.checkbox_entry, parent, false),
-        checkedCallback,
+        DataBindingUtil.inflate(layoutInflater, R.layout.checkbox_entry, parent, false),
+        saveCallback,
         deleteCallback
     )
 
@@ -34,21 +37,21 @@ class CheckBoxAdapter(
 }
 
 class CheckBoxViewHolder(
-    view: View,
-    private val checkedCallback: (CheckboxEntry) -> Unit,
+    private val view: CheckboxEntryBinding,
+    private val saveCallback: (CheckboxEntry) -> Unit,
     private val deleteCallback: (CheckboxEntry) -> Unit
-): RecyclerView.ViewHolder(view) {
-    private val check = view.findViewById<CheckBox>(R.id.checkboxEntry_check)!!
-    private val delete = view.findViewById<ImageView>(R.id.checkboxEntry_delete)!!
-    private val text = view.findViewById<TextInputEditText>(R.id.checkboxEntry_text)!!
+): RecyclerView.ViewHolder(view.root) {
 
     fun bind(checkboxEntry: CheckboxEntry) {
-        check.isChecked = checkboxEntry.checked
+        view.entry = checkboxEntry
+        view.isChecked = MutableLiveData<Boolean>(checkboxEntry.checked).apply {
+            observeForever {
+                checkboxEntry.checked = this.value!!
+                saveCallback(checkboxEntry)
+            }
+        }
 
-        check.setOnCheckedChangeListener { _, isChecked -> checkedCallback(checkboxEntry) }
-        delete.setOnClickListener {  deleteCallback(checkboxEntry) }
-        text.setText(checkboxEntry.content)
-        text.doAfterTextChanged { checkboxEntry.content = text.text.toString(); }
-        text.setOnFocusChangeListener { _, hasFocus -> if(!hasFocus) println("Focus lost") }
+        view.checkboxEntryDelete.setOnClickListener {  deleteCallback(checkboxEntry) }
+        view.checkboxEntryText.doAfterTextChanged {  saveCallback(checkboxEntry) }
     }
 }

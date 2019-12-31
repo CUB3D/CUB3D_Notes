@@ -1,11 +1,7 @@
 package pw.cub3d.cub3_notes.ui.nav
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
 import javax.inject.Inject
@@ -21,7 +17,7 @@ class NewNoteNavigationController @Inject constructor() {
 
     fun editNote(nav: NavController, note: Note) {
         nav.navigate(R.id.nav_new_note, Bundle().apply {
-            putParcelable(KEY_NOTE, note)
+            putLong(KEY_NOTE, note.id)
         })
     }
 

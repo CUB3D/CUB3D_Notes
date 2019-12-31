@@ -22,7 +22,7 @@ abstract class NotesDao {
     abstract fun updateNote(note: Note)
 
     fun save(note: Note) {
-        if(note.title.isEmpty() && note.text.isEmpty() && note.checkboxEntry.isEmpty()) {
+        if(note.title.isEmpty() && note.text.isEmpty() && note.type == Note.TYPE_TEXT) {
             println("Attempt to save empty note")
             return
         }
@@ -37,8 +37,6 @@ abstract class NotesDao {
             updateNote(note)
             println("Updated note: $note")
         }
-
-        note.checkboxEntry.forEach { it.noteId = note.id }
     }
 
     @Query("SELECT * FROM notes WHERE id = :noteId")

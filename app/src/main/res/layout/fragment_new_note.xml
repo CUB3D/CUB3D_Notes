@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="newNoteViewModel"
+            name="viewModel"
             type="pw.cub3d.cub3_notes.ui.newnote.NewNoteViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +26,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/createNote_title"
+            android:text="@={viewModel.title, default=`Example note title`}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
@@ -51,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:hint="Note"
+                android:text="@={viewModel.text, default=`This is an example multiline note`}"
                 android:inputType="textMultiLine" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,7 +93,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="TextView"
+        android:text="@{viewModel.modificationTime}"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

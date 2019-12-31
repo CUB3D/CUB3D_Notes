@@ -2,6 +2,7 @@ package pw.cub3d.cub3_notes.database.entity
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -22,9 +23,8 @@ data class Note(
     var archived: Boolean = false,
 
     var modificationTime: String = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
-    var type: String = TYPE_TEXT,
+    var type: String = TYPE_TEXT
 
-    @Ignore val checkboxEntry: MutableList<CheckboxEntry> = mutableListOf()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
@@ -33,8 +33,7 @@ data class Note(
         parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
         parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readArrayList(ClassLoader.getSystemClassLoader()) as MutableList<CheckboxEntry>
+        parcel.readString()!!
     )
 
     fun getLocalModificationTime(): String {
@@ -58,7 +57,6 @@ data class Note(
         parcel.writeByte(if (archived) 1 else 0)
         parcel.writeString(modificationTime)
         parcel.writeString(type)
-        parcel.writeList(checkboxEntry.toList())
     }
 
     override fun describeContents(): Int {

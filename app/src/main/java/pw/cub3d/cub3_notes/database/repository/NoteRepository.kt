@@ -13,15 +13,7 @@ class NoteRepository @Inject constructor(
     private val notesDao: NotesDao,
     private val checkboxEntryDao: CheckboxEntryDao
 ) {
-    fun getAllUnpinnedNotes(): LiveData<List<Note>> {
-        return Transformations.map(notesDao.getAllUnpinnedNotes()) {
-            it.map { it.getFullNote() }
-        }
-    }
+    fun getAllUnpinnedNotes() = notesDao.getAllUnpinnedNotes()
 
-    fun getAllPinnedNotes(): LiveData<List<Note>> {
-        return Transformations.map(notesDao.getAllPinnedNotes()) {
-            it.map { it.getFullNote() }
-        }
-    }
+    fun getAllPinnedNotes() = notesDao.getAllPinnedNotes()
 }

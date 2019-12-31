@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_new_note.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
 
@@ -34,38 +36,22 @@ class NewNoteFragment : Fragment() {
     ): View? {
         newNoteViewModel =
             ViewModelProviders.of(this, newNoteViewModelFactory).get(NewNoteViewModel::class.java)
-//
-//        val binding: FragmentNewNoteBinding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
-//
-//        binding.newNoteViewModel = newNoteViewModel
 
-        return inflater.inflate(R.layout.fragment_new_note, container, false)
+        val binding: FragmentNewNoteBinding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
+
+        binding.viewModel = newNoteViewModel
+        binding.lifecycleOwner = this
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        newNoteViewModel.loadNote(arguments?.getLong(NewNoteNavigationController.KEY_NOTE, -1) ?: -1)
+
         arguments?.let {
-            it.getParcelable<Note>(NewNoteNavigationController.KEY_NOTE)?.let { note ->
-                println("Editing note: $note")
-                newNoteViewModel.setNote(note)
-                createNote_text.setText(note.text)
-                createNote_title.setText(note.title)
-            }
-
             it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> newNoteViewModel.setNoteType(type) }
-        }
-
-        newNoteViewModel.modificationTime.observe(this, Observer {
-            createNote_lastEdited.text = it
-        })
-
-        createNote_text.doAfterTextChanged {
-            newNoteViewModel.onNoteTextChanged(it.toString())
-        }
-
-        createNote_title.doAfterTextChanged {
-            newNoteViewModel.onNoteTitleChanged(it.toString())
         }
 
         newNoteViewModel.type.observe(this, Observer { type ->
@@ -83,7 +69,7 @@ class NewNoteFragment : Fragment() {
         newNoteViewModel.checkboxes.observe(this, Observer {
             println("Updating checkboxes: $it")
             createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { newNoteViewModel.onCheckboxChecked(it) }, { newNoteViewModel.onCheckboxDelete(it) })
+            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { newNoteViewModel.saveCheckbox(it) }, { newNoteViewModel.onCheckboxDelete(it) })
         })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }

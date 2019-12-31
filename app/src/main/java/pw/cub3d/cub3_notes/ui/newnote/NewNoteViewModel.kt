@@ -1,54 +1,42 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
-import android.provider.Settings
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.database.dao.NotesDao
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Note
-import java.time.ZonedDateTime
 
 class NewNoteViewModel(
     private val dao: NotesDao,
     private val checkboxEntryDao: CheckboxEntryDao
 ) : ViewModel() {
 
-    fun onCheckboxChecked(checkboxEntry: CheckboxEntry) {
-        checkboxEntry.checked = !checkboxEntry.checked
-        GlobalScope.launch { checkboxEntryDao.save(checkboxEntry) }
-    }
+    val title = MutableLiveData<String>()
+    val text = MutableLiveData<String>()
+    val modificationTime = MutableLiveData<String>()
+    var type = MutableLiveData<String>()
+    val checkboxes = MutableLiveData<List<CheckboxEntry>>()
 
     private var note = Note()
 
-    var checkboxes: LiveData<List<CheckboxEntry>> = MutableLiveData<List<CheckboxEntry>>()
 
-    var type = MutableLiveData<String>().apply { value = Note.TYPE_TEXT }
-    var modificationTime = MutableLiveData<String>().apply { value = note.getLocalModificationTime() }
 
     private fun saveNote() {
+        note.title = title.value ?: ""
+        note.text = text.value ?: ""
+        note.type = type.value ?: Note.TYPE_TEXT
+
         println("Note: $note")
         GlobalScope.launch {
             dao.save(note)
-            checkboxEntryDao.saveAll(note.checkboxEntry)
+            checkboxes.postValue(checkboxEntryDao.getByNote(note.id))
         }
+
         modificationTime.value = note.getLocalModificationTime()
-//        checkboxes = checkboxEntryDao.getByNoteLive(note.id)
-    }
-
-    fun onNoteTextChanged(text: String) {
-        note.text = text
-
-        saveNote()
-    }
-
-    fun onNoteTitleChanged(text: String) {
-        note.title = text
-
-        saveNote()
     }
 
     fun onPin() {
@@ -63,12 +51,6 @@ class NewNoteViewModel(
         saveNote()
     }
 
-    fun setNote(note: Note) {
-        this.note = note
-        checkboxes = checkboxEntryDao.getByNoteLive(note.id)
-        type.value = note.type
-    }
-
     fun setNoteType(it: String) {
         note.type = it
         type.value = it
@@ -76,19 +58,49 @@ class NewNoteViewModel(
     }
 
     fun save() {
-        saveNote()
-        GlobalScope.launch { checkboxEntryDao.saveAll(checkboxes.value!!) }
+//        saveNote()
+//        GlobalScope.launch { checkboxEntryDao.saveAll(checkboxes.value!!) }
     }
 
     fun addCheckbox() {
         val chk = CheckboxEntry(noteId = note.id)
-        note.checkboxEntry.add(chk)
         GlobalScope.launch { checkboxEntryDao.insert(chk) }
-
         saveNote()
     }
 
     fun onCheckboxDelete(entry: CheckboxEntry) {
+        println("Deleting checkbox: $entry")
         GlobalScope.launch { checkboxEntryDao.delete(entry.id) }
+        saveNote()
+    }
+
+    fun saveCheckbox(checkboxEntry: CheckboxEntry) {
+        println("Saving checkbox $checkboxEntry")
+        GlobalScope.launch { checkboxEntryDao.update(checkboxEntry) }
+    }
+
+    fun loadNote(it: Long) {
+        if(it != (-1).toLong()) {
+            println("Loading note with id: $it")
+            //TODO: no null
+            GlobalScope.launch {
+                note = dao.getNote(it)!!
+                println("Loaded note: $note")
+                title.postValue(note.title)
+                text.postValue(note.text)
+                modificationTime.postValue(note.getLocalModificationTime())
+                type.postValue(note.type)
+
+                checkboxes.postValue(checkboxEntryDao.getByNote(note.id))
+
+                viewModelScope.launch {
+                    title.observeForever { saveNote() }
+                    text.observeForever { saveNote() }
+                }
+            }
+        } else {
+            title.observeForever { saveNote() }
+            text.observeForever { saveNote() }
+        }
     }
 }

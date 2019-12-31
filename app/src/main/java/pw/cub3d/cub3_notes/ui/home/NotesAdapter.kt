@@ -8,11 +8,12 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
 class NotesAdapter(
     ctx: Context,
-    private val notes: List<Note>,
+    private val notes: List<NoteAndCheckboxes>,
     private val callback: (Note)->Unit
 ) : RecyclerView.Adapter<NoteViewHolder>() {
     lateinit var selectionTracker: SelectionTracker<Long>

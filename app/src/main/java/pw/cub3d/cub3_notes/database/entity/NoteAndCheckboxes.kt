@@ -9,10 +9,4 @@ data class NoteAndCheckboxes(
 
     @Relation(parentColumn = "id", entityColumn = "noteId")
     val checkboxes: List<CheckboxEntry>
-) {
-    fun getFullNote(): Note {
-        return note.apply {
-            checkboxEntry.addAll(checkboxes)
-        }
-    }
-}
+)

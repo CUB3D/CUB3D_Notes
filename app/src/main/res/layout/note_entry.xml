@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
+        <import type="pw.cub3d.cub3_notes.database.entity.Note"/>
         <variable
             name="note"
             type="pw.cub3d.cub3_notes.database.entity.Note"/>
@@ -28,7 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:cardBackgroundColor="@{isSelected ? `#0080ff` : `#fff`, default=`#fff`}">
+            app:cardBackgroundColor="@{isSelected ? @color/colorPrimary : @android:color/white, default=@android:color/white}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -43,7 +45,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:text="@{note.title, default=`Weekly shopping list`}"
-                    android:visibility="@{note.title.empty ? `gone` : `visible`, default=`visible`}"
+                    android:visibility="@{note.title.empty ? View.GONE : View.VISIBLE, default=visible}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +63,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:text="@{note.text, default=`Things to buy this week`}"
-                    android:visibility="@{note.text.empty ? `gone` : `visible`, default=`visible`}"
+                    android:visibility="@{note.text.empty ? View.GONE : View.VISIBLE, default=visible}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:visibility="@{note.type == Note.TYPE_CHECKBOX ? `visible` : `gone`, default=`gone`}"
+                    android:visibility="@{note.type == Note.TYPE_CHECKBOX ? View.GONE : View.VISIBLE, default=gone}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

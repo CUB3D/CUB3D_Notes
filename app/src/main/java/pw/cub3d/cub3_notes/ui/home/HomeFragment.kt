@@ -2,7 +2,6 @@ package pw.cub3d.cub3_notes.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Note.NOTE
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
-import pw.cub3d.cub3_notes.database.RoomDB
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
@@ -51,7 +49,7 @@ class HomeFragment : Fragment() {
 
             home_pinnedNotes.adapter = adapter
 
-            val keyProvider = StableIdKeyProvider(home_notes)
+            val keyProvider = MyItemKeyProvider(home_notes)
 
             val itemDetails = object: ItemDetailsLookup<Long>() {
                 override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
@@ -59,8 +57,7 @@ class HomeFragment : Fragment() {
                     if (view != null) {
                         val holder: ViewHolder = home_notes.getChildViewHolder(view)
                         if (holder is NoteViewHolder) {
-                            val id = holder.getItemDetails(keyProvider.getKey(holder.pos))
-                            return id
+                            return holder.getItemDetails(keyProvider.getKey(holder.pos))
                         }
                     }
                     return null
@@ -87,7 +84,7 @@ class HomeFragment : Fragment() {
 
             home_notes.adapter = adapter
 
-            val keyProvider = StableIdKeyProvider(home_notes)
+            val keyProvider = MyItemKeyProvider(home_notes)
 
             val itemDetails = object: ItemDetailsLookup<Long>() {
                 override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
