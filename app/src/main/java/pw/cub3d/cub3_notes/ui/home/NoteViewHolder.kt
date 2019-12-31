@@ -22,8 +22,12 @@ class NoteViewHolder(
 
         if(note.note.type == Note.TYPE_CHECKBOX) {
             println("Drawing checkbox note $note")
+
+            val unticked = note.checkboxes.filterNot { it.checked }
+
+            view.tickedItemCount = note.checkboxes.size - unticked.size
             view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
-            view.noteChecks.adapter = HomeCheckboxAdapter(view.root.context, note.checkboxes)
+            view.noteChecks.adapter = HomeCheckboxAdapter(view.root.context, unticked)
         }
 
         view.root.setOnClickListener { callback.invoke(note.note) }
