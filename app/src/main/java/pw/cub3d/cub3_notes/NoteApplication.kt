@@ -4,6 +4,8 @@ import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import io.sentry.Sentry
+import io.sentry.android.AndroidSentryClientFactory
 import pw.cub3d.cub3_notes.dagger.DaggerNotesComponent
 import javax.inject.Inject
 
@@ -18,6 +20,9 @@ class NoteApplication: Application(), HasAndroidInjector {
             .inject(this)
 
         AndroidThreeTen.init(this)
+
+        Sentry.init("https://a53e05e0eccb4bac9c4dd5aae56bcbc3@sentry.io/1869522", AndroidSentryClientFactory(this))
+
     }
 
     @Inject

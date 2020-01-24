@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         nav_view.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.nav_new_note) {
+            if (destination.id == R.id.nav_new_note || destination.id == R.id.nav_settings) {
                 main_appBar.visibility = View.GONE
                 drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             } else {

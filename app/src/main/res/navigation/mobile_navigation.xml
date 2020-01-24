@@ -20,4 +20,10 @@
         android:name="pw.cub3d.cub3_notes.ui.newnote.NewNoteFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_new_note" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="pw.cub3d.cub3_notes.ui.settings.SettingsFragment"
+        android:label="@string/action_settings"
+        tools:layout="@layout/fragment_settings"/>
 </navigation>
