@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         window.statusBarColor = Color.parseColor("#FAFAFA")
-
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 

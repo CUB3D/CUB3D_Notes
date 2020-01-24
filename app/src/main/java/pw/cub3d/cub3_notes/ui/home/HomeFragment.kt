@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        home_nestedScroll.isNestedScrollingEnabled = false
+//        home_nestedScroll.isNestedScrollingEnabled = false
 
         homeViewModel.pinnedNotes.observe(this, Observer {
             if(it.isEmpty()) {
