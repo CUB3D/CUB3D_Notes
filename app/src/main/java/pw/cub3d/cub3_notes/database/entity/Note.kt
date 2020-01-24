@@ -23,7 +23,9 @@ data class Note(
     var archived: Boolean = false,
 
     var modificationTime: String = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
-    var type: String = TYPE_TEXT
+    var type: String = TYPE_TEXT,
+
+    var timeReminder: String? = null
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -33,7 +35,8 @@ data class Note(
         parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
         parcel.readString()!!,
-        parcel.readString()!!
+        parcel.readString()!!,
+        parcel.readString()
     )
 
     fun getLocalModificationTime(): String {
@@ -57,6 +60,7 @@ data class Note(
         parcel.writeByte(if (archived) 1 else 0)
         parcel.writeString(modificationTime)
         parcel.writeString(type)
+        parcel.writeString(timeReminder)
     }
 
     override fun describeContents(): Int {

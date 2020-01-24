@@ -37,6 +37,12 @@ object Migrations {
             )""".trimMargin())
         }
     }
+
+    val MIGRATE_4_5 = object: Migration(4, 5) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE notes ADD COLUMN timeReminder TEXT")
+        }
+    }
 }
 
 @Database(
@@ -44,7 +50,7 @@ object Migrations {
         Note::class,
         CheckboxEntry::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
@@ -69,7 +75,8 @@ abstract class RoomDB: RoomDatabase() {
                 ).addMigrations(
                     Migrations.MIGRATE_1_2,
                     Migrations.MIGRATE_2_3,
-                    Migrations.MIGRATE_3_4
+                    Migrations.MIGRATE_3_4,
+                    Migrations.MIGRATE_4_5
                 ).build()
                 INSTANCE = instance
                 return instance

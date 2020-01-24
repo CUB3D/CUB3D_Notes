@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_new_note.*
@@ -80,6 +82,22 @@ class NewNoteFragment : Fragment() {
         }
 
         createNote_newItem.setOnClickListener { newNoteViewModel.addCheckbox() }
+
+        BottomSheetBehavior.from(createNote_moreSheet).state = BottomSheetBehavior.STATE_HIDDEN
+
+        createNote_more.setOnClickListener {
+            BottomSheetBehavior.from(createNote_moreSheet).apply {
+                state = if(state == BottomSheetBehavior.STATE_HIDDEN) {
+                    BottomSheetBehavior.STATE_EXPANDED
+                } else {
+                    BottomSheetBehavior.STATE_HIDDEN
+                }
+            }
+        }
+
+        createNote_reminder.setOnClickListener {
+
+        }
     }
 
     override fun onPause() {

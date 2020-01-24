@@ -110,6 +110,8 @@
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        app:backgroundTint="#fff"
+        android:src="@drawable/ic_plus"
         android:id="@+id/home_takeNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
