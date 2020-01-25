@@ -16,4 +16,6 @@ class NoteRepository @Inject constructor(
     fun getAllUnpinnedNotes() = notesDao.getAllUnpinnedNotes()
 
     fun getAllPinnedNotes() = notesDao.getAllPinnedNotes()
+
+    suspend fun getAllNotes() = notesDao.getAllNotes()
 }
