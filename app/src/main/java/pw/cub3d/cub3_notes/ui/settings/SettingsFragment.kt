@@ -3,18 +3,16 @@ package pw.cub3d.cub3_notes.ui.settings
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Environment
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
-
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.DataExporter
 import java.io.File

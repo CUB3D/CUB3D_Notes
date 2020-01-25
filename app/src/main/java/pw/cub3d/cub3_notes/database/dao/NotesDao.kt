@@ -15,6 +15,7 @@ abstract class NotesDao {
     @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0")
     abstract fun getAllPinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
+    @Transaction
     @Query("SELECT * FROM notes")
     abstract suspend fun getAllNotes(): List<NoteAndCheckboxes>
 
