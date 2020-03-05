@@ -100,7 +100,6 @@ class NewNoteFragment : Fragment() {
         }
 
         createNote_more_labels.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit) }
-        findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit)
     }
 
     override fun onPause() {

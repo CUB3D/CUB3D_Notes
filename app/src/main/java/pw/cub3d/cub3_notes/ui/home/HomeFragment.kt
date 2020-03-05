@@ -6,16 +6,23 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.selection.*
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.activity.MainActivity
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
@@ -31,9 +38,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        home_nestedScroll.isNestedScrollingEnabled = false
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        (requireActivity() as AppCompatActivity).setupActionBarWithNavController(findNavController(), (requireActivity() as MainActivity).appBarConfiguration)
+        requireActivity().nav_view.setupWithNavController(findNavController())
 
-        homeViewModel.pinnedNotes.observe(this, Observer {
+        requireActivity().nav_view.setNavigationItemSelectedListener {
+            println("Nav item selected: $it")
+            if (it.itemId == R.id.nav_new_label) {
+                findNavController().navigate(R.id.nav_label_edit)
+            }
+
+            true
+        }
+
+        homeViewModel.pinnedNotes.observe(viewLifecycleOwner, Observer {
             if(it.isEmpty()) {
                 home_pinnedNotes.visibility = View.GONE
                 home_pinnedTitle.visibility = View.GONE
@@ -79,7 +97,7 @@ class HomeFragment : Fragment() {
             adapter.selectionTracker = tracker
         })
 
-        homeViewModel.unpinnedNotes.observe(this, Observer {
+        homeViewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
             home_notes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
             val adapter = NotesAdapter(requireContext(), it) { note -> newNoteNavigationController.editNote(findNavController(), note) }
@@ -148,8 +166,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        homeViewModel =
-            ViewModelProviders.of(this, homeViewModelFactory).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(viewModelStore, homeViewModelFactory)
+            .get(HomeViewModel::class.java)
 
         return inflater.inflate(R.layout.fragment_home, container, false)
     }

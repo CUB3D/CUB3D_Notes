@@ -25,18 +25,19 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:outlineProvider="none"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createNote_back">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/createNote_title"
-            android:text="@={viewModel.title, default=`Example note title`}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
+            android:outlineProvider="none"
             android:hint="Title"
-            android:outlineProvider="none" />
+            android:text="@={viewModel.title, default=`Example note title`}" />
     </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -46,6 +47,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintBottom_toTopOf="@+id/createNote_lastEdited"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,8 +59,8 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:hint="Note"
-                android:text="@={viewModel.text, default=`This is an example multiline note`}"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:text="@={viewModel.text, default=`This is an example multiline note`}" />
         </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView

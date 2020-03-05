@@ -3,11 +3,13 @@
     package="pw.cub3d.cub3_notes">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 <!--    Only used for sentry-->
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:name=".NoteApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
