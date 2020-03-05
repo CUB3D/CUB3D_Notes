@@ -19,14 +19,13 @@ import pw.cub3d.cub3_notes.R
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         window.statusBarColor = Color.parseColor("#FAFAFA")
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -37,15 +36,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_new_note
             ), drawer_layout
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        nav_view.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if (destination.id == R.id.nav_new_note || destination.id == R.id.nav_settings) {
-                main_appBar.visibility = View.GONE
                 drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             } else {
-                main_appBar.visibility = View.VISIBLE
                 drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
         }
