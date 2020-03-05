@@ -1,6 +1,7 @@
 package pw.cub3d.cub3_notes.database.entity
 
 import androidx.room.Embedded
+import androidx.room.Junction
 import androidx.room.Relation
 import com.squareup.moshi.JsonClass
 
@@ -10,5 +11,8 @@ data class NoteAndCheckboxes(
     val note: Note,
 
     @Relation(parentColumn = "id", entityColumn = "noteId")
-    val checkboxes: List<CheckboxEntry>
+    val checkboxes: List<CheckboxEntry>,
+
+    @Relation(parentColumn = "id", entityColumn = "id", associateBy = Junction(NoteLabel::class))
+    val labels: List<Label>
 )

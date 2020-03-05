@@ -19,11 +19,28 @@
         android:id="@+id/nav_new_note"
         android:name="pw.cub3d.cub3_notes.ui.newnote.NewNoteFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_new_note" />
+        tools:layout="@layout/fragment_new_note" >
+        <action
+            android:id="@+id/action_nav_new_note_to_nav_note_label_edit"
+            app:destination="@id/nav_note_label_edit" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_settings"
         android:name="pw.cub3d.cub3_notes.ui.settings.SettingsFragment"
         android:label="@string/action_settings"
         tools:layout="@layout/fragment_settings"/>
+
+    <fragment
+        android:id="@+id/nav_label_edit"
+        android:name="pw.cub3d.cub3_notes.ui.labelEdit.LabelEditFragment"
+        android:label="Edit Labels"
+        tools:layout="@layout/fragment_label_edit"/>
+
+    <fragment
+        android:id="@+id/nav_note_label_edit"
+        android:name="pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment"
+        android:label="Add Labels"
+        tools:layout="@layout/fragment_note_label_edit"/>
+
 </navigation>

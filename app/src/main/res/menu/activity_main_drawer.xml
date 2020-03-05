@@ -8,16 +8,22 @@
             android:id="@+id/nav_notes"
             android:icon="@drawable/ic_lightbulb"
             android:title="Notes" />
+        <item
+            android:id="@+id/nav_reminders"
+            android:icon="@drawable/ic_bell"
+            android:title="Reminders"/>
     </group>
 
-    <item android:title="Labels">
-        <menu>
-            <item
-                android:id="@+id/nav_new_label"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Create new label" />
-        </menu>
-    </item>
+    <group>
+        <item android:title="Labels" android:id="@+id/hamburger_labels">
+            <menu>
+                <item
+                    android:id="@+id/nav_new_label"
+                    android:icon="@drawable/ic_plus"
+                    android:title="Create new label" />
+            </menu>
+        </item>
+    </group>
 
     <group>
         <item
@@ -26,7 +32,7 @@
             android:title="Archive"/>
         <item
             android:id="@+id/nav_deleted"
-            android:icon="@drawable/ic_package"
+            android:icon="@drawable/ic_trash_2"
             android:title="Deleted"/>
     </group>
 

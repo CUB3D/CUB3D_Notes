@@ -164,7 +164,8 @@
             app:behavior_hideable="true"
             app:behavior_peekHeight="300dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="#fff">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/createNote_more_delete"
@@ -235,7 +236,7 @@
                 android:gravity="start|center_vertical"
                 android:text="Labels"
                 android:textColor="#000"
-                app:icon="@drawable/ic_trash_2"
+                app:icon="@drawable/ic_tag"
                 app:iconTint="#000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
+<!--    Only used for sentry-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".NoteApplication"
         android:allowBackup="true"

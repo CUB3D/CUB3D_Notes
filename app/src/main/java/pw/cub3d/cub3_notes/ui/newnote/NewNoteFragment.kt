@@ -56,7 +56,7 @@ class NewNoteFragment : Fragment() {
             it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> newNoteViewModel.setNoteType(type) }
         }
 
-        newNoteViewModel.type.observe(this, Observer { type ->
+        newNoteViewModel.type.observe(viewLifecycleOwner, Observer { type ->
             if(type == Note.TYPE_CHECKBOX) {
                 createNote_text.visibility = View.GONE
                 createNote_checkBoxes.visibility = View.VISIBLE
@@ -68,7 +68,7 @@ class NewNoteFragment : Fragment() {
             }
         })
 
-        newNoteViewModel.checkboxes.observe(this, Observer {
+        newNoteViewModel.checkboxes.observe(viewLifecycleOwner, Observer {
             println("Updating checkboxes: $it")
             createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
             createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { newNoteViewModel.saveCheckbox(it) }, { newNoteViewModel.onCheckboxDelete(it) })
@@ -98,6 +98,9 @@ class NewNoteFragment : Fragment() {
         createNote_reminder.setOnClickListener {
 
         }
+
+        createNote_more_labels.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit) }
+        findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit)
     }
 
     override fun onPause() {

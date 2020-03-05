@@ -34,19 +34,29 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home,
-                R.id.nav_new_note
+                R.id.nav_new_note,
+                R.id.nav_new_label
             ), drawer_layout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         nav_view.setupWithNavController(navController)
 
+        nav_view.setNavigationItemSelectedListener {
+            if (it.itemId == R.id.nav_new_label) {
+                navController.navigate(R.id.nav_label_edit)
+            }
+
+            true
+        }
+
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.nav_new_note || destination.id == R.id.nav_settings) {
-                main_appBar.visibility = View.GONE
-                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            } else {
+
+            if(destination.id == R.id.nav_home) {
                 main_appBar.visibility = View.VISIBLE
                 drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            } else {
+                main_appBar.visibility = View.GONE
+                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
     }

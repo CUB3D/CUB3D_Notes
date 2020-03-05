@@ -14,7 +14,9 @@ class DatabaseModule {
     @Singleton
     @Provides
     fun provideCheckboxEntityDao(database: RoomDB) = database.checkboxEntryDao()
-
+    @Singleton
+    @Provides
+    fun provideLabelDao(database: RoomDB) = database.labelDao()
 
 
     @Singleton
