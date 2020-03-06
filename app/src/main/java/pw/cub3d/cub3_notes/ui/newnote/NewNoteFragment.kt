@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Switch
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,12 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_new_note.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
+import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
 import javax.inject.Inject
 
 class NewNoteFragment : Fragment() {
@@ -99,7 +96,11 @@ class NewNoteFragment : Fragment() {
 
         }
 
-        createNote_more_labels.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit) }
+        createNote_more_labels.setOnClickListener {
+            findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit, Bundle().apply {
+                putLong(NoteLabelEditFragment.KEY_NOTE_ID, newNoteViewModel.note.id)
+            })
+        }
     }
 
     override fun onPause() {

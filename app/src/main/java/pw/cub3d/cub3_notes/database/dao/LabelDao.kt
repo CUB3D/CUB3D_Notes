@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import pw.cub3d.cub3_notes.database.entity.Label
+import pw.cub3d.cub3_notes.database.entity.NoteLabel
 
 @Dao
 abstract class LabelDao {
@@ -16,4 +17,16 @@ abstract class LabelDao {
 
     @Query("SELECT * FROM labels WHERE title LIKE :query")
     abstract fun findByTitle(query: String): List<Label>
+
+    @Query("SELECT * FROM note_label nl INNER JOIN labels l on l.id = nl.label_id WHERE nl.note_id = :noteId AND l.title LIKE :query")
+    abstract fun findByTitleAndNote(noteId: Long, query: String): List<Label>
+
+    @Query("SELECT * FROM note_label nl INNER JOIN labels l on l.id = nl.label_id WHERE nl.note_id = :noteId")
+    abstract fun findByNote(noteId: Long): LiveData<List<Label>>
+
+    @Insert
+    abstract fun insert(noteLabel: NoteLabel)
+
+    @Query("DELETE FROM note_label WHERE note_id = :noteId AND label_id = :labelId")
+    abstract fun deleteNoteLabel(noteId: Long, labelId: Long)
 }

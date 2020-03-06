@@ -21,7 +21,7 @@ class NewNoteViewModel(
     var type = MutableLiveData<String>()
     val checkboxes = MutableLiveData<List<CheckboxEntry>>()
 
-    private var note = Note()
+    var note = Note()
 
 
 

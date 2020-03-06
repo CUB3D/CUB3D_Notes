@@ -30,6 +30,11 @@ class NoteViewHolder(
             view.noteChecks.adapter = HomeCheckboxAdapter(view.root.context, unticked)
         }
 
+        println("Drawing labels: $note")
+
+        view.noteLabels.layoutManager = LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
+        view.noteLabels.adapter = NoteLabelsAdapter(view.root.context, note.labels)
+
         view.root.setOnClickListener { callback.invoke(note.note) }
     }
 
