@@ -7,12 +7,10 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
+import pw.cub3d.cub3_notes.database.dao.ColourDao
 import pw.cub3d.cub3_notes.database.dao.LabelDao
 import pw.cub3d.cub3_notes.database.dao.NotesDao
-import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
-import pw.cub3d.cub3_notes.database.entity.Label
-import pw.cub3d.cub3_notes.database.entity.Note
-import pw.cub3d.cub3_notes.database.entity.NoteLabel
+import pw.cub3d.cub3_notes.database.entity.*
 
 object Migrations {
     val MIGRATE_1_2 = object: Migration(1, 2) {
@@ -66,6 +64,21 @@ object Migrations {
                             )""".trimMargin())
         }
     }
+
+    val MIGRATE_7_8 = object: Migration(7, 8) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("""CREATE TABLE card_colour(
+                                    id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
+                                    hex_colour TEXT NOT NULL DEFAULT ''
+                            )""".trimMargin())
+        }
+    }
+
+    val MIGRATE_8_9 = object: Migration(8, 9) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("INSERT INTO card_colour (hex_colour) VALUES ('#ff0000')");
+        }
+    }
 }
 
 @Database(
@@ -73,15 +86,17 @@ object Migrations {
         Note::class,
         CheckboxEntry::class,
         Label::class,
-        NoteLabel::class
+        NoteLabel::class,
+        Colour::class
     ],
-    version = 7,
+    version = 9,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
     abstract fun notesDao(): NotesDao
     abstract fun checkboxEntryDao(): CheckboxEntryDao
     abstract fun labelDao(): LabelDao
+    abstract fun colourDao(): ColourDao
 
     companion object {
         @Volatile
@@ -104,7 +119,9 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_3_4,
                     Migrations.MIGRATE_4_5,
                     Migrations.MIGRATE_5_6,
-                    Migrations.MIGRATE_6_7
+                    Migrations.MIGRATE_6_7,
+                    Migrations.MIGRATE_7_8,
+                    Migrations.MIGRATE_8_9
                 //TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()

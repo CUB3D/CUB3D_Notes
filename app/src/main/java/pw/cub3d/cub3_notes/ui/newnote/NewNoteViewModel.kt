@@ -6,14 +6,19 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
+import pw.cub3d.cub3_notes.database.dao.ColourDao
 import pw.cub3d.cub3_notes.database.dao.NotesDao
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
+import pw.cub3d.cub3_notes.database.entity.Colour
 import pw.cub3d.cub3_notes.database.entity.Note
 
 class NewNoteViewModel(
     private val dao: NotesDao,
-    private val checkboxEntryDao: CheckboxEntryDao
+    private val checkboxEntryDao: CheckboxEntryDao,
+    private val colourDao: ColourDao
 ) : ViewModel() {
+
+    val defaultNoteColours = colourDao.getAll()
 
     val title = MutableLiveData<String>()
     val text = MutableLiveData<String>()

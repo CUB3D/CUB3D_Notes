@@ -1,0 +1,15 @@
+package pw.cub3d.cub3_notes.database.entity
+
+import android.graphics.Color
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "card_colour")
+data class Colour(
+    @PrimaryKey(autoGenerate = true)
+    var id: Long,
+
+    var hex_colour: String
+) {
+    fun getColourId() = Color.parseColor(hex_colour)
+}
