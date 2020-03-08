@@ -2,10 +2,7 @@ package pw.cub3d.cub3_notes.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -50,6 +47,16 @@ class HomeFragment : Fragment() {
 
             true
         }
+
+        homeViewModel.labels.observe(viewLifecycleOwner, Observer {
+            val menu = requireActivity().nav_view.menu.findItem(R.id.hamburger_labels).subMenu
+
+            it.forEach {
+                menu.add(R.id.hamburger_group_labels, it.id.toInt(), Menu.NONE, it.title).apply {
+                    setIcon(R.drawable.ic_tag)
+                }
+            }
+        })
 
         homeViewModel.pinnedNotes.observe(viewLifecycleOwner, Observer {
             if(it.isEmpty()) {

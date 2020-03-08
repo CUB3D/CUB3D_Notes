@@ -14,7 +14,7 @@
             android:title="Reminders"/>
     </group>
 
-    <group>
+    <group android:id="@+id/hamburger_group_labels">
         <item android:title="Labels" android:id="@+id/hamburger_labels">
             <menu>
                 <item
@@ -25,7 +25,7 @@
         </item>
     </group>
 
-    <group>
+    <group android:orderInCategory="999">
         <item
             android:id="@+id/nav_archived"
             android:icon="@drawable/ic_package"
@@ -36,7 +36,7 @@
             android:title="Deleted"/>
     </group>
 
-    <group>
+    <group android:orderInCategory="1000">
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_camera"
