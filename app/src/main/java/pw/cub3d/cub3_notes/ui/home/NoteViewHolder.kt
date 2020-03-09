@@ -1,6 +1,7 @@
 package pw.cub3d.cub3_notes.ui.home
 
 import android.view.MotionEvent
+import android.view.View
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,8 +33,13 @@ class NoteViewHolder(
 
         println("Drawing labels: $note")
 
-        view.noteLabels.layoutManager = LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
-        view.noteLabels.adapter = NoteLabelsAdapter(view.root.context, note.labels)
+        if(note.labels.isNotEmpty()) {
+            view.noteLabels.layoutManager =
+                LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
+            view.noteLabels.adapter = NoteLabelsAdapter(view.root.context, note.labels)
+        } else {
+            view.noteLabels.visibility = View.GONE
+        }
 
         view.root.setOnClickListener { callback.invoke(note.note) }
     }

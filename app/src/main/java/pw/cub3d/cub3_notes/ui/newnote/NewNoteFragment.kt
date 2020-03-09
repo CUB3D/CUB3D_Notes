@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
@@ -20,6 +21,7 @@ import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
+import pw.cub3d.cub3_notes.ui.reminderdialog.ReminderDialog
 import javax.inject.Inject
 
 class NewNoteFragment : Fragment() {
@@ -33,8 +35,8 @@ class NewNoteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        newNoteViewModel =
-            ViewModelProviders.of(this, newNoteViewModelFactory).get(NewNoteViewModel::class.java)
+        newNoteViewModel = ViewModelProvider(viewModelStore, newNoteViewModelFactory)
+            .get(NewNoteViewModel::class.java)
 
         val binding: FragmentNewNoteBinding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
 
@@ -71,6 +73,12 @@ class NewNoteFragment : Fragment() {
             createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { newNoteViewModel.saveCheckbox(it) }, { newNoteViewModel.onCheckboxDelete(it) })
         })
 
+        newNoteViewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
+            println("Got colours: $it")
+            createNote_more_colors.layoutManager = LinearLayoutManager(requireContext())
+            createNote_more_colors.adapter = ColoursAdapter(requireContext(), it)
+        })
+
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
         createNote_pin.setOnClickListener { newNoteViewModel.onPin() }
         createNote_archive.setOnClickListener {
@@ -93,7 +101,7 @@ class NewNoteFragment : Fragment() {
         }
 
         createNote_reminder.setOnClickListener {
-
+            ReminderDialog(requireContext()).show()
         }
 
         createNote_more_labels.setOnClickListener {
