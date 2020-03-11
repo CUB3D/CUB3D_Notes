@@ -1,5 +1,6 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
+import android.text.util.Linkify
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,6 +38,7 @@ class NewNoteViewModel(
 
         println("Note: $note")
         GlobalScope.launch {
+            //TODO: find links and pull data from them
             dao.save(note)
             checkboxes.postValue(checkboxEntryDao.getByNote(note.id))
         }

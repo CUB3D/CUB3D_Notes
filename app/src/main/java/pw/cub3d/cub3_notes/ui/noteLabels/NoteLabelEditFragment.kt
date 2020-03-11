@@ -21,7 +21,7 @@ import javax.inject.Inject
 class NoteLabelEditFragment : Fragment() {
 
     @Inject lateinit var noteLabelEditViewModelFactory: NoteLabelEditViewModelFactory
-    lateinit var noteLabelEditViewModel: NoteLabelEditViewModel
+    private lateinit var noteLabelEditViewModel: NoteLabelEditViewModel
     @Inject lateinit var labelDao: LabelDao
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,7 +37,7 @@ class NoteLabelEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        noteLabelEditViewModel.loadNote(arguments?.getLong(NoteLabelEditFragment.KEY_NOTE_ID, -1) ?: -1)
+        noteLabelEditViewModel.loadNote(arguments?.getLong(KEY_NOTE_ID, -1) ?: -1)
 
         noteLabelEditViewModel.labels.observe(viewLifecycleOwner, Observer {
             println("New labels: $it")

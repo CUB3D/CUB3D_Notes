@@ -99,4 +99,8 @@ dependencies {
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.9.2")
 
     // Calendar
-    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'}
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+
+    // JSoup for parsing opengraph for link info
+    implementation 'org.jsoup:jsoup:1.13.1'
+}
