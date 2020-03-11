@@ -59,8 +59,10 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:hint="Note"
+                android:linksClickable="true"
+                android:autoLink="web|email"
                 android:inputType="textMultiLine"
-                android:text="@={viewModel.text, default=`This is an example multiline note`}" />
+                android:text="@={viewModel.text, default=`This is an example multiline note, https://google.com`}" />
         </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
