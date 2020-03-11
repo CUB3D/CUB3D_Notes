@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.activity.MainActivity
 import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
 
@@ -52,7 +53,7 @@ class HomeFragment : Fragment() {
             val menu = requireActivity().nav_view.menu.findItem(R.id.hamburger_labels).subMenu
 
             it.forEach {
-                menu.add(R.id.hamburger_group_labels, it.id.toInt(), Menu.NONE, it.title).apply {
+                menu.add(R.id.hamburger_group_labels, it.id.toInt(), Menu.FIRST, it.title).apply {
                     setIcon(R.drawable.ic_tag)
                 }
             }
@@ -164,7 +165,9 @@ class HomeFragment : Fragment() {
         home_new_checkNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
         home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_DRAW) }
         home_new_voiceNote.setOnClickListener{ newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_AUDIO) }
-        home_new_imgNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_IMAGE) }
+        home_new_imgNote.setOnClickListener {
+            AddImageDialog(requireContext()).show()
+        }
     }
 
     override fun onCreateView(

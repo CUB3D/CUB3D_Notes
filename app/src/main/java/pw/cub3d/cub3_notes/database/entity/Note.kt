@@ -1,5 +1,6 @@
 package pw.cub3d.cub3_notes.database.entity
 
+import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Embedded
@@ -27,7 +28,9 @@ data class Note(
     var modificationTime: String = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
     var type: String = TYPE_TEXT,
 
-    var timeReminder: String? = null
+    var timeReminder: String? = null,
+
+    var colour: String = "#ffffff"
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -38,7 +41,8 @@ data class Note(
         parcel.readByte() != 0.toByte(),
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()
+        parcel.readString(),
+        parcel.readString()!!
     )
 
     fun getLocalModificationTime(): String {
@@ -54,6 +58,8 @@ data class Note(
         }
     }
 
+    fun getColourId() = Color.parseColor(colour)
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)
         parcel.writeString(title)
@@ -63,6 +69,7 @@ data class Note(
         parcel.writeString(modificationTime)
         parcel.writeString(type)
         parcel.writeString(timeReminder)
+        parcel.writeString(colour)
     }
 
     override fun describeContents(): Int {

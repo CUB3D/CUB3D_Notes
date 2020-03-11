@@ -108,4 +108,9 @@ class NewNoteViewModel(
             text.observeForever { saveNote() }
         }
     }
+
+    fun setNoteColour(hexColour: String) {
+        note.colour = hexColour
+        saveNote()
+    }
 }

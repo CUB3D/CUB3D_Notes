@@ -1,10 +1,9 @@
-package pw.cub3d.cub3_notes.ui.reminderdialog
+package pw.cub3d.cub3_notes.ui.dialog.reminderdialog
 
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.Window
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.dialog_reminder.*
 import pw.cub3d.cub3_notes.R
 import java.util.*

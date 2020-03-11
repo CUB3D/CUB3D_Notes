@@ -76,7 +76,13 @@ object Migrations {
 
     val MIGRATE_8_9 = object: Migration(8, 9) {
         override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("INSERT INTO card_colour (hex_colour) VALUES ('#ff0000')");
+            database.execSQL("INSERT INTO card_colour (hex_colour) VALUES ('#ff0000')")
+        }
+    }
+
+    val MIGRATE_9_10 = object: Migration(9, 10) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE notes ADD COLUMN colour TEXT NOT NULL DEFAULT '#ffffff'")
         }
     }
 }
@@ -89,7 +95,7 @@ object Migrations {
         NoteLabel::class,
         Colour::class
     ],
-    version = 9,
+    version = 10,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
@@ -121,7 +127,8 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_5_6,
                     Migrations.MIGRATE_6_7,
                     Migrations.MIGRATE_7_8,
-                    Migrations.MIGRATE_8_9
+                    Migrations.MIGRATE_8_9,
+                    Migrations.MIGRATE_9_10
                 //TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()

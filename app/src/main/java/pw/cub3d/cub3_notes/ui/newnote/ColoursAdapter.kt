@@ -11,12 +11,14 @@ import pw.cub3d.cub3_notes.databinding.ColourEntryBinding
 
 class ColoursAdapter(
     ctx: Context,
-    private val colours: List<Colour>
+    private val colours: List<Colour>,
+    private val callback: (Colour) -> Unit
 ): RecyclerView.Adapter<ColourViewHolder>() {
     private val layoutInflater = LayoutInflater.from(ctx)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ColourViewHolder(
-        DataBindingUtil.inflate(layoutInflater, R.layout.colour_entry, parent, false)
+        DataBindingUtil.inflate(layoutInflater, R.layout.colour_entry, parent, false),
+        callback
     )
 
     override fun getItemCount() = colours.size
@@ -27,9 +29,13 @@ class ColoursAdapter(
 }
 
 class ColourViewHolder(
-    private val view: ColourEntryBinding
+    private val view: ColourEntryBinding,
+    private val callback: (Colour)->Unit
 ): RecyclerView.ViewHolder(view.root) {
     fun bind(colour: Colour) {
         view.colour = colour
+        view.colorEntryButton.setOnClickListener {
+            callback(colour)
+        }
     }
 }

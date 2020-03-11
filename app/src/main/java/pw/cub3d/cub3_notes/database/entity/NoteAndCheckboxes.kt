@@ -14,5 +14,8 @@ data class NoteAndCheckboxes(
     val checkboxes: List<CheckboxEntry>,
 
     @Relation(parentColumn = "id", entityColumn = "id", associateBy = Junction(NoteLabel::class, parentColumn = "note_id", entityColumn = "label_id"))
-    val labels: List<Label>
+    val labels: List<Label>,
+
+    @Relation(parentColumn = "id", entityColumn = "imageId")
+    val images: List<ImageEntry>
 )

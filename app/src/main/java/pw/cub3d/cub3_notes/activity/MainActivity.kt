@@ -1,5 +1,6 @@
 package pw.cub3d.cub3_notes.activity
 
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
@@ -16,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 
 
 class MainActivity : AppCompatActivity() {
@@ -60,5 +62,19 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if(requestCode == AddImageDialog.PICK_IMAGE) {
+
+        }
+        if(requestCode == AddImageDialog.TAKE_PHOTO) {
+
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
+
+
     }
 }

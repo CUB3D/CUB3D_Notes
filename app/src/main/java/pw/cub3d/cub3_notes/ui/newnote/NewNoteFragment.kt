@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +20,7 @@ import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
-import pw.cub3d.cub3_notes.ui.reminderdialog.ReminderDialog
+import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import javax.inject.Inject
 
 class NewNoteFragment : Fragment() {
@@ -76,7 +75,9 @@ class NewNoteFragment : Fragment() {
         newNoteViewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
             println("Got colours: $it")
             createNote_more_colors.layoutManager = LinearLayoutManager(requireContext())
-            createNote_more_colors.adapter = ColoursAdapter(requireContext(), it)
+            createNote_more_colors.adapter = ColoursAdapter(requireContext(), it) {
+                newNoteViewModel.setNoteColour(it.hex_colour)
+            }
         })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
