@@ -23,7 +23,7 @@ class DataExporter @Inject constructor(
         withContext(Dispatchers.IO) {
             file.bufferedWriter(Charset.forName("utf-8")).apply {
                 val data = generateJsonString(
-                    DataExportFormat(notesRepository.getAllNotes(), imageDao.getAll().map { it.toBase64(context) })
+                    DataExportFormat(notesRepository.getAllNotes(), imageDao.getAll().map { ExportedImage(it.imageName, it.toBase64(context)) })
                 )
                 write(data)
                 newLine()
@@ -43,5 +43,11 @@ class DataExporter @Inject constructor(
 @JsonClass(generateAdapter = true)
 data class DataExportFormat(
     val notes: List<NoteAndCheckboxes>,
-    val images: List<String>
+    val images: List<ExportedImage>
+)
+
+@JsonClass(generateAdapter = true)
+data class ExportedImage(
+    val name: String,
+    val base64: String
 )
