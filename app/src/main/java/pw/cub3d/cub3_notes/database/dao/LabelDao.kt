@@ -18,10 +18,10 @@ abstract class LabelDao {
     @Query("SELECT * FROM labels WHERE title LIKE :query")
     abstract fun findByTitle(query: String): List<Label>
 
-    @Query("SELECT * FROM note_label nl INNER JOIN labels l on l.id = nl.label_id WHERE nl.note_id = :noteId AND l.title LIKE :query")
+    @Query("SELECT l.* FROM note_label nl INNER JOIN labels l on l.id = nl.label_id WHERE nl.note_id = :noteId AND l.title LIKE :query")
     abstract fun findByTitleAndNote(noteId: Long, query: String): List<Label>
 
-    @Query("SELECT * FROM note_label nl INNER JOIN labels l on l.id = nl.label_id WHERE nl.note_id = :noteId")
+    @Query("SELECT l.* FROM note_label nl INNER JOIN labels l on l.id = nl.label_id WHERE nl.note_id = :noteId")
     abstract fun findByNote(noteId: Long): LiveData<List<Label>>
 
     @Insert

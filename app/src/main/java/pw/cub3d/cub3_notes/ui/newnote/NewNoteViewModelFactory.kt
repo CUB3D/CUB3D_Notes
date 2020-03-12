@@ -14,6 +14,7 @@ class NewNoteViewModelFactory @Inject constructor(
     private val checkboxEntryDao: CheckboxEntryDao,
     private val colourDao: ColourDao
 ): ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>) = NewNoteViewModel(
         notesDao,
         checkboxEntryDao,

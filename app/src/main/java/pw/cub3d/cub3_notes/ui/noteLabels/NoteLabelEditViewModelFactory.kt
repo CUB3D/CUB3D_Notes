@@ -10,5 +10,6 @@ import javax.inject.Singleton
 class NoteLabelEditViewModelFactory @Inject constructor(
     private val labelDao: LabelDao
 ): ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>) = NoteLabelEditViewModel(labelDao) as T
 }

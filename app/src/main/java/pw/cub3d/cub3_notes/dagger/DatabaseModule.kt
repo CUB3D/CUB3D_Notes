@@ -20,6 +20,9 @@ class DatabaseModule {
     @Singleton
     @Provides
     fun provideColoursDao(database: RoomDB) = database.colourDao()
+    @Singleton
+    @Provides
+    fun provideImageDao(database: RoomDB) = database.imageDao()
 
     @Singleton
     @Provides

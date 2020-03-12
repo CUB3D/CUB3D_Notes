@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             ), drawer_layout
         )
 
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
 
             if(destination.id == R.id.nav_home) {
 //                home_appBar.visibility = View.VISIBLE

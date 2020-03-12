@@ -6,10 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
-import pw.cub3d.cub3_notes.database.dao.ColourDao
-import pw.cub3d.cub3_notes.database.dao.LabelDao
-import pw.cub3d.cub3_notes.database.dao.NotesDao
+import pw.cub3d.cub3_notes.database.dao.*
 import pw.cub3d.cub3_notes.database.entity.*
 
 object Migrations {
@@ -85,6 +82,23 @@ object Migrations {
             database.execSQL("ALTER TABLE notes ADD COLUMN colour TEXT NOT NULL DEFAULT '#ffffff'")
         }
     }
+
+    val MIGRATE_10_11 = object: Migration(10, 11) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("""CREATE TABLE image(
+                                    id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
+                                    noteId INTEGER NOT NULL DEFAULT 0,
+                                    imageName TEXT NOT NULL DEFAULT ``,
+                                    FOREIGN KEY (noteId) REFERENCES notes(id)
+                            )""".trimMargin())
+        }
+    }
+
+    val MIGRATE_11_12 = object: Migration(11, 12) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("CREATE INDEX index_note_label ON note_label (note_id, label_id)")
+        }
+    }
 }
 
 @Database(
@@ -93,9 +107,10 @@ object Migrations {
         CheckboxEntry::class,
         Label::class,
         NoteLabel::class,
-        Colour::class
+        Colour::class,
+        ImageEntry::class
     ],
-    version = 10,
+    version = 12,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
@@ -103,6 +118,7 @@ abstract class RoomDB: RoomDatabase() {
     abstract fun checkboxEntryDao(): CheckboxEntryDao
     abstract fun labelDao(): LabelDao
     abstract fun colourDao(): ColourDao
+    abstract fun imageDao(): ImageDao
 
     companion object {
         @Volatile
@@ -128,7 +144,9 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_6_7,
                     Migrations.MIGRATE_7_8,
                     Migrations.MIGRATE_8_9,
-                    Migrations.MIGRATE_9_10
+                    Migrations.MIGRATE_9_10,
+                    Migrations.MIGRATE_10_11,
+                    Migrations.MIGRATE_11_12
                 //TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()

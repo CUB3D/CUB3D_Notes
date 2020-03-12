@@ -13,6 +13,7 @@ class NotesViewModelFactory @Inject constructor(
     private val notesRepository: NoteRepository,
     private val labelDao: LabelDao
 ): ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>) = HomeViewModel(notesRepository, labelDao) as T
 
 }
