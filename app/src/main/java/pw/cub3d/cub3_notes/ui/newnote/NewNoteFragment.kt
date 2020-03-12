@@ -1,6 +1,7 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +53,7 @@ class NewNoteFragment : Fragment() {
 
         arguments?.let {
             it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> newNoteViewModel.setNoteType(type) }
+            it.getString(NewNoteNavigationController.KEY_NOTE_IMAGE_PATH)?.let { imagePath -> newNoteViewModel.addImage(imagePath) }
         }
 
         newNoteViewModel.type.observe(viewLifecycleOwner, Observer { type ->

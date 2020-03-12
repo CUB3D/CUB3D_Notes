@@ -8,15 +8,18 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.database.dao.ColourDao
+import pw.cub3d.cub3_notes.database.dao.ImageDao
 import pw.cub3d.cub3_notes.database.dao.NotesDao
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Colour
+import pw.cub3d.cub3_notes.database.entity.ImageEntry
 import pw.cub3d.cub3_notes.database.entity.Note
 
 class NewNoteViewModel(
     private val dao: NotesDao,
     private val checkboxEntryDao: CheckboxEntryDao,
-    private val colourDao: ColourDao
+    private val colourDao: ColourDao,
+    private val imagesDao: ImageDao
 ) : ViewModel() {
 
     val defaultNoteColours = colourDao.getAll()
@@ -26,6 +29,7 @@ class NewNoteViewModel(
     val modificationTime = MutableLiveData<String>()
     var type = MutableLiveData<String>()
     val checkboxes = MutableLiveData<List<CheckboxEntry>>()
+    val images = MutableLiveData<List<ImageEntry>>()
 
     var note = Note()
 
@@ -40,7 +44,9 @@ class NewNoteViewModel(
         GlobalScope.launch {
             //TODO: find links and pull data from them
             dao.save(note)
+            //TODO: transformations map instead of ths
             checkboxes.postValue(checkboxEntryDao.getByNote(note.id))
+            images.postValue(imagesDao.getByNote(note.id))
         }
 
         modificationTime.value = note.getLocalModificationTime()
@@ -113,6 +119,11 @@ class NewNoteViewModel(
 
     fun setNoteColour(hexColour: String) {
         note.colour = hexColour
+        saveNote()
+    }
+
+    fun addImage(imagePath: String) {
+        GlobalScope.launch { imagesDao.save(ImageEntry(0, note.id, imagePath)) }
         saveNote()
     }
 }

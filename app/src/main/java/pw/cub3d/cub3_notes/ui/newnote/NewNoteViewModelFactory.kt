@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.database.dao.ColourDao
+import pw.cub3d.cub3_notes.database.dao.ImageDao
 import pw.cub3d.cub3_notes.database.dao.NotesDao
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,12 +13,14 @@ import javax.inject.Singleton
 class NewNoteViewModelFactory @Inject constructor(
     private val notesDao: NotesDao,
     private val checkboxEntryDao: CheckboxEntryDao,
-    private val colourDao: ColourDao
+    private val colourDao: ColourDao,
+    private val imagesDao: ImageDao
 ): ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>) = NewNoteViewModel(
         notesDao,
         checkboxEntryDao,
-        colourDao
+        colourDao,
+        imagesDao
     ) as T
 }

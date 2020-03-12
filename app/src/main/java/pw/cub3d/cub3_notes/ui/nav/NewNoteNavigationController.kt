@@ -15,6 +15,13 @@ class NewNoteNavigationController @Inject constructor() {
         })
     }
 
+    fun navigateNewNoteWithImage(nav: NavController, imagePath: String) {
+        nav.navigate(R.id.nav_new_note, Bundle().apply {
+            putString(KEY_NOTE_TYPE, Note.TYPE_IMAGE)
+            putString(KEY_NOTE_IMAGE_PATH, imagePath)
+        })
+    }
+
     fun editNote(nav: NavController, note: Note) {
         nav.navigate(R.id.nav_new_note, Bundle().apply {
             putLong(KEY_NOTE, note.id)
@@ -24,5 +31,6 @@ class NewNoteNavigationController @Inject constructor() {
     companion object {
         const val KEY_NOTE_TYPE = "NOTE_TYPE"
         const val KEY_NOTE = "NOTE"
+        const val KEY_NOTE_IMAGE_PATH = "NOTE_IMAGE_PATH"
     }
 }
