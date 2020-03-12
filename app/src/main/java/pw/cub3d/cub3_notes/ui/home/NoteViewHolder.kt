@@ -6,6 +6,7 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
@@ -20,6 +21,14 @@ class NoteViewHolder(
     fun bind(note: NoteAndCheckboxes) {
 
         view.note = note.note
+
+        note.images.firstOrNull()?.let {
+            view.noteImage.visibility = View.VISIBLE
+
+            Glide.with(view.root)
+                .load(it.getFile(view.root.context))
+                .into(view.noteImage)
+        }
 
         if(note.note.type == Note.TYPE_CHECKBOX) {
             println("Drawing checkbox note $note")

@@ -46,6 +46,9 @@ class HomeFragment : Fragment() {
             if (it.itemId == R.id.nav_new_label) {
                 findNavController().navigate(R.id.nav_label_edit)
             }
+            if(it.itemId == R.id.sidenav_settings) {
+                findNavController().navigate(R.id.nav_settings)
+            }
 
             true
         }

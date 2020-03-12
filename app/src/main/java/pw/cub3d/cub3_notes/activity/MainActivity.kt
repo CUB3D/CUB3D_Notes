@@ -87,11 +87,14 @@ class MainActivity : AppCompatActivity() {
                 // Copy the given image to the local storage
                 println("Pick image")
                 val fileUri = data!!.data!!
-                val uuid = "${UUID.randomUUID().toString()}${fileUri.toFile().extension}"
+                val uuid = UUID.randomUUID().toString()
                 val imagesDir = File(filesDir, "images/").apply {
-                    createNewFile()
+                    mkdirs()
                 }
-                fileUri.toFile().copyTo(File(imagesDir, uuid))
+
+                val outFile = File(imagesDir, uuid)
+
+                contentResolver.openInputStream(fileUri)!!.copyTo(outFile.outputStream())
 
                 newNoteNavigationController.navigateNewNoteWithImage(findNavController(R.id.nav_host_fragment), uuid)
             }

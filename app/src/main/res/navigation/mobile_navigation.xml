@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_new_note"
             app:destination="@id/nav_new_note" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_settings"
+            app:destination="@id/nav_settings" />
     </fragment>
 
     <fragment

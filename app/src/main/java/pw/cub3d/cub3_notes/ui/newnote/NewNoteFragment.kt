@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_new_note.*
@@ -79,6 +79,14 @@ class NewNoteFragment : Fragment() {
             createNote_more_colors.layoutManager = LinearLayoutManager(requireContext())
             createNote_more_colors.adapter = ColoursAdapter(requireContext(), it) {
                 newNoteViewModel.setNoteColour(it.hex_colour)
+            }
+        })
+
+        newNoteViewModel.images.observe(viewLifecycleOwner, Observer {
+            it.firstOrNull()?.let {
+                Glide.with(this@NewNoteFragment)
+                    .load(it.getFile(requireContext()))
+                    .into(createNote_image)
             }
         })
 

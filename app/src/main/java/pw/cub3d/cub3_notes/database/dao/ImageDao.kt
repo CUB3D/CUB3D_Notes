@@ -22,4 +22,7 @@ abstract class ImageDao {
             update(imageEntry)
         }
     }
+
+    @Query("SELECT * FROM image")
+    abstract fun getAll(): List<ImageEntry>
 }

@@ -2,10 +2,12 @@ package pw.cub3d.cub3_notes.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.squareup.moshi.JsonClass
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
 @Entity(tableName = "labels")
+@JsonClass(generateAdapter = true)
 data class Label(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
