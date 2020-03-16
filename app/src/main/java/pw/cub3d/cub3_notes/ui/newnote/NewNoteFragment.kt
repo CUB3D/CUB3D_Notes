@@ -112,7 +112,7 @@ class NewNoteFragment : Fragment() {
         }
 
         createNote_reminder.setOnClickListener {
-            ReminderDialog(requireContext()).show()
+            ReminderDialog(requireActivity()).show()
         }
 
         createNote_more_labels.setOnClickListener {

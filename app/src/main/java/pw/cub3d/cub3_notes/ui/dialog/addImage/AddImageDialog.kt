@@ -40,14 +40,14 @@ class AddImageDialog(
         }
 
         addImage_takePhoto.setOnClickListener {
-            val file = File(
-                    context
-                    .getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-                    .absolutePath + File.separator.toString() + "yourPicture.jpg"
-            )
+//            val file = File(
+//                    context
+//                    .getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+//                    .absolutePath + File.separator.toString() + "yourPicture.jpg"
+//            )
 
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
-                putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file))
+//                putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file))
             }
 
             act.startActivityForResult(cameraIntent, TAKE_PHOTO)
