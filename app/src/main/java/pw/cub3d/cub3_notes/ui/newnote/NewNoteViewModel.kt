@@ -19,12 +19,13 @@ class NewNoteViewModel(
 ) : ViewModel() {
     val defaultNoteColours = colourDao.getAll()
 
-    val title = MutableLiveData<String>()
-    val text = MutableLiveData<String>()
+    var title = MutableLiveData<String>()
+    var text = MutableLiveData<String>()
 
     var noteAndCheckboxes: LiveData<NoteAndCheckboxes>? = null
 
     lateinit var type: LiveData<String>
+    lateinit var pinned: LiveData<Boolean>
     lateinit var checkboxes: LiveData<List<CheckboxEntry>>
     lateinit var images: LiveData<List<ImageEntry>>
     lateinit var modificationTime: LiveData<String>
@@ -33,7 +34,7 @@ class NewNoteViewModel(
     var noteId: Long? = null
 
     fun onPin() {
-        GlobalScope.launch { dao.pinNote(noteId!!, true) }
+        GlobalScope.launch { dao.pinNote(noteId!!, !pinned.value!!) }
     }
 
     fun onArchive() {
@@ -59,8 +60,8 @@ class NewNoteViewModel(
     fun loadNote(it: Long) = GlobalScope.async {
         noteId = it
 
-        title.postValue(dao.getNoteTitle(it))
-        text.postValue(dao.getNoteContent(it))
+        title = MutableLiveData(dao.getNoteTitle(it))
+        text = MutableLiveData(dao.getNoteContent(it))
 
         noteAndCheckboxes = dao.getNoteLive(it)
 
@@ -68,6 +69,7 @@ class NewNoteViewModel(
         type = Transformations.map(noteAndCheckboxes!!) { it.note.type }
         images = Transformations.map(noteAndCheckboxes!!) { it.images }
         modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
+        pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
     }
 
     fun setNoteColour(hexColour: String) {
@@ -87,6 +89,7 @@ class NewNoteViewModel(
         type = Transformations.map(noteAndCheckboxes!!) { it.note.type }
         images = Transformations.map(noteAndCheckboxes!!) { it.images }
         modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
+        pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
     }
 
     fun onTitleChange(title: String) {

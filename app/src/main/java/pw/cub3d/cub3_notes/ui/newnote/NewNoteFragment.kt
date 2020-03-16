@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.impl.utils.LiveDataUtils
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.support.AndroidSupportInjection
@@ -98,12 +98,16 @@ class NewNoteFragment : Fragment() {
             }
         })
 
-        Transformations.distinctUntilChanged(newNoteViewModel.title).observe(viewLifecycleOwner, Observer {
+        newNoteViewModel.title.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
             newNoteViewModel.onTitleChange(it)
         })
 
-        Transformations.distinctUntilChanged(newNoteViewModel.text).observe(viewLifecycleOwner, Observer {
+        newNoteViewModel.text.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
             newNoteViewModel.onTextChange(it)
+        })
+
+        newNoteViewModel.pinned.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
+            Toast.makeText(requireContext(), it.takeIf { it }?.let {  "Pinned" } ?: "Unpinned", Toast.LENGTH_SHORT).show()
         })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
@@ -147,3 +151,17 @@ class NewNoteFragment : Fragment() {
         super.onAttach(context)
     }
 }
+
+fun <T> ignoreFirstAssignment(data: LiveData<T>): LiveData<T> = MediatorLiveData<T>().apply {
+    var updates = 0
+    addSource(data) {
+        if(updates > 0) {
+            value = it
+        }
+        updates += 1
+    }
+}
+
+fun <T> LiveData<T>.distinctUntilChanged() = Transformations.distinctUntilChanged(this)
+
+fun <T> LiveData<T>.ignoreFirstValue() = ignoreFirstAssignment(this)

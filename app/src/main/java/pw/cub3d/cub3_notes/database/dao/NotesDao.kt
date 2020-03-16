@@ -2,6 +2,8 @@ package pw.cub3d.cub3_notes.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 
@@ -68,9 +70,11 @@ abstract class NotesDao {
     @Query("UPDATE notes SET type = :type WHERE id = :id")
     abstract fun setType(id: Long, type: String)
 
-    @Query("UPDATE notes SET title = :title WHERE id = :id")
-    abstract fun setTitle(id: Long, title: String)
+    @Query("UPDATE notes SET title = :title, modificationTime = :time WHERE id = :id")
+    abstract fun setTitle(id: Long, title: String, time: String = currentTime())
 
-    @Query("UPDATE notes SET text = :text WHERE id = :id")
-    abstract fun setText(id: Long, text: String)
+    @Query("UPDATE notes SET text = :text, modificationTime = :time WHERE id = :id")
+    abstract fun setText(id: Long, text: String, time: String = currentTime())
+
+    fun currentTime() = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
 }
