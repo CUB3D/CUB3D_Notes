@@ -21,6 +21,7 @@ import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import pw.cub3d.cub3_notes.ui.newnote.NewNoteFragment
@@ -34,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var appBarConfiguration: AppBarConfiguration
 
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
+
+    @Inject lateinit var storageManager: StorageManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +103,15 @@ class MainActivity : AppCompatActivity() {
             }
             if (requestCode == AddImageDialog.TAKE_PHOTO) {
                 println("Take photo")
+
+                // Will always return true, unless app is restarted between images
+                storageManager.getLastCameraImageUUID()?.let {
+                    newNoteNavigationController.navigateNewNoteWithImage(findNavController(R.id.nav_host_fragment),
+                        it
+                    )
+                }
+
+                AddImageDialog.closeIfOpen()
             }
         } else {
             println("Result: failed")
