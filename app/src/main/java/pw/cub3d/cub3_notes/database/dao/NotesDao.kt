@@ -45,4 +45,32 @@ abstract class NotesDao {
 
     @Query("SELECT * FROM notes WHERE id = :noteId")
     abstract fun getNote(noteId: Long): Note?
+
+    @Query("SELECT title from notes WHERE id = :noteId")
+    abstract fun getNoteTitle(noteId: Long): String
+
+    @Query("SELECT text from notes WHERE id = :noteId")
+    abstract fun getNoteContent(noteId: Long): String
+
+    @Transaction
+    @Query("SELECT * FROM notes WHERE id = :noteId")
+    abstract fun getNoteLive(noteId: Long): LiveData<NoteAndCheckboxes>
+
+    @Query("UPDATE notes SET archived = :state WHERE id = :id")
+    abstract fun archiveNote(id: Long, state: Boolean)
+
+    @Query("UPDATE notes SET pinned = :state WHERE id = :id")
+    abstract fun pinNote(id: Long, state: Boolean)
+
+    @Query("UPDATE notes SET colour = :colour WHERE id = :id")
+    abstract fun setNoteColour(id: Long, colour: String)
+
+    @Query("UPDATE notes SET type = :type WHERE id = :id")
+    abstract fun setType(id: Long, type: String)
+
+    @Query("UPDATE notes SET title = :title WHERE id = :id")
+    abstract fun setTitle(id: Long, title: String)
+
+    @Query("UPDATE notes SET text = :text WHERE id = :id")
+    abstract fun setText(id: Long, text: String)
 }

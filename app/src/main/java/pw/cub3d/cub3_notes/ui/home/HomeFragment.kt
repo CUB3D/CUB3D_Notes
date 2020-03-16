@@ -20,6 +20,7 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.activity.MainActivity
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
@@ -33,6 +34,7 @@ class HomeFragment : Fragment() {
 
     @Inject lateinit var homeViewModelFactory: NotesViewModelFactory
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
+    @Inject lateinit var storageManager: StorageManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -170,7 +172,7 @@ class HomeFragment : Fragment() {
         home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_DRAW) }
         home_new_voiceNote.setOnClickListener{ newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_AUDIO) }
         home_new_imgNote.setOnClickListener {
-            AddImageDialog(requireActivity()).show()
+            AddImageDialog(requireActivity(), storageManager).show()
         }
     }
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_new_note.*
+import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
@@ -38,6 +40,13 @@ class NewNoteFragment : Fragment() {
         newNoteViewModel = ViewModelProvider(viewModelStore, newNoteViewModelFactory)
             .get(NewNoteViewModel::class.java)
 
+        arguments?.let {
+            it.getBoolean(NewNoteNavigationController.KEY_NEW_NOTE, false).takeIf { it }?.let { runBlocking { newNoteViewModel.newNote().await() } }
+            it.getLong(NewNoteNavigationController.KEY_NOTE, -1).takeIf { it != -1L }?.let { runBlocking { newNoteViewModel.loadNote(it).await() } }
+            it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> newNoteViewModel.setNoteType(type) }
+            it.getString(NewNoteNavigationController.KEY_NOTE_IMAGE_PATH)?.let { imagePath -> newNoteViewModel.addImage(imagePath) }
+        }
+
         val binding: FragmentNewNoteBinding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
 
         binding.viewModel = newNoteViewModel
@@ -49,12 +58,7 @@ class NewNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        newNoteViewModel.loadNote(arguments?.getLong(NewNoteNavigationController.KEY_NOTE, -1) ?: -1)
-
-        arguments?.let {
-            it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> newNoteViewModel.setNoteType(type) }
-            it.getString(NewNoteNavigationController.KEY_NOTE_IMAGE_PATH)?.let { imagePath -> newNoteViewModel.addImage(imagePath) }
-        }
+//        newNoteViewModel.loadNote(arguments?.getLong(NewNoteNavigationController.KEY_NOTE, -1) ?: -1)
 
         newNoteViewModel.type.observe(viewLifecycleOwner, Observer { type ->
             if(type == Note.TYPE_CHECKBOX) {
@@ -66,6 +70,10 @@ class NewNoteFragment : Fragment() {
                 createNote_checkBoxes.visibility = View.GONE
                 createNote_newItem.visibility = View.GONE
             }
+        })
+
+        newNoteViewModel.modificationTime.observe(viewLifecycleOwner, Observer {
+            createNote_lastEdited.text = it
         })
 
         newNoteViewModel.checkboxes.observe(viewLifecycleOwner, Observer {
@@ -88,6 +96,14 @@ class NewNoteFragment : Fragment() {
                     .load(it.getFile(requireContext()))
                     .into(createNote_image)
             }
+        })
+
+        Transformations.distinctUntilChanged(newNoteViewModel.title).observe(viewLifecycleOwner, Observer {
+            newNoteViewModel.onTitleChange(it)
+        })
+
+        Transformations.distinctUntilChanged(newNoteViewModel.text).observe(viewLifecycleOwner, Observer {
+            newNoteViewModel.onTextChange(it)
         })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
@@ -117,14 +133,13 @@ class NewNoteFragment : Fragment() {
 
         createNote_more_labels.setOnClickListener {
             findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit, Bundle().apply {
-                putLong(NoteLabelEditFragment.KEY_NOTE_ID, newNoteViewModel.note.id)
+                putLong(NoteLabelEditFragment.KEY_NOTE_ID, newNoteViewModel.noteAndCheckboxes!!.value!!.note.id)
             })
         }
     }
 
     override fun onPause() {
         super.onPause()
-        newNoteViewModel.save()
     }
 
     override fun onAttach(context: Context) {

@@ -1,19 +1,15 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
 import android.text.util.Linkify
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.database.dao.ColourDao
 import pw.cub3d.cub3_notes.database.dao.ImageDao
 import pw.cub3d.cub3_notes.database.dao.NotesDao
-import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
-import pw.cub3d.cub3_notes.database.entity.Colour
-import pw.cub3d.cub3_notes.database.entity.ImageEntry
-import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.database.entity.*
 
 class NewNoteViewModel(
     private val dao: NotesDao,
@@ -21,109 +17,85 @@ class NewNoteViewModel(
     private val colourDao: ColourDao,
     private val imagesDao: ImageDao
 ) : ViewModel() {
-
     val defaultNoteColours = colourDao.getAll()
 
     val title = MutableLiveData<String>()
     val text = MutableLiveData<String>()
-    val modificationTime = MutableLiveData<String>()
-    var type = MutableLiveData<String>()
-    val checkboxes = MutableLiveData<List<CheckboxEntry>>()
-    val images = MutableLiveData<List<ImageEntry>>()
 
-    var note = Note()
+    var noteAndCheckboxes: LiveData<NoteAndCheckboxes>? = null
+
+    lateinit var type: LiveData<String>
+    lateinit var checkboxes: LiveData<List<CheckboxEntry>>
+    lateinit var images: LiveData<List<ImageEntry>>
+    lateinit var modificationTime: LiveData<String>
 
 
-
-    private fun saveNote() {
-        note.title = title.value ?: ""
-        note.text = text.value ?: ""
-        note.type = type.value ?: Note.TYPE_TEXT
-
-        println("Note: $note")
-        GlobalScope.launch {
-            //TODO: find links and pull data from them
-            dao.save(note)
-            //TODO: transformations map instead of ths
-            checkboxes.postValue(checkboxEntryDao.getByNote(note.id))
-            images.postValue(imagesDao.getByNote(note.id))
-        }
-
-        modificationTime.value = note.getLocalModificationTime()
-    }
+    var noteId: Long? = null
 
     fun onPin() {
-        note.pinned = !note.pinned
-
-        saveNote()
+        GlobalScope.launch { dao.pinNote(noteId!!, true) }
     }
 
     fun onArchive() {
-        note.archived = true
-
-        saveNote()
+        GlobalScope.launch { dao.archiveNote(noteId!!, true) }
     }
 
     fun setNoteType(it: String) {
-        note.type = it
-        type.value = it
-        saveNote()
-    }
-
-    fun save() {
-//        saveNote()
-//        GlobalScope.launch { checkboxEntryDao.saveAll(checkboxes.value!!) }
+        GlobalScope.launch { dao.setType(noteId!!, it) }
     }
 
     fun addCheckbox() {
-        val chk = CheckboxEntry(noteId = note.id)
-        GlobalScope.launch { checkboxEntryDao.insert(chk) }
-        saveNote()
+        GlobalScope.launch { checkboxEntryDao.insert(CheckboxEntry(noteId = noteId!!)) }
     }
 
     fun onCheckboxDelete(entry: CheckboxEntry) {
-        println("Deleting checkbox: $entry")
         GlobalScope.launch { checkboxEntryDao.delete(entry.id) }
-        saveNote()
     }
 
     fun saveCheckbox(checkboxEntry: CheckboxEntry) {
-        println("Saving checkbox $checkboxEntry")
         GlobalScope.launch { checkboxEntryDao.update(checkboxEntry) }
     }
 
-    fun loadNote(it: Long) {
-        if(it != (-1).toLong()) {
-            println("Loading note with id: $it")
-            //TODO: no null
-            GlobalScope.launch {
-                note = dao.getNote(it)!!
-                println("Loaded note: $note")
-                title.postValue(note.title)
-                text.postValue(note.text)
-                modificationTime.postValue(note.getLocalModificationTime())
-                type.postValue(note.type)
+    fun loadNote(it: Long) = GlobalScope.async {
+        noteId = it
 
-                checkboxes.postValue(checkboxEntryDao.getByNote(note.id))
+        title.postValue(dao.getNoteTitle(it))
+        text.postValue(dao.getNoteContent(it))
 
-                viewModelScope.launch {
-                    title.observeForever { saveNote() }
-                    text.observeForever { saveNote() }
-                }
-            }
-        } else {
-            title.observeForever { saveNote() }
-            text.observeForever { saveNote() }
-        }
+        noteAndCheckboxes = dao.getNoteLive(it)
+
+        checkboxes = Transformations.map(noteAndCheckboxes!!) { it.checkboxes }
+        type = Transformations.map(noteAndCheckboxes!!) { it.note.type }
+        images = Transformations.map(noteAndCheckboxes!!) { it.images }
+        modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
     }
 
     fun setNoteColour(hexColour: String) {
-        note.colour = hexColour
-        saveNote()
+        GlobalScope.launch { dao.setNoteColour(noteId!!, hexColour) }
     }
 
     fun addImage(imagePath: String) {
-        GlobalScope.launch { imagesDao.save(ImageEntry(0, note.id, imagePath)) }
-        saveNote()
+        GlobalScope.launch { imagesDao.save(ImageEntry(0, noteId!!, imagePath)) }
+    }
+
+    fun newNote() = GlobalScope.async {
+        noteId = dao.insert(Note())
+
+        noteAndCheckboxes = dao.getNoteLive(noteId!!)
+
+        checkboxes = Transformations.map(noteAndCheckboxes!!) { it.checkboxes }
+        type = Transformations.map(noteAndCheckboxes!!) { it.note.type }
+        images = Transformations.map(noteAndCheckboxes!!) { it.images }
+        modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
+    }
+
+    fun onTitleChange(title: String) {
+        println("Title change: $title")
+        GlobalScope.launch { dao.setTitle(noteId!!, title) }
+    }
+
+    fun onTextChange(text: String) {
+        println("Text change")
+        GlobalScope.launch { dao.setText(noteId!!, text) }
     }
 }
