@@ -20,6 +20,7 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.activity.MainActivity
 import pw.cub3d.cub3_notes.database.entity.Note
@@ -36,12 +37,29 @@ class HomeFragment : Fragment() {
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
     @Inject lateinit var storageManager: StorageManager
 
+    @Inject lateinit var settingsManager: SettingsManager
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         (requireActivity() as AppCompatActivity).setupActionBarWithNavController(findNavController(), (requireActivity() as MainActivity).appBarConfiguration)
         requireActivity().nav_view.setupWithNavController(findNavController())
+
+        home_pinnedNotes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        home_notes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
+        settingsManager.noteLayout.observe(viewLifecycleOwner, Observer {
+            println("Layout changed to: $it")
+
+            (home_pinnedNotes.layoutManager as StaggeredGridLayoutManager).apply {
+                spanCount = it.grid_size
+            }
+
+            (home_notes.layoutManager as StaggeredGridLayoutManager).apply {
+                spanCount = it.grid_size
+            }
+        })
 
         requireActivity().nav_view.setNavigationItemSelectedListener {
             println("Nav item selected: $it")
@@ -80,8 +98,6 @@ class HomeFragment : Fragment() {
             home_pinnedTitle.visibility = View.VISIBLE
             home_othersTitle.visibility = View.VISIBLE
 
-            home_pinnedNotes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
             val adapter = NotesAdapter(requireContext(), it) { note -> newNoteNavigationController.editNote(findNavController(), note) }
 
             home_pinnedNotes.adapter = adapter
@@ -115,8 +131,6 @@ class HomeFragment : Fragment() {
         })
 
         homeViewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
-            home_notes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
             val adapter = NotesAdapter(requireContext(), it) { note -> newNoteNavigationController.editNote(findNavController(), note) }
 
             home_notes.adapter = adapter

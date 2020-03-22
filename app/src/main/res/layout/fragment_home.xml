@@ -18,11 +18,12 @@
             app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
+                android:background="@drawable/background_toolbar_home"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways"
-                android:elevation="4dp"
+                android:elevation="0dp"
                 android:layout_margin="4dp"/>
         </com.google.android.material.appbar.AppBarLayout>
 
