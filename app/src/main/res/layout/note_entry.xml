@@ -30,7 +30,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:outlineProvider="background"
-            app:cardBackgroundColor="@{isSelected ? note.colourId : @android:color/white, default=@android:color/white}"
+            app:cardBackgroundColor="@{isSelected ? @android:color/white : note.colourId, default=@android:color/white}"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

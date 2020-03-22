@@ -80,13 +80,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(settingsManager.noteLayout.value!! == Layouts.GRID) {
-            settingsManager.noteLayout.postValue(Layouts.LIST)
+        if(item.itemId == R.id.main_changeLayout) {
+            if (settingsManager.noteLayout.value!! == Layouts.GRID) {
+                settingsManager.noteLayout.postValue(Layouts.LIST)
+            }
+            if (settingsManager.noteLayout.value!! == Layouts.LIST) {
+                settingsManager.noteLayout.postValue(Layouts.GRID)
+            }
+            return true
         }
-        if(settingsManager.noteLayout.value!! == Layouts.LIST) {
-            settingsManager.noteLayout.postValue(Layouts.GRID)
-        }
-        return true
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -68,8 +68,8 @@ abstract class NotesDao {
     @Query("UPDATE notes SET pinned = :state WHERE id = :id")
     abstract fun pinNote(id: Long, state: Boolean)
 
-    @Query("UPDATE notes SET colour = :colour WHERE id = :id")
-    abstract fun setNoteColour(id: Long, colour: String)
+    @Query("UPDATE notes SET colour = :colour, modificationTime = :time WHERE id = :id")
+    abstract fun setNoteColour(id: Long, colour: String, time: String = currentTime())
 
     @Query("UPDATE notes SET type = :type WHERE id = :id")
     abstract fun setType(id: Long, type: String)
