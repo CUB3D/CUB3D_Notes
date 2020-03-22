@@ -13,7 +13,7 @@ import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
 class NotesAdapter(
     ctx: Context,
-    private val notes: List<NoteAndCheckboxes>,
+    private var notes: List<NoteAndCheckboxes>,
     private val callback: (Note)->Unit
 ) : RecyclerView.Adapter<NoteViewHolder>() {
     lateinit var selectionTracker: SelectionTracker<Long>
@@ -39,6 +39,11 @@ class NotesAdapter(
         holder.pos = position
         println("Bind view: $position, selected: ${selectionTracker.isSelected(position.toLong())}")
         holder.bind(notes[position])
+    }
+
+    fun updateData(it: List<NoteAndCheckboxes>) {
+        notes = it
+        notifyDataSetChanged()
     }
 
 }

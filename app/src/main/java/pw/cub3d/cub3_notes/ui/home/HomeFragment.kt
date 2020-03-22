@@ -51,6 +51,9 @@ class HomeFragment : Fragment() {
             if(it.itemId == R.id.sidenav_settings) {
                 findNavController().navigate(R.id.nav_settings)
             }
+            if(it.itemId == R.id.sidenav_archived) {
+                findNavController().navigate(R.id.nav_archive)
+            }
 
             true
         }

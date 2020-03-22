@@ -27,7 +27,7 @@
 
     <group android:orderInCategory="999" android:id="@+id/hamburger_group_archive">
         <item
-            android:id="@+id/nav_archived"
+            android:id="@+id/sidenav_archived"
             android:icon="@drawable/ic_package"
             android:title="Archive"/>
         <item

@@ -18,6 +18,10 @@ abstract class NotesDao {
     abstract fun getAllPinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
+    @Query("SELECT * FROM notes WHERE notes.archived = 1")
+    abstract fun getAllArchivedNotes(): LiveData<List<NoteAndCheckboxes>>
+
+    @Transaction
     @Query("SELECT * FROM notes")
     abstract suspend fun getAllNotes(): List<NoteAndCheckboxes>
 
