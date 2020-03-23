@@ -30,7 +30,9 @@ data class Note(
 
     var timeReminder: String? = null,
 
-    var colour: String = "#ffffff"
+    var colour: String = "#ffffff",
+
+    var deletionTime: String? = ""
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -43,6 +45,7 @@ data class Note(
         parcel.readString()!!,
         parcel.readString(),
         parcel.readString()!!
+    //TODO: delet
     )
 
     fun getLocalModificationTime(): String {

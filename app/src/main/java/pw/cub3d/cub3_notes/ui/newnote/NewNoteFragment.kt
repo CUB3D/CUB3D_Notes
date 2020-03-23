@@ -131,8 +131,11 @@ class NewNoteFragment : Fragment() {
             }
         }
 
-        createNote_reminder.setOnClickListener {
-            ReminderDialog(requireActivity()).show()
+        createNote_reminder.setOnClickListener { ReminderDialog(requireActivity()).show() }
+
+        createNote_more_delete.setOnClickListener {
+            newNoteViewModel.onDelete()
+            findNavController().popBackStack()
         }
 
         createNote_more_labels.setOnClickListener {

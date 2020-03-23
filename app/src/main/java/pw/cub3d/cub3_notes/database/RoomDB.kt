@@ -99,6 +99,12 @@ object Migrations {
             database.execSQL("CREATE INDEX index_note_label ON note_label (note_id, label_id)")
         }
     }
+
+    val MIGRATE_12_13 = object: Migration(12, 13) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE notes ADD COLUMN deletionTime TEXT")
+        }
+    }
 }
 
 @Database(
@@ -110,7 +116,7 @@ object Migrations {
         Colour::class,
         ImageEntry::class
     ],
-    version = 12,
+    version = 13,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {

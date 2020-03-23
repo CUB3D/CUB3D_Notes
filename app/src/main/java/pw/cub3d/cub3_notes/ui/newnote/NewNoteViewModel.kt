@@ -101,4 +101,8 @@ class NewNoteViewModel(
         println("Text change")
         GlobalScope.launch { dao.setText(noteId!!, text) }
     }
+
+    fun onDelete() {
+        GlobalScope.launch { dao.deleteNote(noteId!!) }
+    }
 }

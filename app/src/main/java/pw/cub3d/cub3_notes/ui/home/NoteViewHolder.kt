@@ -22,12 +22,16 @@ class NoteViewHolder(
 
         view.note = note.note
 
-        note.images.firstOrNull()?.let {
+        val image = note.images.firstOrNull()
+
+        if (image != null) {
             view.noteImage.visibility = View.VISIBLE
 
             Glide.with(view.root)
-                .load(it.getFile(view.root.context))
+                .load(image.getFile(view.root.context))
                 .into(view.noteImage)
+        } else {
+            view.noteImage.visibility = View.GONE
         }
 
         if(note.note.type == Note.TYPE_CHECKBOX) {

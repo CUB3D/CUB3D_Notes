@@ -10,15 +10,15 @@ import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 @Dao
 abstract class NotesDao {
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0")
+    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime = NULL")
     abstract fun getAllUnpinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0")
+    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime = NULL")
     abstract fun getAllPinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.archived = 1")
+    @Query("SELECT * FROM notes WHERE notes.archived = 1 AND deletionTime = NULL")
     abstract fun getAllArchivedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
@@ -81,4 +81,10 @@ abstract class NotesDao {
     abstract fun setText(id: Long, text: String, time: String = currentTime())
 
     fun currentTime() = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+
+    @Query("UPDATE notes SET deletionTime = :time WHERE id = :id")
+    abstract fun deleteNote(id: Long, time: String = currentTime())
+
+    @Query("UPDATE notes set deletionTime = NULL WHERE id = :id")
+    abstract fun restoreNote(id: Long)
 }
