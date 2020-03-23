@@ -46,4 +46,10 @@
         android:label="Add Labels"
         tools:layout="@layout/fragment_note_label_edit"/>
 
+    <fragment
+        android:id="@+id/nav_archive"
+        android:name="pw.cub3d.cub3_notes.ui.archived.ArchiveFragment"
+        android:label="Archive"
+        tools:layout="@layout/archive_fragment"/>
+
 </navigation>

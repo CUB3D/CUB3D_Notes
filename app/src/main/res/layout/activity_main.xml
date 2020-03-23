@@ -25,6 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        app:itemShapeAppearanceOverlay="@style/CustomShapeOVerlay"
+        app:itemShapeInsetStart="0dp"
+        app:itemShapeInsetTop="0dp"
+        app:itemShapeInsetEnd="16dp"
+        app:itemShapeInsetBottom="0dp"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 

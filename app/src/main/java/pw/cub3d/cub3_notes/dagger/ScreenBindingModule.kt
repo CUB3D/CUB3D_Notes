@@ -3,6 +3,7 @@ package pw.cub3d.cub3_notes.dagger
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import pw.cub3d.cub3_notes.activity.MainActivity
+import pw.cub3d.cub3_notes.ui.archived.ArchiveFragment
 import pw.cub3d.cub3_notes.ui.home.HomeFragment
 import pw.cub3d.cub3_notes.ui.labelEdit.LabelEditFragment
 import pw.cub3d.cub3_notes.ui.newnote.NewNoteFragment
@@ -21,6 +22,8 @@ abstract class ScreenBindingModule {
     abstract fun labelEditFragment(): LabelEditFragment
     @ContributesAndroidInjector
     abstract fun noteLabelEditFragment(): NoteLabelEditFragment
+    @ContributesAndroidInjector
+    abstract fun archiveFragment(): ArchiveFragment
 
     @ContributesAndroidInjector
     abstract fun mainActivity(): MainActivity

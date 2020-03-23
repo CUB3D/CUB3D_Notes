@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
@@ -20,7 +21,9 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import pw.cub3d.cub3_notes.Layouts
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
 
     @Inject lateinit var storageManager: StorageManager
+    @Inject lateinit var settingsManager: SettingsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,8 +75,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.menu_main_toolbar, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.main_changeLayout) {
+            if (settingsManager.noteLayout.value!! == Layouts.GRID) {
+                settingsManager.noteLayout.postValue(Layouts.LIST)
+            }
+            if (settingsManager.noteLayout.value!! == Layouts.LIST) {
+                settingsManager.noteLayout.postValue(Layouts.GRID)
+            }
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {

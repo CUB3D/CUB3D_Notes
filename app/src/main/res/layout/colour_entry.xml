@@ -11,22 +11,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/colorEntry_button"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:cornerRadius="1000dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/colorEntryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@{colour.colourId}">
-
-        </com.google.android.material.button.MaterialButton>
+            android:background="@{colour.colourId}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
