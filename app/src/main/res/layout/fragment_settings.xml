@@ -17,7 +17,7 @@
         android:text="Export data" />
 
     <Button
-        android:id="@+id/settings_blockstack_login"
+        android:id="@+id/settings_test_sync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

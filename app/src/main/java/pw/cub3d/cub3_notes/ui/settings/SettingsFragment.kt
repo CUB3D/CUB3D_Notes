@@ -15,6 +15,7 @@ import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.DataExporter
+import pw.cub3d.cub3_notes.sync.OpenTasksSyncManager
 import java.io.File
 import javax.inject.Inject
 
@@ -23,6 +24,8 @@ class SettingsFragment : Fragment() {
 
     @Inject
     lateinit var dataExporter: DataExporter
+
+    @Inject lateinit var openTasksSyncManager: OpenTasksSyncManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -41,6 +44,10 @@ class SettingsFragment : Fragment() {
                     )
                 )
             }
+        }
+
+        settings_test_sync.setOnClickListener {
+            openTasksSyncManager.test()
         }
     }
 
