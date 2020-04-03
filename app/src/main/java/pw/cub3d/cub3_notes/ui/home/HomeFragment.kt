@@ -186,8 +186,8 @@ class HomeFragment : Fragment() {
 
         home_takeNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController()) }
         home_new_checkNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
-        home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_DRAW) }
-        home_new_voiceNote.setOnClickListener{ newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_AUDIO) }
+//        home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_DRAW) }
+//        home_new_voiceNote.setOnClickListener{ newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_AUDIO) }
         home_new_imgNote.setOnClickListener {
             AddImageDialog(requireActivity(), storageManager).show()
         }

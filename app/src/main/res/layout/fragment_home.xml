@@ -111,19 +111,19 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_check_square" />
 
-        <ImageView
-            android:id="@+id/home_new_penNote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_pen_tool" />
+<!--        <ImageView-->
+<!--            android:id="@+id/home_new_penNote"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="16dp"-->
+<!--            android:src="@drawable/ic_pen_tool" />-->
 
-        <ImageView
-            android:id="@+id/home_new_voiceNote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_mic" />
+<!--        <ImageView-->
+<!--            android:id="@+id/home_new_voiceNote"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="16dp"-->
+<!--            android:src="@drawable/ic_mic" />-->
 
         <ImageView
             android:id="@+id/home_new_imgNote"

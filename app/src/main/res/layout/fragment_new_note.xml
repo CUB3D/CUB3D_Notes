@@ -128,18 +128,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/createNote_newItem"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:text="+ List item"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createNote_checkBoxes" />
+            <Button
+                android:id="@+id/createNote_newItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:text="+ List Item"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/createNote_checkBoxes" />
 
         <ImageView
             android:id="@+id/createNote_more"

@@ -18,4 +18,6 @@ data class NoteAndCheckboxes(
 
     @Relation(parentColumn = "id", entityColumn = "noteId")
     val images: List<ImageEntry>
-)
+) {
+    fun isEmpty() = note.title.isEmpty() && note.text.isEmpty() && checkboxes.isEmpty() && images.isEmpty()
+}

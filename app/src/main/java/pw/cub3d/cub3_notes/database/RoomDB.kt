@@ -152,7 +152,8 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_8_9,
                     Migrations.MIGRATE_9_10,
                     Migrations.MIGRATE_10_11,
-                    Migrations.MIGRATE_11_12
+                    Migrations.MIGRATE_11_12,
+                    Migrations.MIGRATE_12_13
                 //TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()

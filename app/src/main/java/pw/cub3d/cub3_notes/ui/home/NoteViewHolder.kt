@@ -55,6 +55,10 @@ class NoteViewHolder(
         }
 
         view.root.setOnClickListener { callback.invoke(note.note) }
+
+        if(note.isEmpty()) {
+            view.noteTitle.visibility = View.VISIBLE
+        }
     }
 
     fun getItemDetails(idd: Long?): ItemDetailsLookup.ItemDetails<Long>? {
