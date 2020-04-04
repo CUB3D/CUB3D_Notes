@@ -79,11 +79,10 @@ class NewNoteFragment : Fragment() {
         newNoteViewModel.checkboxes.observe(viewLifecycleOwner, Observer {
             println("Updating checkboxes: $it")
             createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { newNoteViewModel.saveCheckbox(it) }, { newNoteViewModel.onCheckboxDelete(it) })
+            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, newNoteViewModel)
         })
 
         newNoteViewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
-            println("Got colours: $it")
             createNote_more_colors.layoutManager = LinearLayoutManager(requireContext())
             createNote_more_colors.adapter = ColoursAdapter(requireContext(), it) {
                 newNoteViewModel.setNoteColour(it.hex_colour)

@@ -45,18 +45,6 @@ class NewNoteViewModel(
         GlobalScope.launch { dao.setType(noteId!!, it) }
     }
 
-    fun addCheckbox() {
-        GlobalScope.launch { checkboxEntryDao.insert(CheckboxEntry(noteId = noteId!!)) }
-    }
-
-    fun onCheckboxDelete(entry: CheckboxEntry) {
-        GlobalScope.launch { checkboxEntryDao.delete(entry.id) }
-    }
-
-    fun saveCheckbox(checkboxEntry: CheckboxEntry) {
-        GlobalScope.launch { checkboxEntryDao.update(checkboxEntry) }
-    }
-
     fun loadNote(it: Long) = GlobalScope.async {
         noteId = it
 
@@ -104,5 +92,18 @@ class NewNoteViewModel(
 
     fun onDelete() {
         GlobalScope.launch { dao.deleteNote(noteId!!) }
+    }
+
+    fun addCheckbox() {
+        GlobalScope.launch { checkboxEntryDao.insert(CheckboxEntry(noteId = noteId!!)) }
+    }
+
+    fun onCheckboxChecked(checkboxEntry: CheckboxEntry, checked: Boolean) {
+        println("Checked: ${checkboxEntry}, $checked")
+        GlobalScope.launch { checkboxEntryDao.setChecked(checkboxEntry.id, checked) }
+    }
+
+    fun onCheckboxDelete(entry: CheckboxEntry) {
+        GlobalScope.launch { checkboxEntryDao.delete(entry.id) }
     }
 }

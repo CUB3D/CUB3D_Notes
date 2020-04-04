@@ -35,4 +35,7 @@ abstract class CheckboxEntryDao {
     open fun saveAll(checkboxEntry: List<CheckboxEntry>) {
         checkboxEntry.forEach { save(it) }
     }
+
+    @Query("UPDATE checkbox_entry SET checked = :checked WHERE id = :id")
+    abstract fun setChecked(id: Long, checked: Boolean)
 }
