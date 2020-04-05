@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -78,6 +79,7 @@ class HomeFragment : Fragment() {
 
         homeViewModel.labels.observe(viewLifecycleOwner, Observer {
             val menu = requireActivity().nav_view.menu.findItem(R.id.hamburger_labels).subMenu
+            menu.children.filter { it.groupId == R.id.hamburger_group_labels }.forEach { menu.removeItem(it.itemId) }
 
             it.forEach {
                 menu.add(R.id.hamburger_group_labels, it.id.toInt(), Menu.FIRST, it.title).apply {
