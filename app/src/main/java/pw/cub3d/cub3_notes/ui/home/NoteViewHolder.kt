@@ -34,14 +34,15 @@ class NoteViewHolder(
             view.noteImage.visibility = View.GONE
         }
 
-        if(note.note.type == Note.TYPE_CHECKBOX) {
-            println("Drawing checkbox note $note")
-
+        if(note.checkboxes.isNotEmpty()) {
             val unticked = note.checkboxes.filterNot { it.checked }
 
             view.tickedItemCount = note.checkboxes.size - unticked.size
             view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
             view.noteChecks.adapter = HomeCheckboxAdapter(view.root.context, unticked)
+            view.noteChecks.visibility = View.VISIBLE
+        } else {
+            view.noteChecks.visibility = View.GONE
         }
 
         println("Drawing labels: $note")

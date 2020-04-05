@@ -76,7 +76,7 @@ class NewNoteFragment : Fragment() {
             createNote_lastEdited.text = it
         })
 
-        newNoteViewModel.checkboxes.observe(viewLifecycleOwner, Observer {
+        newNoteViewModel.checkboxes.distinctUntilLengthChanged().observe(viewLifecycleOwner, Observer {
             println("Updating checkboxes: $it")
             createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
             createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, newNoteViewModel)
@@ -164,6 +164,16 @@ fun <T> ignoreFirstAssignment(data: LiveData<T>): LiveData<T> = MediatorLiveData
     }
 }
 
+fun <T> distinctUntilLengthChanges(data: LiveData<List<T>>): LiveData<List<T>> = MediatorLiveData<List<T>>().apply {
+    addSource(data) {
+        if(value == null || value!!.size != it.size) {
+            value = it
+        }
+    }
+}
+
 fun <T> LiveData<T>.distinctUntilChanged() = Transformations.distinctUntilChanged(this)
 
 fun <T> LiveData<T>.ignoreFirstValue() = ignoreFirstAssignment(this)
+
+fun <T> LiveData<List<T>>.distinctUntilLengthChanged() = distinctUntilLengthChanges(this)

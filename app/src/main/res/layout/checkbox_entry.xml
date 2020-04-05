@@ -6,6 +6,9 @@
         <variable
             name="entry"
             type="pw.cub3d.cub3_notes.database.entity.CheckboxEntry"/>
+        <variable
+            name="content"
+            type="androidx.lifecycle.MutableLiveData&lt;String>"/>
 <!--        <variable-->
 <!--            name="isChecked"-->
 <!--            type="androidx.lifecycle.MutableLiveData&lt;Boolean>" />-->
@@ -58,7 +61,7 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:outlineProvider="none"
-                android:text="@={entry.content}" />
+                android:text="@={content}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView

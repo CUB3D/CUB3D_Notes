@@ -10,16 +10,20 @@ import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 @Dao
 abstract class NotesDao {
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime = NULL")
+    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL")
     abstract fun getAllUnpinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime = NULL")
+    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime IS NULL")
     abstract fun getAllPinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.archived = 1 AND deletionTime = NULL")
+    @Query("SELECT * FROM notes WHERE notes.archived = 1 AND deletionTime IS NULL")
     abstract fun getAllArchivedNotes(): LiveData<List<NoteAndCheckboxes>>
+
+    @Transaction
+    @Query("SELECT * FROM notes WHERE deletionTime IS NOT NULL")
+    abstract fun getDeletedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
     @Query("SELECT * FROM notes")

@@ -38,4 +38,7 @@ abstract class CheckboxEntryDao {
 
     @Query("UPDATE checkbox_entry SET checked = :checked WHERE id = :id")
     abstract fun setChecked(id: Long, checked: Boolean)
+
+    @Query("UPDATE checkbox_entry SET content = :text WHERE id = :id")
+    abstract fun setText(id: Long, text: String)
 }

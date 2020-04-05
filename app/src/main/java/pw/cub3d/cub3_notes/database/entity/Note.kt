@@ -32,7 +32,7 @@ data class Note(
 
     var colour: String = "#ffffff",
 
-    var deletionTime: String? = ""
+    var deletionTime: String? = null
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(

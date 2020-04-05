@@ -131,6 +131,7 @@ class HomeFragment : Fragment() {
         })
 
         homeViewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
+            println("Got notes: $it")
             val adapter = NotesAdapter(requireContext(), it) { note -> newNoteNavigationController.editNote(findNavController(), note) }
 
             home_notes.adapter = adapter

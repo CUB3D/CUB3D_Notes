@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
@@ -46,14 +47,13 @@ class CheckBoxViewHolder(
             newNoteViewModel.onCheckboxChecked(checkboxEntry, isChecked)
         }
 
-//        view.isChecked = MutableLiveData<Boolean>(checkboxEntry.checked).apply {
-//            observeForever {
-//                checkboxEntry.checked = this.value!!
-//                saveCallback(checkboxEntry)
-//            }
-//        }
-//
-//        view.checkboxEntryDelete.setOnClickListener {  deleteCallback(checkboxEntry) }
-//        view.checkboxEntryText.doAfterTextChanged {  saveCallback(checkboxEntry) }
+        val test = MutableLiveData(checkboxEntry.content)
+        view.content = test
+
+        //TODO: pass lifecycleowner and use observe
+        test.distinctUntilChanged().ignoreFirstValue().observeForever {
+            println("Got new content for $checkboxEntry, $it")
+            newNoteViewModel.onCheckboxTextChange(checkboxEntry, it)
+        }
     }
 }

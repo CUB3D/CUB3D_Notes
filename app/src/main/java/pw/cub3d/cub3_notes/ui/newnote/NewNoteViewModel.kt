@@ -71,6 +71,10 @@ class NewNoteViewModel(
     fun newNote() = GlobalScope.async {
         noteId = dao.insert(Note())
 
+        println("Got note id: $noteId")
+
+        println("All notes: ${dao.getAllNotes()}")
+
         noteAndCheckboxes = dao.getNoteLive(noteId!!)
 
         checkboxes = Transformations.map(noteAndCheckboxes!!) { it.checkboxes }
@@ -105,5 +109,9 @@ class NewNoteViewModel(
 
     fun onCheckboxDelete(entry: CheckboxEntry) {
         GlobalScope.launch { checkboxEntryDao.delete(entry.id) }
+    }
+
+    fun onCheckboxTextChange(entry: CheckboxEntry, text: String) {
+        GlobalScope.launch { checkboxEntryDao.setText(entry.id, text) }
     }
 }
