@@ -83,9 +83,11 @@ class MainActivity : AppCompatActivity() {
         if(item.itemId == R.id.main_changeLayout) {
             if (settingsManager.noteLayout.value!! == Layouts.GRID) {
                 settingsManager.noteLayout.postValue(Layouts.LIST)
+                item.icon = resources.getDrawable(R.drawable.ic_rows, theme)
             }
             if (settingsManager.noteLayout.value!! == Layouts.LIST) {
                 settingsManager.noteLayout.postValue(Layouts.GRID)
+                item.icon = resources.getDrawable(R.drawable.ic_grid, theme)
             }
             return true
         }
