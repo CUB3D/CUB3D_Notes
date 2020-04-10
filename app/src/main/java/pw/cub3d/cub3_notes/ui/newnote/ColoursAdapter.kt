@@ -33,9 +33,16 @@ class ColourViewHolder(
     private val callback: (Colour)->Unit
 ): RecyclerView.ViewHolder(view.root) {
     fun bind(colour: Colour) {
-        view.colour = colour
-        view.colorEntryButton.setOnClickListener {
-            callback(colour)
+        if(colour.id == -1L) {
+            view.background = R.drawable.ic_plus
+            view.colorEntryButton.setOnClickListener {
+                println("Open color modify fragment")
+            }
+        } else {
+            view.background = colour.getColourId()
+            view.colorEntryButton.setOnClickListener {
+                callback(colour)
+            }
         }
     }
 }

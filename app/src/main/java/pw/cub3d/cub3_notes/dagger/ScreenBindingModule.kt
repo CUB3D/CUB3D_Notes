@@ -8,6 +8,7 @@ import pw.cub3d.cub3_notes.ui.home.HomeFragment
 import pw.cub3d.cub3_notes.ui.labelEdit.LabelEditFragment
 import pw.cub3d.cub3_notes.ui.newnote.NewNoteFragment
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
+import pw.cub3d.cub3_notes.ui.search.SearchFragment
 import pw.cub3d.cub3_notes.ui.settings.SettingsFragment
 
 @Module
@@ -24,6 +25,8 @@ abstract class ScreenBindingModule {
     abstract fun noteLabelEditFragment(): NoteLabelEditFragment
     @ContributesAndroidInjector
     abstract fun archiveFragment(): ArchiveFragment
+    @ContributesAndroidInjector
+    abstract fun searchFragment(): SearchFragment
 
     @ContributesAndroidInjector
     abstract fun mainActivity(): MainActivity

@@ -46,6 +46,11 @@ class HomeFragment : Fragment() {
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         (requireActivity() as AppCompatActivity).setupActionBarWithNavController(findNavController(), (requireActivity() as MainActivity).appBarConfiguration)
         requireActivity().nav_view.setupWithNavController(findNavController())
+        (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Search your notes"
+        (requireActivity() as AppCompatActivity).toolbar.setOnClickListener {
+            findNavController().navigate(R.id.nav_search)
+        }
+
 
         home_pinnedNotes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         home_notes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)

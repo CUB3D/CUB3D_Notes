@@ -17,7 +17,9 @@ class NewNoteViewModel(
     private val colourDao: ColourDao,
     private val imagesDao: ImageDao
 ) : ViewModel() {
-    val defaultNoteColours = colourDao.getAll()
+    val defaultNoteColours = colourDao.getAll().map {
+        it + Colour(-1, "")
+    }
 
     var title = MutableLiveData<String>()
     var text = MutableLiveData<String>()
@@ -99,11 +101,12 @@ class NewNoteViewModel(
     }
 
     fun addCheckbox() {
-        GlobalScope.launch { checkboxEntryDao.insert(CheckboxEntry(noteId = noteId!!)) }
+        GlobalScope.launch { checkboxEntryDao.insert(CheckboxEntry(noteId = noteId!!, position = checkboxes.value?.lastOrNull()?.position?.plus(1) ?: 1)) }
     }
 
     fun onCheckboxChecked(checkboxEntry: CheckboxEntry, checked: Boolean) {
         println("Checked: ${checkboxEntry}, $checked")
+        checkboxEntry.checked = checked
         GlobalScope.launch { checkboxEntryDao.setChecked(checkboxEntry.id, checked) }
     }
 
@@ -113,5 +116,9 @@ class NewNoteViewModel(
 
     fun onCheckboxTextChange(entry: CheckboxEntry, text: String) {
         GlobalScope.launch { checkboxEntryDao.setText(entry.id, text) }
+    }
+
+    fun upadateCheckboxPosition(entry: CheckboxEntry, position: Int) {
+        GlobalScope.launch { checkboxEntryDao.setPosition(entry.id, position) }
     }
 }

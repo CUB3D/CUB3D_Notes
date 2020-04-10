@@ -3,6 +3,7 @@ package pw.cub3d.cub3_notes.ui.newnote
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -17,10 +18,18 @@ class CheckBoxAdapter(
 ) : RecyclerView.Adapter<CheckBoxViewHolder>() {
     private val layoutInflater = LayoutInflater.from(ctx)
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CheckBoxViewHolder(
         DataBindingUtil.inflate(layoutInflater, R.layout.checkbox_entry, parent, false),
         newNoteViewModel
     )
+
+    override fun getItemId(position: Int): Long {
+        return checkboxEntries[position].id
+    }
 
     override fun getItemCount() = checkboxEntries.size
 
@@ -47,13 +56,20 @@ class CheckBoxViewHolder(
             newNoteViewModel.onCheckboxChecked(checkboxEntry, isChecked)
         }
 
-        val test = MutableLiveData(checkboxEntry.content)
-        view.content = test
+        view.checkboxEntryText.setText(checkboxEntry.content)
 
-        //TODO: pass lifecycleowner and use observe
-        test.distinctUntilChanged().ignoreFirstValue().observeForever {
-            println("Got new content for $checkboxEntry, $it")
-            newNoteViewModel.onCheckboxTextChange(checkboxEntry, it)
+        view.checkboxEntryText.doOnTextChanged { text, start, count, after ->
+            newNoteViewModel.onCheckboxTextChange(checkboxEntry, text.toString())
         }
+
+//        val test = MutableLiveData<String>()
+//        view.content = test
+//        test.postValue(checkboxEntry.content)
+//
+//        //TODO: pass lifecycleowner and use observe
+//        test.distinctUntilChanged().ignoreFirstValue().observeForever {
+//            println("Got new content for $checkboxEntry, $it")
+//            newNoteViewModel.onCheckboxTextChange(checkboxEntry, it)
+//        }
     }
 }

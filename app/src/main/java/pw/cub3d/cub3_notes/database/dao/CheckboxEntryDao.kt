@@ -41,4 +41,7 @@ abstract class CheckboxEntryDao {
 
     @Query("UPDATE checkbox_entry SET content = :text WHERE id = :id")
     abstract fun setText(id: Long, text: String)
+
+    @Query("UPDATE checkbox_entry SET position = :position WHERE id = :id")
+    abstract fun setPosition(id: Long, position: Int)
 }

@@ -10,6 +10,11 @@ import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 @Dao
 abstract class NotesDao {
     @Transaction
+    @Query("SELECT * FROM notes n WHERE deletionTime IS NULL AND (n.text LIKE :query OR n.title LIKE :query OR n.type LIKE :query)")
+    abstract fun getNoteSearchResults(query: String): LiveData<List<NoteAndCheckboxes>>
+
+
+    @Transaction
     @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL")
     abstract fun getAllUnpinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 

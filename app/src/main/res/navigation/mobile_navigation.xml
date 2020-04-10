@@ -52,4 +52,10 @@
         android:label="Archive"
         tools:layout="@layout/archive_fragment"/>
 
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="pw.cub3d.cub3_notes.ui.search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search"/>
+
 </navigation>

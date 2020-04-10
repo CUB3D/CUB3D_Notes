@@ -6,25 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.view.menu.MenuView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.impl.utils.LiveDataUtils
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_new_note.*
 import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
+import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
-import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import javax.inject.Inject
+
 
 class NewNoteFragment : Fragment() {
 
@@ -76,10 +80,73 @@ class NewNoteFragment : Fragment() {
             createNote_lastEdited.text = it
         })
 
-        newNoteViewModel.checkboxes.distinctUntilLengthChanged().observe(viewLifecycleOwner, Observer {
-            println("Updating checkboxes: $it")
+        //TODO sort in room junction
+        newNoteViewModel.checkboxes.map { it.sortedBy { it.position } }.distinctUntilChanged { old, new -> old.map { it.id } == new.map { it.id } }.observe(viewLifecycleOwner, Observer { checkboxes ->
+            println("Updating checkboxes: $checkboxes")
             createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, newNoteViewModel)
+            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), checkboxes, newNoteViewModel)
+
+            val callback: ItemTouchHelper.Callback = object: ItemTouchHelper.Callback() {
+                override fun getMovementFlags(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ): Int {
+                    val cb: (vh: RecyclerView.ViewHolder)->CheckboxEntry = {vh -> checkboxes.find { it.id ==  vh.itemId}!!}
+
+                    return makeMovementFlags(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), if(cb(viewHolder).checked) ItemTouchHelper.RIGHT else ItemTouchHelper.LEFT)
+                }
+
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    val cb: (vh: RecyclerView.ViewHolder)->CheckboxEntry = {vh -> checkboxes.find { it.id ==  vh.itemId}!!}
+
+                    newNoteViewModel.upadateCheckboxPosition(cb(viewHolder), cb(target).position)
+                    newNoteViewModel.upadateCheckboxPosition(cb(target), cb(viewHolder).position)
+
+//                    val moveUp = target.adapterPosition > viewHolder.adapterPosition
+//
+//                    if(moveUp) {
+//                        newNoteViewModel.upadateCheckboxPosition(checkboxes[viewHolder.adapterPosition], checkboxes[target.adapterPosition].position)
+//                        newNoteViewModel.upadateCheckboxPosition(checkboxes[target.adapterPosition], checkboxes[viewHolder.adapterPosition].position)
+//
+//                    } else {
+//                        newNoteViewModel.moveCheckbox(checkboxes[viewHolder.adapterPosition], ItemTouchHelper.DOWN)
+//                    }
+
+//                    //TODO only update the ones that are needed
+//                    newNoteViewModel.upadateCheckboxPosition(checkboxes[viewHolder.adapterPosition], target.adapterPosition)
+//
+//                    (viewHolder.adapterPosition until (createNote_checkBoxes.adapter as CheckBoxAdapter).itemCount).forEachIndexed { ind, it ->
+//                        newNoteViewModel.upadateCheckboxPosition(checkboxes[it], target.adapterPosition + ind + 1)
+//                    }
+
+                    (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
+
+
+//                    Toast.makeText(requireContext(), "Moving item", Toast.LENGTH_LONG).show()
+                    return true
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    if(direction == ItemTouchHelper.LEFT) {
+                        newNoteViewModel.onCheckboxChecked(checkboxes[viewHolder.adapterPosition], true)
+                        //TODO: is this the correct pos
+                        (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
+                    }
+
+                    if(direction == ItemTouchHelper.RIGHT) {
+                        newNoteViewModel.onCheckboxChecked(checkboxes[viewHolder.adapterPosition], false)
+                        //TODO: is this the correct pos
+                        (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
+                    }
+                }
+
+            }
+            val touchHelper = ItemTouchHelper(callback)
+            touchHelper.attachToRecyclerView(createNote_checkBoxes)
         })
 
         newNoteViewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
@@ -144,10 +211,6 @@ class NewNoteFragment : Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -172,8 +235,23 @@ fun <T> distinctUntilLengthChanges(data: LiveData<List<T>>): LiveData<List<T>> =
     }
 }
 
+fun <T> distinctUntilChangedPred(data:  LiveData<T>, predicate: (old: T, new: T)->Boolean) = MediatorLiveData<T>().apply {
+    addSource(data) {
+        if(value != null && it != null) {
+            if(!predicate(value!!, it)) {
+                value = it
+            }
+        } else {
+            value = it
+        }
+    }
+}
+
 fun <T> LiveData<T>.distinctUntilChanged() = Transformations.distinctUntilChanged(this)
+fun <T> LiveData<T>.distinctUntilChanged(predicate: (old: T, new: T) -> Boolean) = distinctUntilChangedPred(this, predicate)
 
 fun <T> LiveData<T>.ignoreFirstValue() = ignoreFirstAssignment(this)
 
 fun <T> LiveData<List<T>>.distinctUntilLengthChanged() = distinctUntilLengthChanges(this)
+
+fun <T, Y> LiveData<T>.map(func: (T) -> Y) = Transformations.map(this, func)

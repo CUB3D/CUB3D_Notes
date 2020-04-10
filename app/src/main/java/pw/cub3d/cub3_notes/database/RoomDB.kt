@@ -105,6 +105,12 @@ object Migrations {
             database.execSQL("ALTER TABLE notes ADD COLUMN deletionTime TEXT")
         }
     }
+
+    val MIGRATE_13_14 = object: Migration(13, 14) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE checkbox_entry ADD COLUMN position INTEGER DEFAULT 1 NOT NULL")
+        }
+    }
 }
 
 @Database(
@@ -116,7 +122,7 @@ object Migrations {
         Colour::class,
         ImageEntry::class
     ],
-    version = 13,
+    version = 14,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
@@ -153,7 +159,8 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_9_10,
                     Migrations.MIGRATE_10_11,
                     Migrations.MIGRATE_11_12,
-                    Migrations.MIGRATE_12_13
+                    Migrations.MIGRATE_12_13,
+                    Migrations.MIGRATE_13_14
                 //TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()

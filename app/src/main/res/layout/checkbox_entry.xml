@@ -61,7 +61,8 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:outlineProvider="none"
-                android:text="@={content}" />
+                />
+<!--            android:text="@={content}"-->
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
