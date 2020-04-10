@@ -7,6 +7,10 @@
         <variable
             name="viewModel"
             type="pw.cub3d.cub3_notes.ui.newnote.NewNoteViewModel"/>
+
+        <variable
+            name="noteColour"
+            type="int" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -14,8 +18,9 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-    android:layout_height="match_parent">
+            android:background="@{noteColour}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/createNote_image"

@@ -16,4 +16,7 @@ abstract class ColourDao {
 
     @Query("DELETE FROM card_colour")
     abstract fun deleteAll()
+
+    @Query("DELETE FROM card_colour WHERE id = :id")
+    abstract fun delete(id: Long)
 }

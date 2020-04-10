@@ -11,20 +11,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/colorEntryButton"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/colourEntry_button"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@{background}"
-            app:cornerRadius="1000dp"
+            android:layout_marginBottom="16dp"
+            app:iconTint="#000"
+            android:backgroundTint="@{background, default=`#ff0000`}"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            app:iconPadding="0dp"
+            app:iconSize="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

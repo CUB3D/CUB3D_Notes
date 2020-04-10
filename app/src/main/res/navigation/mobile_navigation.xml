@@ -58,4 +58,11 @@
         android:label="Search"
         tools:layout="@layout/fragment_search"/>
 
+    <fragment
+        android:id="@+id/nav_colours"
+        android:name="pw.cub3d.cub3_notes.ui.colours.ColoursFragment"
+        android:label="Colours"
+        tools:layout="@layout/fragment_colours"/>
+
+
 </navigation>

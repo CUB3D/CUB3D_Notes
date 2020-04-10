@@ -1,5 +1,6 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
+import android.graphics.Color
 import android.text.util.Linkify
 import androidx.lifecycle.*
 import kotlinx.coroutines.GlobalScope
@@ -31,6 +32,7 @@ class NewNoteViewModel(
     lateinit var checkboxes: LiveData<List<CheckboxEntry>>
     lateinit var images: LiveData<List<ImageEntry>>
     lateinit var modificationTime: LiveData<String>
+    lateinit var colour: LiveData<Int>
 
 
     var noteId: Long? = null
@@ -60,6 +62,7 @@ class NewNoteViewModel(
         images = Transformations.map(noteAndCheckboxes!!) { it.images }
         modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
         pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
+        colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
     }
 
     fun setNoteColour(hexColour: String) {
@@ -84,6 +87,8 @@ class NewNoteViewModel(
         images = Transformations.map(noteAndCheckboxes!!) { it.images }
         modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
         pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
+        colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
+
     }
 
     fun onTitleChange(title: String) {

@@ -10,7 +10,7 @@ import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 @Dao
 abstract class NotesDao {
     @Transaction
-    @Query("SELECT * FROM notes n WHERE deletionTime IS NULL AND (n.text LIKE :query OR n.title LIKE :query OR n.type LIKE :query)")
+    @Query("SELECT * FROM notes n INNER JOIN checkbox_entry ce ON ce.noteId = n.id WHERE deletionTime IS NULL AND (n.text LIKE :query OR n.title LIKE :query OR n.type LIKE :query OR ce.content LIKE :query)")
     abstract fun getNoteSearchResults(query: String): LiveData<List<NoteAndCheckboxes>>
 
 

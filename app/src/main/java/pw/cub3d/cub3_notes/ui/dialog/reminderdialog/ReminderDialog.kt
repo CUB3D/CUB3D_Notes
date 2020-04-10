@@ -1,21 +1,24 @@
 package pw.cub3d.cub3_notes.ui.dialog.reminderdialog
 
-import android.app.Activity
+import android.app.AlarmManager
 import android.app.Dialog
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
 import kotlinx.android.synthetic.main.dialog_reminder.*
 import org.threeten.bp.ZonedDateTime
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.ReminderBroadcastReciever
 import java.util.*
 
 
@@ -31,6 +34,25 @@ class ReminderDialog(private val act: FragmentActivity): Dialog(act) {
 
     var selectedDate: ZonedDateTime? = null
 
+    private fun setAlarm(
+        context: Context,
+        time: Long,
+        pendingIntent: PendingIntent
+    ) {
+        val alarmManager =
+            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        if (SDK_INT < Build.VERSION_CODES.KITKAT) alarmManager[AlarmManager.RTC_WAKEUP, time] =
+            pendingIntent else if (Build.VERSION_CODES.KITKAT <= SDK_INT && SDK_INT < Build.VERSION_CODES.M) alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        ) else if (SDK_INT >= Build.VERSION_CODES.M) alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -38,6 +60,14 @@ class ReminderDialog(private val act: FragmentActivity): Dialog(act) {
         setContentView(R.layout.dialog_reminder)
 
         reminder_cancel.setOnClickListener { dismiss() }
+
+        reminder_save.setOnClickListener {
+            val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            setAlarm(context, ZonedDateTime.now().plusSeconds(10).toEpochSecond(),
+                PendingIntent.getBroadcast(context, 0, Intent(context, ReminderBroadcastReciever::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT)
+            )
+        }
 
 
 

@@ -28,4 +28,10 @@
         <item name="cornerSizeBottomRight">30dp</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.MyApp.Button.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
 </resources>

@@ -1,12 +1,13 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Color.WHITE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.view.menu.MenuView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_new_note.*
 import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
+import pw.cub3d.cub3_notes.database.entity.Colour
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
@@ -35,6 +37,7 @@ class NewNoteFragment : Fragment() {
     @Inject
     lateinit var newNoteViewModelFactory: NewNoteViewModelFactory
     private lateinit var newNoteViewModel: NewNoteViewModel
+    private lateinit var binding: FragmentNewNoteBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,9 +54,10 @@ class NewNoteFragment : Fragment() {
             it.getString(NewNoteNavigationController.KEY_NOTE_IMAGE_PATH)?.let { imagePath -> newNoteViewModel.addImage(imagePath) }
         }
 
-        val binding: FragmentNewNoteBinding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
 
         binding.viewModel = newNoteViewModel
+        binding.noteColour = Color.WHITE
         binding.lifecycleOwner = this
 
         return binding.root
@@ -150,10 +154,8 @@ class NewNoteFragment : Fragment() {
         })
 
         newNoteViewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
-            createNote_more_colors.layoutManager = LinearLayoutManager(requireContext())
-            createNote_more_colors.adapter = ColoursAdapter(requireContext(), it) {
-                newNoteViewModel.setNoteColour(it.hex_colour)
-            }
+            createNote_more_colors.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            createNote_more_colors.adapter = ColoursAdapter(this, it, newNoteViewModel)
         })
 
         newNoteViewModel.images.observe(viewLifecycleOwner, Observer {
@@ -174,6 +176,10 @@ class NewNoteFragment : Fragment() {
 
         newNoteViewModel.pinned.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
             Toast.makeText(requireContext(), it.takeIf { it }?.let {  "Pinned" } ?: "Unpinned", Toast.LENGTH_SHORT).show()
+        })
+
+        newNoteViewModel.colour.observe(viewLifecycleOwner, Observer {
+            binding.noteColour = it
         })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
