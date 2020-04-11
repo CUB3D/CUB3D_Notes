@@ -37,8 +37,10 @@ class HomeFragment : Fragment() {
     @Inject lateinit var homeViewModelFactory: NotesViewModelFactory
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
     @Inject lateinit var storageManager: StorageManager
-
     @Inject lateinit var settingsManager: SettingsManager
+
+    lateinit var pinnedAdapter: NotesAdapter
+    lateinit var otherAdapter: NotesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,9 +49,7 @@ class HomeFragment : Fragment() {
         (requireActivity() as AppCompatActivity).setupActionBarWithNavController(findNavController(), (requireActivity() as MainActivity).appBarConfiguration)
         requireActivity().nav_view.setupWithNavController(findNavController())
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Search your notes"
-        (requireActivity() as AppCompatActivity).toolbar.setOnClickListener {
-            findNavController().navigate(R.id.nav_search)
-        }
+        (requireActivity() as AppCompatActivity).toolbar.setOnClickListener { findNavController().navigate(R.id.nav_search) }
 
 
         home_pinnedNotes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -69,14 +69,11 @@ class HomeFragment : Fragment() {
 
         requireActivity().nav_view.setNavigationItemSelectedListener {
             println("Nav item selected: $it")
-            if (it.itemId == R.id.nav_new_label) {
-                findNavController().navigate(R.id.nav_label_edit)
-            }
-            if(it.itemId == R.id.sidenav_settings) {
-                findNavController().navigate(R.id.nav_settings)
-            }
-            if(it.itemId == R.id.sidenav_archived) {
-                findNavController().navigate(R.id.nav_archive)
+            when (it.itemId) {
+                R.id.nav_new_label -> findNavController().navigate(R.id.nav_label_edit)
+                R.id.sidenav_settings -> findNavController().navigate(R.id.nav_settings)
+                R.id.sidenav_archived -> findNavController().navigate(R.id.nav_archive)
+                R.id.sidenav_deleted -> findNavController().navigate(R.id.nav_deleted)
             }
 
             true
@@ -93,103 +90,102 @@ class HomeFragment : Fragment() {
             }
         })
 
+        pinnedAdapter = NotesAdapter(requireContext(), emptyList()) { note -> newNoteNavigationController.editNote(findNavController(), note) }
+        home_pinnedNotes.adapter = pinnedAdapter
+        val keyProvider = MyItemKeyProvider(home_notes)
+
+        val itemDetails = object: ItemDetailsLookup<Long>() {
+            override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
+                val view: View? = home_notes.findChildViewUnder(e.x, e.y)
+                if (view != null) {
+                    val holder: ViewHolder = home_notes.getChildViewHolder(view)
+                    if (holder is NoteViewHolder) {
+                        return holder.getItemDetails(keyProvider.getKey(holder.pos))
+                    }
+                }
+                return null
+            }
+        }
+
+        val tracker = SelectionTracker.Builder(
+            "notes-pin-selection",
+            home_pinnedNotes,
+            keyProvider,
+            itemDetails,
+            StorageStrategy.createLongStorage()
+        )
+            .withSelectionPredicate(SelectionPredicates.createSelectAnything())
+            .build()
+
+        pinnedAdapter.selectionTracker = tracker
+
+
         homeViewModel.pinnedNotes.observe(viewLifecycleOwner, Observer {
             if(it.isEmpty()) {
                 home_pinnedNotes.visibility = View.GONE
                 home_pinnedTitle.visibility = View.GONE
                 home_othersTitle.visibility = View.GONE
-                return@Observer
+            } else {
+                home_pinnedNotes.visibility = View.VISIBLE
+                home_pinnedTitle.visibility = View.VISIBLE
+                home_othersTitle.visibility = View.VISIBLE
             }
-
-            home_pinnedNotes.visibility = View.VISIBLE
-            home_pinnedTitle.visibility = View.VISIBLE
-            home_othersTitle.visibility = View.VISIBLE
-
-            val adapter = NotesAdapter(requireContext(), it) { note -> newNoteNavigationController.editNote(findNavController(), note) }
-
-            home_pinnedNotes.adapter = adapter
-
-            val keyProvider = MyItemKeyProvider(home_notes)
-
-            val itemDetails = object: ItemDetailsLookup<Long>() {
-                override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
-                    val view: View? = home_notes.findChildViewUnder(e.x, e.y)
-                    if (view != null) {
-                        val holder: ViewHolder = home_notes.getChildViewHolder(view)
-                        if (holder is NoteViewHolder) {
-                            return holder.getItemDetails(keyProvider.getKey(holder.pos))
-                        }
-                    }
-                    return null
-                }
-            }
-
-            val tracker = SelectionTracker.Builder(
-                "notes-pin-selection",
-                home_pinnedNotes,
-                keyProvider,
-                itemDetails,
-                StorageStrategy.createLongStorage()
-            )
-                .withSelectionPredicate(SelectionPredicates.createSelectAnything())
-                .build()
-
-            adapter.selectionTracker = tracker
+            pinnedAdapter.updateData(it)
         })
 
-        homeViewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
-            println("Got notes: $it")
-            val adapter = NotesAdapter(requireContext(), it) { note -> newNoteNavigationController.editNote(findNavController(), note) }
+        otherAdapter = NotesAdapter(requireContext(), emptyList()) { note -> newNoteNavigationController.editNote(findNavController(), note) }
+        home_notes.adapter = otherAdapter
 
-            home_notes.adapter = adapter
+        val otherKeyProvider = MyItemKeyProvider(home_notes)
 
-            val keyProvider = MyItemKeyProvider(home_notes)
-
-            val itemDetails = object: ItemDetailsLookup<Long>() {
-                override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
-                    val view: View? = home_notes.findChildViewUnder(e.x, e.y)
-                    if (view != null) {
-                        val holder: ViewHolder = home_notes.getChildViewHolder(view)
-                        if (holder is NoteViewHolder) {
-                            val id = holder.getItemDetails(keyProvider.getKey(holder.pos))
-                            return id
-                        }
+        val otherItemDetails = object: ItemDetailsLookup<Long>() {
+            override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
+                val view: View? = home_notes.findChildViewUnder(e.x, e.y)
+                if (view != null) {
+                    val holder: ViewHolder = home_notes.getChildViewHolder(view)
+                    if (holder is NoteViewHolder) {
+                        val id = holder.getItemDetails(otherKeyProvider.getKey(holder.pos))
+                        return id
                     }
-                    return null
+                }
+                return null
+            }
+        }
+
+        val otherTracker = SelectionTracker.Builder(
+            "notes-selection",
+            home_notes,
+            otherKeyProvider,
+            otherItemDetails,
+            StorageStrategy.createLongStorage()
+        )
+            .withSelectionPredicate(SelectionPredicates.createSelectAnything())
+            .build()
+
+        otherTracker.addObserver(object: SelectionTracker.SelectionObserver<Long>() {
+            override fun onItemStateChanged(key: Long, selected: Boolean) {
+                println("Item state change: $key, $selected")
+                home_notes.findViewHolderForAdapterPosition(otherKeyProvider.getPosition(key))?.let {
+                    (it as NoteViewHolder).onSelected()
                 }
             }
 
-            val tracker = SelectionTracker.Builder(
-                "notes-selection",
-                home_notes,
-                keyProvider,
-                itemDetails,
-                StorageStrategy.createLongStorage()
-            )
-                .withSelectionPredicate(SelectionPredicates.createSelectAnything())
-                .build()
+            override fun onSelectionChanged() {
+            }
 
-            adapter.selectionTracker = tracker
+            override fun onSelectionRestored() {
+                println("Selection restored")
+            }
 
-            tracker.addObserver(object: SelectionTracker.SelectionObserver<Long>() {
-                override fun onItemStateChanged(key: Long, selected: Boolean) {
-                    println("Item state change: $key, $selected")
-                    home_notes.findViewHolderForAdapterPosition(keyProvider.getPosition(key))?.let {
-                        (it as NoteViewHolder).onSelected()
-                    }
-                }
+            override fun onSelectionRefresh() {
+                println("Selection refreshed")
+            }
+        })
 
-                override fun onSelectionChanged() {
-                }
+        otherAdapter.selectionTracker = otherTracker
 
-                override fun onSelectionRestored() {
-                    println("Selection restored")
-                }
-
-                override fun onSelectionRefresh() {
-                    println("Selection refreshed")
-                }
-            })
+        homeViewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
+            otherAdapter.updateData(it)
         })
 
         home_takeNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController()) }

@@ -64,5 +64,11 @@
         android:label="Colours"
         tools:layout="@layout/fragment_colours"/>
 
+    <fragment
+        android:id="@+id/nav_deleted"
+        android:name="pw.cub3d.cub3_notes.ui.deleted.DeletedNotesFragment"
+        android:label="Deleted"
+        tools:layout="@layout/fragment_deleted_notes"/>
+
 
 </navigation>
