@@ -1,5 +1,6 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
@@ -14,13 +15,15 @@ class NewNoteViewModelFactory @Inject constructor(
     private val notesDao: NotesDao,
     private val checkboxEntryDao: CheckboxEntryDao,
     private val colourDao: ColourDao,
-    private val imagesDao: ImageDao
+    private val imagesDao: ImageDao,
+    private val context: Context
 ): ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>) = NewNoteViewModel(
         notesDao,
         checkboxEntryDao,
         colourDao,
-        imagesDao
+        imagesDao,
+        context
     ) as T
 }

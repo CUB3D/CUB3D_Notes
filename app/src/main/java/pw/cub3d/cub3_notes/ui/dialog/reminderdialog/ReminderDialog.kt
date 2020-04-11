@@ -3,6 +3,7 @@ package pw.cub3d.cub3_notes.ui.dialog.reminderdialog
 import android.app.AlarmManager
 import android.app.Dialog
 import android.app.PendingIntent
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -13,16 +14,21 @@ import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.FragmentActivity
+import androidx.work.workDataOf
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
 import kotlinx.android.synthetic.main.dialog_reminder.*
-import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.ReminderBroadcastReciever
 import java.util.*
+import kotlin.math.min
 
 
-class ReminderDialog(private val act: FragmentActivity): Dialog(act) {
+class ReminderDialog(
+    private val act: FragmentActivity,
+    private val callback: (ZonedDateTime)->Unit
+): Dialog(act) {
 
     val dateOptions = arrayOf(
         Pair("Today", ZonedDateTime.now()),
@@ -51,6 +57,40 @@ class ReminderDialog(private val act: FragmentActivity): Dialog(act) {
             time,
             pendingIntent
         )
+    }
+
+    fun datePicker(callback: OnDateSetListener) {
+        val now = Calendar.getInstance()
+        val dpd: DatePickerDialog = DatePickerDialog.newInstance(
+            callback,
+            now[Calendar.YEAR],  // Initial year selection
+            now[Calendar.MONTH],  // Initial month selection
+            now[Calendar.DAY_OF_MONTH] // Inital day selection
+        )
+        dpd.show(act.supportFragmentManager, "DPD-Date")
+    }
+
+    fun timePicker(callback: com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener) {
+        val now = ZonedDateTime.now()
+        val tpd = com.wdullaer.materialdatetimepicker.time.TimePickerDialog.newInstance(
+            callback,
+            now.hour,
+            now.minute,
+            now.second,
+            true
+        )
+        tpd.show(act.supportFragmentManager, "TPD-Time")
+    }
+
+    fun simpleDialog() {
+        datePicker(OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            timePicker(com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute, second ->
+                val date = LocalDate.of(year, monthOfYear, dayOfMonth)
+                val time = LocalTime.of(hourOfDay, minute, second)
+                val zonedate = ZonedDateTime.of(date, time, ZoneId.systemDefault())
+                callback(zonedate)
+            })
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,6 +1,9 @@
 package pw.cub3d.cub3_notes.activity
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
@@ -47,6 +50,13 @@ class MainActivity : AppCompatActivity() {
 
         AndroidInjection.inject(this)
 
+        // Create notification channels
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannel(NotificationChannel("default", "Defualt", NotificationManager.IMPORTANCE_LOW))
+            }
+        }
+
         window.statusBarColor = Color.parseColor("#FAFAFA")
         setContentView(R.layout.activity_main)
 
@@ -70,6 +80,11 @@ class MainActivity : AppCompatActivity() {
 //                home_appBar.visibility = View.GONE
                 drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
+        }
+
+        // Check if loaded due to notification click
+        intent.getLongExtra("NOTE_ID", -1).takeIf { it > 0 }?.let {
+            newNoteNavigationController.editNote(navController, it)
         }
     }
 

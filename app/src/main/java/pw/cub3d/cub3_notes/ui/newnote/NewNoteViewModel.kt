@@ -1,11 +1,19 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.text.util.Linkify
 import androidx.lifecycle.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import pw.cub3d.cub3_notes.ReminderBroadcastReciever
 import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.database.dao.ColourDao
 import pw.cub3d.cub3_notes.database.dao.ImageDao
@@ -16,7 +24,8 @@ class NewNoteViewModel(
     private val dao: NotesDao,
     private val checkboxEntryDao: CheckboxEntryDao,
     private val colourDao: ColourDao,
-    private val imagesDao: ImageDao
+    private val imagesDao: ImageDao,
+    private val context: Context
 ) : ViewModel() {
     val defaultNoteColours = colourDao.getAll().map {
         it + Colour(-1, "")
@@ -125,5 +134,36 @@ class NewNoteViewModel(
 
     fun upadateCheckboxPosition(entry: CheckboxEntry, position: Int) {
         GlobalScope.launch { checkboxEntryDao.setPosition(entry.id, position) }
+    }
+
+    fun setNoteReminder(zonedDateTime: ZonedDateTime) {
+        GlobalScope.launch {
+            dao.setNoteReminder(noteId!!, zonedDateTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME))
+
+            setAlarm(context, zonedDateTime.toEpochSecond(),
+                PendingIntent.getBroadcast(context, 0, Intent(context, ReminderBroadcastReciever::class.java).apply {
+                    putExtra("NOTE_ID", noteId!!)
+                }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT)
+            )
+        }
+    }
+
+    private fun setAlarm(
+        context: Context,
+        time: Long,
+        pendingIntent: PendingIntent
+    ) {
+        val alarmManager =
+            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) alarmManager[AlarmManager.RTC_WAKEUP, time] =
+            pendingIntent else if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        ) else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        )
     }
 }

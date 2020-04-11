@@ -4,6 +4,7 @@ import androidx.room.Delete
 import com.bumptech.glide.provider.ModelToResourceClassCache
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import pw.cub3d.cub3_notes.ReminderBroadcastReciever
 import pw.cub3d.cub3_notes.activity.MainActivity
 import pw.cub3d.cub3_notes.ui.archived.ArchiveFragment
 import pw.cub3d.cub3_notes.ui.colours.ColoursFragment
@@ -38,4 +39,7 @@ abstract class ScreenBindingModule {
 
     @ContributesAndroidInjector
     abstract fun mainActivity(): MainActivity
+
+    @ContributesAndroidInjector
+    abstract fun reminderBroadcastReceiver(): ReminderBroadcastReciever
 }

@@ -15,11 +15,11 @@ abstract class NotesDao {
 
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL")
+    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL ORDER BY POSITION")
     abstract fun getAllUnpinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime IS NULL")
+    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime IS NULL ORDER BY position")
     abstract fun getAllPinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
@@ -96,4 +96,7 @@ abstract class NotesDao {
 
     @Query("UPDATE notes set deletionTime = NULL WHERE id = :id")
     abstract fun restoreNote(id: Long)
+
+    @Query("UPDATE notes set timeReminder = :time WHERE id = :id")
+    abstract fun setNoteReminder(id: Long, time: String)
 }

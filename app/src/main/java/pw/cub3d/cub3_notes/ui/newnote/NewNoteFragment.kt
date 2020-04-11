@@ -203,7 +203,12 @@ class NewNoteFragment : Fragment() {
             }
         }
 
-        createNote_reminder.setOnClickListener { ReminderDialog(requireActivity()).show() }
+        createNote_reminder.setOnClickListener {
+            ReminderDialog(requireActivity()) { zonedDateTime ->
+                newNoteViewModel.setNoteReminder(zonedDateTime)
+            }.simpleDialog()
+
+        }
 
         createNote_more_delete.setOnClickListener {
             newNoteViewModel.onDelete()
