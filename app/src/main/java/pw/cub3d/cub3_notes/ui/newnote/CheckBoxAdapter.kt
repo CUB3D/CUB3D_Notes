@@ -3,10 +3,12 @@ package pw.cub3d.cub3_notes.ui.newnote
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import pw.cub3d.cub3_notes.AutoCompleteManager
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.databinding.CheckboxEntryBinding
@@ -57,6 +59,8 @@ class CheckBoxViewHolder(
         }
 
         view.checkboxEntryText.setText(checkboxEntry.content)
+
+        view.checkboxEntryText.setAdapter(ArrayAdapter<String>(view.root.context, android.R.layout.simple_list_item_1, AutoCompleteManager(view.root.context).food))
 
         view.checkboxEntryText.doOnTextChanged { text, start, count, after ->
             newNoteViewModel.onCheckboxTextChange(checkboxEntry, text.toString())

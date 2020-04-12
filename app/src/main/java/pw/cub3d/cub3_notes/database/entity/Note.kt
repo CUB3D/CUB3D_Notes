@@ -85,6 +85,10 @@ data class Note(
         modificationTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
     }
 
+    fun getReminderTimeZoned() = timeReminder?.let { ZonedDateTime.parse(timeReminder) }
+
+    fun formattedReminderTime() = getReminderTimeZoned()?.format(DateTimeFormatter.ofPattern("dd MMM YYYY, HH:mm"))
+
     companion object CREATOR : Parcelable.Creator<Note> {
         const val TYPE_TEXT = "TEXT"
         const val TYPE_CHECKBOX = "CHECK"

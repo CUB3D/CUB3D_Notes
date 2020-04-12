@@ -9,9 +9,7 @@
         <variable
             name="content"
             type="androidx.lifecycle.MutableLiveData&lt;String>"/>
-<!--        <variable-->
-<!--            name="isChecked"-->
-<!--            type="androidx.lifecycle.MutableLiveData&lt;Boolean>" />-->
+
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"
@@ -30,7 +28,6 @@
             app:layout_constraintTop_toTopOf="@+id/checkboxEntry_check"
             app:srcCompat="@drawable/ic_grid" />
 
-<!--        android:checked="@={isChecked}"-->
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/checkboxEntry_check"
             android:layout_width="0dp"
@@ -53,16 +50,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/checkboxEntry_delete"
             app:layout_constraintStart_toEndOf="@+id/checkboxEntry_check"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:endIconMode="none">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/checkboxEntry_text"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:outlineProvider="none"
-                />
-<!--            android:text="@={content}"-->
+                android:layout_height="wrap_content"
+                android:background="@null" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
