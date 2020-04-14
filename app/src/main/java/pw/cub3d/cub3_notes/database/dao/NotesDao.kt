@@ -15,7 +15,7 @@ abstract class NotesDao {
 
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL ORDER BY POSITION")
+    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL ORDER BY position")
     abstract fun getAllUnpinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
@@ -102,4 +102,7 @@ abstract class NotesDao {
 
     @Query("DELETE FROM notes WHERE id = :id")
     abstract fun deletePermanently(id: Long)
+
+    @Query("UPDATE notes set position = :position WHERE id = :id")
+    abstract fun setNotePosition(id: Long, position: Long)
 }

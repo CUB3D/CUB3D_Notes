@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_new_note.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.StorageManager
@@ -32,6 +33,7 @@ import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
+import pw.cub3d.cub3_notes.ui.newnote.CheckBoxAdapter
 import javax.inject.Inject
 
 
@@ -72,24 +74,54 @@ class HomeFragment : Fragment() {
             }
         })
 
-        val pinnedNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        val pinnedNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: ViewHolder,
                 target: ViewHolder
-            ) = false
+            ): Boolean {
+                val cb: (vh: RecyclerView.ViewHolder)->NoteAndCheckboxes = {vh -> pinnedAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!}
+                var targetPos = cb(target).note.position
+                val srcPos = cb(viewHolder).note.position
+
+                if(targetPos == srcPos) {
+                    targetPos++;
+                }
+
+                homeViewModel.upadateNotePosition(cb(viewHolder), targetPos)
+                homeViewModel.upadateNotePosition(cb(target), srcPos)
+
+                pinnedAdapter.notifyDataSetChanged()
+
+                return true
+            }
 
             override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
                 homeViewModel.archiveNote(pinnedAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)
                 Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
             }
         }
-        val otherNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        val otherNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: ViewHolder,
                 target: ViewHolder
-            ) = false
+            ): Boolean {
+                val cb: (vh: RecyclerView.ViewHolder)->NoteAndCheckboxes = {vh -> otherAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!}
+                var targetPos = cb(target).note.position
+                val srcPos = cb(viewHolder).note.position
+
+                if(targetPos == srcPos) {
+                    targetPos++;
+                }
+
+                homeViewModel.upadateNotePosition(cb(viewHolder), targetPos)
+                homeViewModel.upadateNotePosition(cb(target), srcPos)
+
+                otherAdapter.notifyDataSetChanged()
+
+                return true
+            }
 
             override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
                 homeViewModel.archiveNote(otherAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)

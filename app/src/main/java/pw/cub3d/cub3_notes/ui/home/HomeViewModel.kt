@@ -17,6 +17,10 @@ class HomeViewModel(
         GlobalScope.launch { notesRepository.archiveNote(note.note.id, true)}
     }
 
+    fun upadateNotePosition(cb: NoteAndCheckboxes, position: Long) {
+        GlobalScope.launch { notesRepository.setNotePosition(cb.note.id, position) }
+    }
+
     val unpinnedNotes = notesRepository.getAllUnpinnedNotes()
     val pinnedNotes = notesRepository.getAllPinnedNotes()
     val labels = labelDao.getAll()

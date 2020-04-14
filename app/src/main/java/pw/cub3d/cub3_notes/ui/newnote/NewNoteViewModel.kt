@@ -87,6 +87,8 @@ class NewNoteViewModel(
     fun newNote() = GlobalScope.async {
         noteId = dao.insert(Note())
 
+        dao.setNotePosition(noteId!!, noteId!!)
+
         println("Got note id: $noteId")
 
         println("All notes: ${dao.getAllNotes()}")
