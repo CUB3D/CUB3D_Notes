@@ -12,7 +12,7 @@ import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 
 class NotesAdapter(
     ctx: Context,
-    private var notes: List<NoteAndCheckboxes>,
+    public var notes: List<NoteAndCheckboxes>,
     private val callback: (Note)->Unit
 ) : RecyclerView.Adapter<NoteViewHolder>() {
     lateinit var selectionTracker: SelectionTracker<Long>
@@ -32,11 +32,11 @@ class NotesAdapter(
 
     override fun getItemCount() = notes.size
 
-    override fun getItemId(position: Int) = position.toLong()
+    override fun getItemId(position: Int) = notes[position].note.id
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         holder.pos = position
-        println("Bind view: $position, selected: ${selectionTracker.isSelected(position.toLong())}")
+//        println("Bind view: $position, selected: ${selectionTracker.isSelected(position.toLong())}")
         holder.bind(notes[position])
     }
 

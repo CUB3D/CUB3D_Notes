@@ -53,6 +53,12 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        arguments?.let {
+            it.getString("SEARCH_QUERY")?.let {
+                viewModel.searchQuery.value = it
+            }
+        }
+
         viewModel.searchQuery.observe(viewLifecycleOwner, Observer {
             viewModel.getSearchResults(it).observe(viewLifecycleOwner, Observer {
                 search_results.layoutManager = LinearLayoutManager(requireContext())

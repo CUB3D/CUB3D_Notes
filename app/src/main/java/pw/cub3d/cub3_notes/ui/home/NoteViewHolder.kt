@@ -55,7 +55,7 @@ class NoteViewHolder(
             view.noteLabels.visibility = View.GONE
         }
 
-        view.root.setOnClickListener { callback.invoke(note.note) }
+        view.noteClickRoot.setOnClickListener { callback.invoke(note.note) }
 
         if(note.isEmpty()) {
             view.noteTitle.visibility = View.VISIBLE

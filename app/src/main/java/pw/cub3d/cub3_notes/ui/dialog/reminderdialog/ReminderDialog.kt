@@ -19,6 +19,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
 import kotlinx.android.synthetic.main.dialog_reminder.*
 import org.threeten.bp.*
+import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.ReminderBroadcastReciever
 import java.util.*
@@ -85,9 +86,13 @@ class ReminderDialog(
     fun simpleDialog() {
         datePicker(OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             timePicker(com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute, second ->
-                val date = LocalDate.of(year, monthOfYear, dayOfMonth)
+                // Month of year is 0 indexed
+                val date = LocalDate.of(year, monthOfYear + 1, dayOfMonth)
                 val time = LocalTime.of(hourOfDay, minute, second)
                 val zonedate = ZonedDateTime.of(date, time, ZoneId.systemDefault())
+
+                println("Date selected: ${zonedate.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)}")
+
                 callback(zonedate)
             })
         })
@@ -104,9 +109,9 @@ class ReminderDialog(
         reminder_save.setOnClickListener {
             val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-            setAlarm(context, ZonedDateTime.now().plusSeconds(10).toEpochSecond(),
-                PendingIntent.getBroadcast(context, 0, Intent(context, ReminderBroadcastReciever::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT)
-            )
+//            setAlarm(context, ZonedDateTime.now().plusSeconds(10).toEpochSecond(),
+//                PendingIntent.getBroadcast(context, 0, Intent(context, ReminderBroadcastReciever::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT)
+//            )
         }
 
 

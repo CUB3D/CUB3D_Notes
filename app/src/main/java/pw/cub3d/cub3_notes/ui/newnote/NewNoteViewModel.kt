@@ -11,6 +11,8 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.threeten.bp.Duration
+import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.ReminderBroadcastReciever
@@ -140,9 +142,13 @@ class NewNoteViewModel(
         GlobalScope.launch {
             dao.setNoteReminder(noteId!!, zonedDateTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME))
 
-            setAlarm(context, zonedDateTime.toEpochSecond(),
+            val epoch = zonedDateTime.withZoneSameInstant(ZoneId.of("UTC")).toEpochSecond() * 1000
+
+            //TODO: time is correct but dosent work when phone is locked
+            setAlarm(context, epoch,
                 PendingIntent.getBroadcast(context, 0, Intent(context, ReminderBroadcastReciever::class.java).apply {
                     putExtra("NOTE_ID", noteId!!)
+                    addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT)
             )
         }

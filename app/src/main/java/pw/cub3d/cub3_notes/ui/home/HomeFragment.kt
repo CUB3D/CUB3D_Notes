@@ -3,6 +3,7 @@ package pw.cub3d.cub3_notes.ui.home
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -15,6 +16,8 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.support.AndroidSupportInjection
@@ -24,7 +27,9 @@ import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.activity.MainActivity
+import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
@@ -67,6 +72,33 @@ class HomeFragment : Fragment() {
             }
         })
 
+        val pinnedNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: ViewHolder,
+                target: ViewHolder
+            ) = false
+
+            override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+                homeViewModel.archiveNote(pinnedAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)
+                Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
+            }
+        }
+        val otherNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: ViewHolder,
+                target: ViewHolder
+            ) = false
+
+            override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+                homeViewModel.archiveNote(otherAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)
+                Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
+            }
+        }
+        ItemTouchHelper(pinnedNoteItemTouchHelperCallback).attachToRecyclerView(home_pinnedNotes)
+        ItemTouchHelper(otherNoteItemTouchHelperCallback).attachToRecyclerView(home_notes)
+
         requireActivity().nav_view.setNavigationItemSelectedListener {
             println("Nav item selected: $it")
             when (it.itemId) {
@@ -86,6 +118,12 @@ class HomeFragment : Fragment() {
             it.forEach {
                 menu.add(R.id.hamburger_group_labels, it.id.toInt(), Menu.FIRST, it.title).apply {
                     setIcon(R.drawable.ic_tag)
+                    setOnMenuItemClickListener {
+                        findNavController().navigate(R.id.nav_search, Bundle().apply {
+                            putString("SEARCH_QUERY", "tag:${it.title}")
+                        })
+                        true
+                    }
                 }
             }
         })

@@ -18,4 +18,6 @@ class NoteRepository @Inject constructor(
     fun getAllPinnedNotes() = notesDao.getAllPinnedNotes()
 
     suspend fun getAllNotes() = notesDao.getAllNotes()
+
+    suspend fun archiveNote(noteId: Long, state: Boolean) = notesDao.archiveNote(noteId, state)
 }
