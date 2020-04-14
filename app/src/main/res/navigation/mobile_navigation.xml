@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_deleted"
+            app:destination="@id/nav_deleted" />
     </fragment>
 
     <fragment
@@ -68,7 +71,11 @@
         android:id="@+id/nav_deleted"
         android:name="pw.cub3d.cub3_notes.ui.deleted.DeletedNotesFragment"
         android:label="Deleted"
-        tools:layout="@layout/fragment_deleted_notes"/>
+        tools:layout="@layout/fragment_deleted_notes">
+        <action
+            android:id="@+id/action_nav_deleted_to_nav_note_label_edit"
+            app:destination="@id/nav_note_label_edit" />
+    </fragment>
 
 
 </navigation>

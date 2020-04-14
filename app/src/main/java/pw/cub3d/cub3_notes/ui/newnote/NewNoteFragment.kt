@@ -2,7 +2,6 @@ package pw.cub3d.cub3_notes.ui.newnote
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Color.WHITE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_new_note.*
 import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
-import pw.cub3d.cub3_notes.database.entity.Colour
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
@@ -36,7 +35,7 @@ class NewNoteFragment : Fragment() {
 
     @Inject
     lateinit var newNoteViewModelFactory: NewNoteViewModelFactory
-    private lateinit var newNoteViewModel: NewNoteViewModel
+    private val newNoteViewModel: NewNoteViewModel by viewModels { newNoteViewModelFactory }
     private lateinit var binding: FragmentNewNoteBinding
 
     override fun onCreateView(
@@ -44,8 +43,6 @@ class NewNoteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        newNoteViewModel = ViewModelProvider(viewModelStore, newNoteViewModelFactory)
-            .get(NewNoteViewModel::class.java)
 
         arguments?.let {
             it.getBoolean(NewNoteNavigationController.KEY_NEW_NOTE, false).takeIf { it }?.let { runBlocking { newNoteViewModel.newNote().await() } }
@@ -110,27 +107,8 @@ class NewNoteFragment : Fragment() {
                     newNoteViewModel.upadateCheckboxPosition(cb(viewHolder), cb(target).position)
                     newNoteViewModel.upadateCheckboxPosition(cb(target), cb(viewHolder).position)
 
-//                    val moveUp = target.adapterPosition > viewHolder.adapterPosition
-//
-//                    if(moveUp) {
-//                        newNoteViewModel.upadateCheckboxPosition(checkboxes[viewHolder.adapterPosition], checkboxes[target.adapterPosition].position)
-//                        newNoteViewModel.upadateCheckboxPosition(checkboxes[target.adapterPosition], checkboxes[viewHolder.adapterPosition].position)
-//
-//                    } else {
-//                        newNoteViewModel.moveCheckbox(checkboxes[viewHolder.adapterPosition], ItemTouchHelper.DOWN)
-//                    }
-
-//                    //TODO only update the ones that are needed
-//                    newNoteViewModel.upadateCheckboxPosition(checkboxes[viewHolder.adapterPosition], target.adapterPosition)
-//
-//                    (viewHolder.adapterPosition until (createNote_checkBoxes.adapter as CheckBoxAdapter).itemCount).forEachIndexed { ind, it ->
-//                        newNoteViewModel.upadateCheckboxPosition(checkboxes[it], target.adapterPosition + ind + 1)
-//                    }
-
                     (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
 
-
-//                    Toast.makeText(requireContext(), "Moving item", Toast.LENGTH_LONG).show()
                     return true
                 }
 
@@ -192,6 +170,35 @@ class NewNoteFragment : Fragment() {
         createNote_newItem.setOnClickListener { newNoteViewModel.addCheckbox() }
 
         BottomSheetBehavior.from(createNote_moreSheet).state = BottomSheetBehavior.STATE_HIDDEN
+
+        newNoteViewModel.deletionTime.observe(viewLifecycleOwner, Observer {
+            if(it == null) {
+                createNote_more_share.visibility = View.VISIBLE
+                createNote_more_labels.visibility = View.VISIBLE
+                createNote_more_colors.visibility = View.VISIBLE
+                createNote_more_copy.visibility = View.VISIBLE
+                createNote_more_delete.visibility = View.VISIBLE
+                createNote_more_restore.visibility = View.GONE
+                createNote_more_deletePerm.visibility = View.GONE
+            } else {
+                createNote_more_share.visibility = View.GONE
+                createNote_more_labels.visibility = View.GONE
+                createNote_more_colors.visibility = View.GONE
+                createNote_more_copy.visibility = View.GONE
+                createNote_more_delete.visibility = View.GONE
+                createNote_more_restore.visibility = View.VISIBLE
+                createNote_more_deletePerm.visibility = View.VISIBLE
+            }
+        })
+
+        binding.createNoteMoreRestore.setOnClickListener {
+            newNoteViewModel.onCheckboxRestore()
+        }
+
+        binding.createNoteMoreDeletePerm.setOnClickListener {
+            newNoteViewModel.onCheckboxDeletePermanently()
+            findNavController().popBackStack()
+        }
 
         createNote_more.setOnClickListener {
             BottomSheetBehavior.from(createNote_moreSheet).apply {

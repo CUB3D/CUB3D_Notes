@@ -6,12 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import android.text.util.Linkify
 import androidx.lifecycle.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import org.threeten.bp.Duration
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -44,6 +42,7 @@ class NewNoteViewModel(
     lateinit var images: LiveData<List<ImageEntry>>
     lateinit var modificationTime: LiveData<String>
     lateinit var colour: LiveData<Int>
+    lateinit var deletionTime: LiveData<String?>
 
 
     var noteId: Long? = null
@@ -74,6 +73,7 @@ class NewNoteViewModel(
         modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
         pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
         colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
+        deletionTime = noteAndCheckboxes!!.map { it.note.deletionTime }
     }
 
     fun setNoteColour(hexColour: String) {
@@ -99,7 +99,7 @@ class NewNoteViewModel(
         modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
         pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
         colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
-
+        deletionTime = noteAndCheckboxes!!.map { it.note.deletionTime }
     }
 
     fun onTitleChange(title: String) {
@@ -113,7 +113,7 @@ class NewNoteViewModel(
     }
 
     fun onDelete() {
-        GlobalScope.launch { dao.deleteNote(noteId!!) }
+        GlobalScope.launch { dao.setDeletionTime(noteId!!) }
     }
 
     fun addCheckbox() {
@@ -171,5 +171,13 @@ class NewNoteViewModel(
             time,
             pendingIntent
         )
+    }
+
+    fun onCheckboxRestore() {
+        GlobalScope.launch { dao.setDeletionTime(noteId!!, null) }
+    }
+
+    fun onCheckboxDeletePermanently() {
+        GlobalScope.launch { dao.deletePermanently(noteId!!) }
     }
 }

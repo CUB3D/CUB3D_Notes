@@ -181,11 +181,11 @@
             android:id="@+id/createNote_moreSheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="300dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            android:background="#fff"
             android:orientation="vertical"
-            android:background="#fff">
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="450dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/createNote_more_delete"
@@ -263,10 +263,49 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNote_more_restore"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:text="Restore"
+                android:textColor="#000"
+                app:icon="@drawable/ic_upload"
+                app:iconTint="#000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNote_more_deletePerm"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:text="Delete permanently"
+                android:textColor="#000"
+                app:icon="@drawable/ic_x_octagon"
+                app:iconTint="#000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/createNote_more_colors"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/colour_entry">
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
