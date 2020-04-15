@@ -157,7 +157,7 @@
             app:srcCompat="@drawable/ic_more_vertical" />
 
         <ImageView
-            android:id="@+id/createNote_plus"
+            android:id="@+id/createNote_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -166,15 +166,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_plus_square" />
 
-            <ImageView
-                android:id="@+id/createNote_reminder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/createNote_archive"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_bell" />
+        <ImageView
+            android:id="@+id/createNote_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/createNote_archive"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_bell" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -308,6 +308,55 @@
                 tools:listitem="@layout/colour_entry">
 
             </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/createNote_addSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="vertical"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="450dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNote_add_photo"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:text="Add Photo"
+                android:textColor="#000"
+                app:icon="@drawable/ic_menu_camera"
+                app:iconTint="#000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNote_add_image"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:text="Add image"
+                android:textColor="#000"
+                app:icon="@drawable/ic_menu_gallery"
+                app:iconTint="#000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

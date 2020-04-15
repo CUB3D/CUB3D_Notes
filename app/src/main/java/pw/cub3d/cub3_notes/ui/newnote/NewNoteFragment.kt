@@ -22,9 +22,11 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_new_note.*
 import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
+import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
@@ -37,6 +39,8 @@ class NewNoteFragment : Fragment() {
     lateinit var newNoteViewModelFactory: NewNoteViewModelFactory
     private val newNoteViewModel: NewNoteViewModel by viewModels { newNoteViewModelFactory }
     private lateinit var binding: FragmentNewNoteBinding
+
+    @Inject lateinit var storageManager: StorageManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -169,7 +173,9 @@ class NewNoteFragment : Fragment() {
 
         createNote_newItem.setOnClickListener { newNoteViewModel.addCheckbox() }
 
-        BottomSheetBehavior.from(createNote_moreSheet).state = BottomSheetBehavior.STATE_HIDDEN
+        BottomSheetBehavior.from(binding.createNoteMoreSheet).state = BottomSheetBehavior.STATE_HIDDEN
+        BottomSheetBehavior.from(binding.createNoteAddSheet).state = BottomSheetBehavior.STATE_HIDDEN
+
 
         newNoteViewModel.deletionTime.observe(viewLifecycleOwner, Observer {
             if(it == null) {
@@ -209,6 +215,23 @@ class NewNoteFragment : Fragment() {
                 }
             }
         }
+
+        binding.createNoteAdd.setOnClickListener {
+            BottomSheetBehavior.from(binding.createNoteAddSheet).apply {
+                state = if(state == BottomSheetBehavior.STATE_HIDDEN) {
+                    BottomSheetBehavior.STATE_EXPANDED
+                } else {
+                    BottomSheetBehavior.STATE_HIDDEN
+                }
+            }
+        }
+        binding.createNoteAddPhoto.setOnClickListener {
+            AddImageDialog(requireActivity(), storageManager).takePhoto()
+        }
+        binding.createNoteAddImage.setOnClickListener {
+            AddImageDialog(requireActivity(), storageManager).pickImage()
+        }
+
 
         createNote_reminder.setOnClickListener {
             ReminderDialog(requireActivity()) { zonedDateTime ->
