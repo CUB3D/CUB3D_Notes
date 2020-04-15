@@ -19,8 +19,16 @@ abstract class NotesDao {
     abstract fun getAllUnpinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
+    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL AND timeReminder IS NOT NULL ORDER BY position")
+    abstract fun getAllUnpinnedReminders(): LiveData<List<NoteAndCheckboxes>>
+
+    @Transaction
     @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime IS NULL ORDER BY position")
     abstract fun getAllPinnedNotes(): LiveData<List<NoteAndCheckboxes>>
+
+    @Transaction
+    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime IS NULL AND timeReminder IS NOT NULL ORDER BY position")
+    abstract fun getAllPinnedReminders(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
     @Query("SELECT * FROM notes WHERE notes.archived = 1 AND deletionTime IS NULL")

@@ -1,5 +1,8 @@
 package pw.cub3d.cub3_notes.ui.home
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,7 +24,25 @@ class HomeViewModel(
         GlobalScope.launch { notesRepository.setNotePosition(cb.note.id, position) }
     }
 
-    val unpinnedNotes = notesRepository.getAllUnpinnedNotes()
-    val pinnedNotes = notesRepository.getAllPinnedNotes()
+    fun setShowOnlyReminders(b: Boolean) {
+        showOnlyReminders.value = b
+    }
+
+    private val showOnlyReminders = MutableLiveData(false)
+
+    val unpinnedNotes = showOnlyReminders.switchMap {
+        when (it) {
+            true -> notesRepository.getAllUnpinnedReminders()
+            false -> notesRepository.getAllUnpinnedNotes()
+        }
+    }
+    val pinnedNotes = showOnlyReminders.switchMap {
+        when (it) {
+            true -> notesRepository.getAllPinnedReminders()
+            false -> notesRepository.getAllPinnedNotes()
+        }
+    }
     val labels = labelDao.getAll()
 }
+
+fun <T, R> LiveData<T>.switchMap(switchMapFunction: (T)->LiveData<R>) = Transformations.switchMap(this, switchMapFunction)

@@ -50,6 +50,7 @@ class HomeFragment : Fragment() {
         requireActivity().nav_view.setupWithNavController(findNavController())
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Search your notes"
         (requireActivity() as AppCompatActivity).toolbar.setOnClickListener { findNavController().navigate(R.id.nav_search) }
+        requireActivity().nav_view.menu.getItem(0).isChecked = true;
 
 
         home_pinnedNotes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -74,6 +75,8 @@ class HomeFragment : Fragment() {
                 R.id.sidenav_settings -> findNavController().navigate(R.id.nav_settings)
                 R.id.sidenav_archived -> findNavController().navigate(R.id.nav_archive)
                 R.id.sidenav_deleted -> findNavController().navigate(R.id.nav_deleted)
+                R.id.sidenav_reminders -> homeViewModel.setShowOnlyReminders(true)
+                R.id.sidenav_notes -> homeViewModel.setShowOnlyReminders(false)
             }
 
             true
