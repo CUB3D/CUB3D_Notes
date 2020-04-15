@@ -7,15 +7,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.selection.ItemDetailsLookup
-import androidx.recyclerview.selection.SelectionPredicates
-import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StorageStrategy
+import androidx.recyclerview.selection.*
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -23,25 +20,21 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_new_note.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.activity.MainActivity
-import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Note
-import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
-import pw.cub3d.cub3_notes.ui.newnote.CheckBoxAdapter
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
-
-    private lateinit var homeViewModel: HomeViewModel
-
     @Inject lateinit var homeViewModelFactory: NotesViewModelFactory
+    private val homeViewModel: HomeViewModel by viewModels { homeViewModelFactory }
+
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
     @Inject lateinit var storageManager: StorageManager
     @Inject lateinit var settingsManager: SettingsManager
@@ -74,63 +67,6 @@ class HomeFragment : Fragment() {
             }
         })
 
-        val pinnedNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: ViewHolder,
-                target: ViewHolder
-            ): Boolean {
-                val cb: (vh: RecyclerView.ViewHolder)->NoteAndCheckboxes = {vh -> pinnedAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!}
-                var targetPos = cb(target).note.position
-                val srcPos = cb(viewHolder).note.position
-
-                if(targetPos == srcPos) {
-                    targetPos++;
-                }
-
-                homeViewModel.upadateNotePosition(cb(viewHolder), targetPos)
-                homeViewModel.upadateNotePosition(cb(target), srcPos)
-
-                pinnedAdapter.notifyDataSetChanged()
-
-                return true
-            }
-
-            override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-                homeViewModel.archiveNote(pinnedAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)
-                Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
-            }
-        }
-        val otherNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: ViewHolder,
-                target: ViewHolder
-            ): Boolean {
-                val cb: (vh: RecyclerView.ViewHolder)->NoteAndCheckboxes = {vh -> otherAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!}
-                var targetPos = cb(target).note.position
-                val srcPos = cb(viewHolder).note.position
-
-                if(targetPos == srcPos) {
-                    targetPos++;
-                }
-
-                homeViewModel.upadateNotePosition(cb(viewHolder), targetPos)
-                homeViewModel.upadateNotePosition(cb(target), srcPos)
-
-                otherAdapter.notifyDataSetChanged()
-
-                return true
-            }
-
-            override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-                homeViewModel.archiveNote(otherAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)
-                Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
-            }
-        }
-        ItemTouchHelper(pinnedNoteItemTouchHelperCallback).attachToRecyclerView(home_pinnedNotes)
-        ItemTouchHelper(otherNoteItemTouchHelperCallback).attachToRecyclerView(home_notes)
-
         requireActivity().nav_view.setNavigationItemSelectedListener {
             println("Nav item selected: $it")
             when (it.itemId) {
@@ -160,28 +96,71 @@ class HomeFragment : Fragment() {
             }
         })
 
-        pinnedAdapter = NotesAdapter(requireContext(), emptyList()) { note -> newNoteNavigationController.editNote(findNavController(), note) }
-        home_pinnedNotes.adapter = pinnedAdapter
-        val keyProvider = MyItemKeyProvider(home_notes)
+        val pinnedNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: ViewHolder,
+                target: ViewHolder
+            ): Boolean {
+                val oldList = ArrayList(pinnedAdapter.notes)
+                val selectedItem = oldList.find { it.note.id == viewHolder.itemId }!!
+                val targetIndex = oldList.indexOf(oldList.find { it.note.id == target.itemId })
+                oldList.remove(selectedItem)
+                oldList.add(targetIndex, selectedItem)
 
-        val itemDetails = object: ItemDetailsLookup<Long>() {
-            override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
-                val view: View? = home_notes.findChildViewUnder(e.x, e.y)
-                if (view != null) {
-                    val holder: ViewHolder = home_notes.getChildViewHolder(view)
-                    if (holder is NoteViewHolder) {
-                        return holder.getItemDetails(keyProvider.getKey(holder.pos))
-                    }
+                oldList.forEach {
+                    homeViewModel.upadateNotePosition(it, oldList.indexOf(it).toLong())
                 }
-                return null
+
+                pinnedAdapter.updateData(oldList)
+
+                return true
+            }
+
+            override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+                homeViewModel.archiveNote(pinnedAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)
+                Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
             }
         }
+        val otherNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: ViewHolder,
+                target: ViewHolder
+            ): Boolean {
+                val oldList = ArrayList(otherAdapter.notes)
+                val selectedItem = oldList.find { it.note.id == viewHolder.itemId }!!
+                val targetIndex = oldList.indexOf(oldList.find { it.note.id == target.itemId })
+                oldList.remove(selectedItem)
+                oldList.add(targetIndex, selectedItem)
+
+                oldList.forEach {
+                    homeViewModel.upadateNotePosition(it, oldList.indexOf(it).toLong())
+                }
+
+                otherAdapter.updateData(oldList)
+
+                return true
+            }
+
+            override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+                homeViewModel.archiveNote(otherAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)
+                Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
+            }
+        }
+        ItemTouchHelper(pinnedNoteItemTouchHelperCallback).attachToRecyclerView(home_pinnedNotes)
+        ItemTouchHelper(otherNoteItemTouchHelperCallback).attachToRecyclerView(home_notes)
+
+
+        pinnedAdapter = NotesAdapter(requireContext(), emptyList()) { note -> newNoteNavigationController.editNote(findNavController(), note) }
+        home_pinnedNotes.adapter = pinnedAdapter
+        val keyProvider = MyItemKeyProvider(home_pinnedNotes)
 
         val tracker = SelectionTracker.Builder(
             "notes-pin-selection",
             home_pinnedNotes,
             keyProvider,
-            itemDetails,
+            ItemDetailsProvider(home_pinnedNotes, keyProvider),
             StorageStrategy.createLongStorage()
         )
             .withSelectionPredicate(SelectionPredicates.createSelectAnything())
@@ -208,25 +187,11 @@ class HomeFragment : Fragment() {
 
         val otherKeyProvider = MyItemKeyProvider(home_notes)
 
-        val otherItemDetails = object: ItemDetailsLookup<Long>() {
-            override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
-                val view: View? = home_notes.findChildViewUnder(e.x, e.y)
-                if (view != null) {
-                    val holder: ViewHolder = home_notes.getChildViewHolder(view)
-                    if (holder is NoteViewHolder) {
-                        val id = holder.getItemDetails(otherKeyProvider.getKey(holder.pos))
-                        return id
-                    }
-                }
-                return null
-            }
-        }
-
         val otherTracker = SelectionTracker.Builder(
             "notes-selection",
             home_notes,
             otherKeyProvider,
-            otherItemDetails,
+            ItemDetailsProvider(home_notes, otherKeyProvider),
             StorageStrategy.createLongStorage()
         )
             .withSelectionPredicate(SelectionPredicates.createSelectAnything())
@@ -272,15 +237,28 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        homeViewModel = ViewModelProvider(viewModelStore, homeViewModelFactory)
-            .get(HomeViewModel::class.java)
-
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+    }
+}
+
+interface ProvidesItemDetails {
+    fun getItemDetails(key: Long): ItemDetailsLookup.ItemDetails<Long>
+    fun getItemPosition(): Int
+}
+
+class ItemDetailsProvider(private val recycler: RecyclerView, private val keyProvider: ItemKeyProvider<Long>) : ItemDetailsLookup<Long>() {
+    override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
+        recycler.findChildViewUnder(e.x, e.y)?.let { v ->
+            val holder: ViewHolder = recycler.getChildViewHolder(v)
+            if (holder is ProvidesItemDetails) {
+                return holder.getItemDetails(keyProvider.getKey(holder.getItemPosition())!!)
+            }
+        }
+        return null
     }
 }
