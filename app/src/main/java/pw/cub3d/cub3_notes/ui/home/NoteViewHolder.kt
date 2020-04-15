@@ -16,7 +16,7 @@ class NoteViewHolder(
     private val callback: (Note) -> Unit,
     var pos: Int,
     private val selectionTracker: SelectionTracker<Long>
-): RecyclerView.ViewHolder(view.root) {
+): RecyclerView.ViewHolder(view.root), ProvidesItemDetails {
 
     fun bind(note: NoteAndCheckboxes) {
 
@@ -62,10 +62,10 @@ class NoteViewHolder(
         }
     }
 
-    fun getItemDetails(idd: Long?): ItemDetailsLookup.ItemDetails<Long>? {
+    override fun getItemDetails(key: Long): ItemDetailsLookup.ItemDetails<Long> {
         println("Get item details for $this")
         return object: ItemDetailsLookup.ItemDetails<Long>() {
-            override fun getSelectionKey() = idd
+            override fun getSelectionKey() = key
             override fun getPosition() = pos
             override fun inDragRegion(e: MotionEvent): Boolean {
                 return true
@@ -80,6 +80,8 @@ class NoteViewHolder(
             }
         }
     }
+
+    override fun getItemPosition() = pos
 
     fun onSelected() {
         view.isSelected = selectionTracker.isSelected(pos.toLong())

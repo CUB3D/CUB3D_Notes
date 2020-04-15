@@ -96,9 +96,10 @@ class NewNoteFragment : Fragment() {
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder
                 ): Int {
-                    val cb: (vh: RecyclerView.ViewHolder)->CheckboxEntry = {vh -> checkboxes.find { it.id ==  vh.itemId}!!}
+                    val selectedItem = checkboxes.find { it.id == viewHolder.itemId }!!
 
-                    return makeMovementFlags(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), if(cb(viewHolder).checked) ItemTouchHelper.RIGHT else ItemTouchHelper.LEFT)
+
+                    return makeMovementFlags(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), if(selectedItem.checked) ItemTouchHelper.RIGHT else ItemTouchHelper.LEFT)
                 }
 
                 override fun onMove(
@@ -106,10 +107,15 @@ class NewNoteFragment : Fragment() {
                     viewHolder: RecyclerView.ViewHolder,
                     target: RecyclerView.ViewHolder
                 ): Boolean {
-                    val cb: (vh: RecyclerView.ViewHolder)->CheckboxEntry = {vh -> checkboxes.find { it.id ==  vh.itemId}!!}
+                    val oldList = ArrayList(checkboxes)
+                    val selectedItem = oldList.find { it.id == viewHolder.itemId }!!
+                    val targetIndex = oldList.indexOf(oldList.find { it.id == target.itemId })
+                    oldList.remove(selectedItem)
+                    oldList.add(targetIndex, selectedItem)
 
-                    newNoteViewModel.upadateCheckboxPosition(cb(viewHolder), cb(target).position)
-                    newNoteViewModel.upadateCheckboxPosition(cb(target), cb(viewHolder).position)
+                    oldList.forEach {
+                        newNoteViewModel.upadateCheckboxPosition(it, oldList.indexOf(it))
+                    }
 
                     (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
 

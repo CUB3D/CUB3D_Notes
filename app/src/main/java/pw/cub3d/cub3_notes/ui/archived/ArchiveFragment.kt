@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.archive_fragment.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
 import pw.cub3d.cub3_notes.ui.home.NoteViewHolder
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
@@ -48,25 +49,11 @@ class ArchiveFragment : Fragment() {
 
         val keyProvider = MyItemKeyProvider(archive_recycler)
 
-        val itemDetails = object: ItemDetailsLookup<Long>() {
-            override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
-                val view: View? = archive_recycler.findChildViewUnder(e.x, e.y)
-                if (view != null) {
-                    val holder: RecyclerView.ViewHolder = archive_recycler.getChildViewHolder(view)
-                    if (holder is NoteViewHolder) {
-                        val id = holder.getItemDetails(keyProvider.getKey(holder.pos))
-                        return id
-                    }
-                }
-                return null
-            }
-        }
-
         val tracker = SelectionTracker.Builder(
             "archive-selection",
             archive_recycler,
             keyProvider,
-            itemDetails,
+            ItemDetailsProvider(archive_recycler, keyProvider),
             StorageStrategy.createLongStorage()
         )
             .withSelectionPredicate(SelectionPredicates.createSelectAnything())

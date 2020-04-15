@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_search.*
 
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.databinding.FragmentSearchBinding
+import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
 import pw.cub3d.cub3_notes.ui.home.NoteViewHolder
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
@@ -68,24 +69,11 @@ class SearchFragment : Fragment() {
 
                 val keyProvider = MyItemKeyProvider(search_results)
 
-                val itemDetails = object: ItemDetailsLookup<Long>() {
-                    override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
-                        val view: View? = search_results.findChildViewUnder(e.x, e.y)
-                        if (view != null) {
-                            val holder: RecyclerView.ViewHolder = search_results.getChildViewHolder(view)
-                            if (holder is NoteViewHolder) {
-                                return holder.getItemDetails(keyProvider.getKey(holder.pos))
-                            }
-                        }
-                        return null
-                    }
-                }
-
                 val tracker = SelectionTracker.Builder(
                     "search-selection",
                     search_results,
                     keyProvider,
-                    itemDetails,
+                    ItemDetailsProvider(search_results, keyProvider),
                     StorageStrategy.createLongStorage()
                 )
                     .withSelectionPredicate(SelectionPredicates.createSelectAnything())

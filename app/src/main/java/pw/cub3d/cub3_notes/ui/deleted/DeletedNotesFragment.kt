@@ -27,6 +27,7 @@ import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.activity.MainActivity
 import pw.cub3d.cub3_notes.databinding.FragmentDeletedNotesBinding
+import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
 import pw.cub3d.cub3_notes.ui.home.NoteViewHolder
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
@@ -69,24 +70,11 @@ class DeletedNotesFragment : Fragment() {
 
         val keyProvider = MyItemKeyProvider(binding.deletedRecycler)
 
-        val itemDetails = object: ItemDetailsLookup<Long>() {
-            override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
-                val view: View? = binding.deletedRecycler.findChildViewUnder(e.x, e.y)
-                if (view != null) {
-                    val holder: RecyclerView.ViewHolder = binding.deletedRecycler.getChildViewHolder(view)
-                    if (holder is NoteViewHolder) {
-                        return holder.getItemDetails(keyProvider.getKey(holder.pos))
-                    }
-                }
-                return null
-            }
-        }
-
         val tracker = SelectionTracker.Builder(
             "deleted-selection",
             binding.deletedRecycler,
             keyProvider,
-            itemDetails,
+            ItemDetailsProvider(binding.deletedRecycler, keyProvider),
             StorageStrategy.createLongStorage()
         )
             .withSelectionPredicate(SelectionPredicates.createSelectAnything())
