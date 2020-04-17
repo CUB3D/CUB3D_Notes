@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.net.toFile
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -56,6 +57,8 @@ class MainActivity : AppCompatActivity() {
                 createNotificationChannel(NotificationChannel("default", "Defualt", NotificationManager.IMPORTANCE_LOW))
             }
         }
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         window.statusBarColor = Color.parseColor("#FAFAFA")
         setContentView(R.layout.activity_main)

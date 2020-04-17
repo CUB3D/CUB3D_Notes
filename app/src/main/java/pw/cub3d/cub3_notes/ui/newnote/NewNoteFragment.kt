@@ -58,10 +58,12 @@ class NewNoteFragment : Fragment() {
             it.getString(NewNoteNavigationController.KEY_NOTE_IMAGE_PATH)?.let { imagePath -> newNoteViewModel.addImage(imagePath) }
         }
 
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
+        binding = FragmentNewNoteBinding.inflate(layoutInflater, container, false)
 
         binding.viewModel = newNoteViewModel
-        binding.noteColour = Color.WHITE
+        requireContext().obtainStyledAttributes(intArrayOf(R.attr.colorSurface)).apply {
+            binding.noteColour = this.getColor(0, Color.WHITE)
+        }.recycle()
         binding.lifecycleOwner = this
 
         return binding.root
@@ -173,7 +175,8 @@ class NewNoteFragment : Fragment() {
         })
 
         newNoteViewModel.colour.observe(viewLifecycleOwner, Observer {
-            binding.noteColour = it
+            println("Ignoring background colour for now $it")
+            //binding.noteColour = it
         })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
