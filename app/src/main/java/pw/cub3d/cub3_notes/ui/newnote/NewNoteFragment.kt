@@ -2,6 +2,7 @@ package pw.cub3d.cub3_notes.ui.newnote
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -177,10 +178,21 @@ class NewNoteFragment : Fragment() {
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
         createNote_pin.setOnClickListener { newNoteViewModel.onPin() }
-        createNote_archive.setOnClickListener {
-            newNoteViewModel.onArchive()
-            findNavController().popBackStack()
-        }
+
+        newNoteViewModel.archived.observe(viewLifecycleOwner, Observer { archived ->
+            if(archived) {
+                createNote_archive.setImageResource(R.drawable.ic_upload)
+                createNote_archive.setOnClickListener {
+                    newNoteViewModel.onArchive()
+                }
+            } else {
+                createNote_archive.setImageResource(R.drawable.ic_package)
+                createNote_archive.setOnClickListener {
+                    newNoteViewModel.onArchive()
+                    findNavController().popBackStack()
+                }
+            }
+        })
 
         createNote_newItem.setOnClickListener { newNoteViewModel.addCheckbox() }
 

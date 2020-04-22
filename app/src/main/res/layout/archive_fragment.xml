@@ -1,12 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.archived.ArchiveFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/archive_recycler"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/archive_appBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fitsSystemWindows="true"
+        android:background="@drawable/bg_app_bar"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/archive_toolbar"
+            android:background="@drawable/background_toolbar_home"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="0dp"
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/archive_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

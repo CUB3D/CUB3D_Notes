@@ -43,6 +43,7 @@ class NewNoteViewModel(
     lateinit var modificationTime: LiveData<String>
     lateinit var colour: LiveData<Int>
     lateinit var deletionTime: LiveData<String?>
+    lateinit var archived: LiveData<Boolean>
 
 
     var noteId: Long? = null
@@ -52,7 +53,7 @@ class NewNoteViewModel(
     }
 
     fun onArchive() {
-        GlobalScope.launch { dao.archiveNote(noteId!!, true) }
+        GlobalScope.launch { dao.archiveNote(noteId!!, !archived.value!!) }
     }
 
     fun setNoteType(it: String) {
@@ -74,6 +75,7 @@ class NewNoteViewModel(
         pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
         colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
         deletionTime = noteAndCheckboxes!!.map { it.note.deletionTime }
+        archived = noteAndCheckboxes!!.map { it.note.archived }
     }
 
     fun setNoteColour(hexColour: String) {
@@ -102,6 +104,7 @@ class NewNoteViewModel(
         pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
         colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
         deletionTime = noteAndCheckboxes!!.map { it.note.deletionTime }
+        archived = noteAndCheckboxes!!.map { it.note.archived }
     }
 
     fun onTitleChange(title: String) {
