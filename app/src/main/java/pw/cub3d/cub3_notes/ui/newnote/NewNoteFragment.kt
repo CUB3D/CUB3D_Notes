@@ -42,6 +42,8 @@ class NewNoteFragment : Fragment() {
 
     @Inject lateinit var storageManager: StorageManager
 
+    private lateinit var checkBoxAdapter: CheckBoxAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,8 +69,6 @@ class NewNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        newNoteViewModel.loadNote(arguments?.getLong(NewNoteNavigationController.KEY_NOTE, -1) ?: -1)
-
         newNoteViewModel.type.observe(viewLifecycleOwner, Observer { type ->
             if(type == Note.TYPE_CHECKBOX) {
                 createNote_text.visibility = View.GONE
@@ -85,60 +85,64 @@ class NewNoteFragment : Fragment() {
             createNote_lastEdited.text = it
         })
 
+        createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
+        checkBoxAdapter = CheckBoxAdapter(requireContext(), emptyList(), newNoteViewModel)
+        createNote_checkBoxes.adapter = checkBoxAdapter
+        val callback: ItemTouchHelper.Callback = object: ItemTouchHelper.Callback() {
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                println("Get chkbox move flags")
+
+                val selectedItem = checkBoxAdapter.checkboxEntries.find { it.id == viewHolder.itemId }!!
+
+                return makeMovementFlags(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), if(selectedItem.checked) ItemTouchHelper.RIGHT else ItemTouchHelper.LEFT)
+            }
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                println("On chkbox move")
+                val oldList = ArrayList(checkBoxAdapter.checkboxEntries)
+                val selectedItem = oldList.find { it.id == viewHolder.itemId }!!
+                val targetIndex = oldList.indexOf(oldList.find { it.id == target.itemId })
+                oldList.remove(selectedItem)
+                oldList.add(targetIndex, selectedItem)
+
+                oldList.forEach {
+                    newNoteViewModel.upadateCheckboxPosition(it, oldList.indexOf(it))
+                }
+
+                (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
+
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                println("on chkbox swip")
+                if(direction == ItemTouchHelper.LEFT) {
+                    newNoteViewModel.onCheckboxChecked(checkBoxAdapter.checkboxEntries[viewHolder.adapterPosition], true)
+                    //TODO: is this the correct pos
+                    (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
+                }
+
+                if(direction == ItemTouchHelper.RIGHT) {
+                    newNoteViewModel.onCheckboxChecked(checkBoxAdapter.checkboxEntries[viewHolder.adapterPosition], false)
+                    //TODO: is this the correct pos
+                    (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
+                }
+            }
+
+        }
+        ItemTouchHelper(callback).attachToRecyclerView(createNote_checkBoxes)
+
         //TODO sort in room junction
         newNoteViewModel.checkboxes.map { it.sortedBy { it.position } }.distinctUntilChanged { old, new -> old.map { it.id } == new.map { it.id } }.observe(viewLifecycleOwner, Observer { checkboxes ->
             println("Updating checkboxes: $checkboxes")
-            createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), checkboxes, newNoteViewModel)
-
-            val callback: ItemTouchHelper.Callback = object: ItemTouchHelper.Callback() {
-                override fun getMovementFlags(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder
-                ): Int {
-                    val selectedItem = checkboxes.find { it.id == viewHolder.itemId }!!
-
-
-                    return makeMovementFlags(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), if(selectedItem.checked) ItemTouchHelper.RIGHT else ItemTouchHelper.LEFT)
-                }
-
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    val oldList = ArrayList(checkboxes)
-                    val selectedItem = oldList.find { it.id == viewHolder.itemId }!!
-                    val targetIndex = oldList.indexOf(oldList.find { it.id == target.itemId })
-                    oldList.remove(selectedItem)
-                    oldList.add(targetIndex, selectedItem)
-
-                    oldList.forEach {
-                        newNoteViewModel.upadateCheckboxPosition(it, oldList.indexOf(it))
-                    }
-
-                    (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
-
-                    return true
-                }
-
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    if(direction == ItemTouchHelper.LEFT) {
-                        newNoteViewModel.onCheckboxChecked(checkboxes[viewHolder.adapterPosition], true)
-                        //TODO: is this the correct pos
-                        (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
-                    }
-
-                    if(direction == ItemTouchHelper.RIGHT) {
-                        newNoteViewModel.onCheckboxChecked(checkboxes[viewHolder.adapterPosition], false)
-                        //TODO: is this the correct pos
-                        (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
-                    }
-                }
-
-            }
-            val touchHelper = ItemTouchHelper(callback)
-            touchHelper.attachToRecyclerView(createNote_checkBoxes)
+            checkBoxAdapter.updateData(checkboxes)
         })
 
         newNoteViewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
@@ -155,6 +159,7 @@ class NewNoteFragment : Fragment() {
         })
 
         newNoteViewModel.title.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
+            println("Title changed to $it")
             newNoteViewModel.onTitleChange(it)
         })
 

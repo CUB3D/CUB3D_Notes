@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +16,7 @@ import pw.cub3d.cub3_notes.databinding.CheckboxEntryBinding
 
 class CheckBoxAdapter(
     ctx: Context,
-    private val checkboxEntries: List<CheckboxEntry>,
+    var checkboxEntries: List<CheckboxEntry>,
     private val newNoteViewModel: NewNoteViewModel
 ) : RecyclerView.Adapter<CheckBoxViewHolder>() {
     private val layoutInflater = LayoutInflater.from(ctx)
@@ -38,6 +39,11 @@ class CheckBoxAdapter(
     override fun onBindViewHolder(holder: CheckBoxViewHolder, position: Int) {
         holder.bind(checkboxEntries[position])
     }
+
+    fun updateData(checkboxes: List<CheckboxEntry>) {
+        this.checkboxEntries = checkboxes
+        notifyDataSetChanged()
+    }
 }
 
 class CheckBoxViewHolder(
@@ -46,34 +52,24 @@ class CheckBoxViewHolder(
 ): RecyclerView.ViewHolder(view.root) {
 
     fun bind(checkboxEntry: CheckboxEntry) {
-        view.entry = checkboxEntry
+        println("Bound check ${checkboxEntry}")
         view.checkboxEntryCheck.isChecked = checkboxEntry.checked
-        println("Bound checkbox")
 
         view.checkboxEntryDelete.setOnClickListener {
+            println("check delete $checkboxEntry")
             newNoteViewModel.onCheckboxDelete(checkboxEntry)
         }
 
         view.checkboxEntryCheck.setOnCheckedChangeListener { _, isChecked ->
+            println("check updated $checkboxEntry to $isChecked")
             newNoteViewModel.onCheckboxChecked(checkboxEntry, isChecked)
         }
 
         view.checkboxEntryText.setText(checkboxEntry.content)
-
         view.checkboxEntryText.setAdapter(ArrayAdapter<String>(view.root.context, android.R.layout.simple_list_item_1, AutoCompleteManager(view.root.context).food))
-
-        view.checkboxEntryText.doOnTextChanged { text, start, count, after ->
-            newNoteViewModel.onCheckboxTextChange(checkboxEntry, text.toString())
+        view.checkboxEntryText.doAfterTextChanged { it ->
+            println("Text changed to: $it")
+            newNoteViewModel.onCheckboxTextChange(checkboxEntry, it.toString())
         }
-
-//        val test = MutableLiveData<String>()
-//        view.content = test
-//        test.postValue(checkboxEntry.content)
-//
-//        //TODO: pass lifecycleowner and use observe
-//        test.distinctUntilChanged().ignoreFirstValue().observeForever {
-//            println("Got new content for $checkboxEntry, $it")
-//            newNoteViewModel.onCheckboxTextChange(checkboxEntry, it)
-//        }
     }
 }
