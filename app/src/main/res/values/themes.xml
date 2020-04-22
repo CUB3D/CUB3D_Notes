@@ -11,5 +11,6 @@
 
         <item name="icon_tint">@android:color/black</item>
         <item name="toolbar_color">#fff</item>
+        <item name="status_color">#FAFAFA</item>
     </style>
 </resources>

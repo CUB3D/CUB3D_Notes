@@ -60,7 +60,10 @@ class MainActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-        window.statusBarColor = Color.parseColor("#FAFAFA")
+        obtainStyledAttributes(intArrayOf(R.attr.status_color)).apply {
+            window.statusBarColor = this.getColor(0, Color.WHITE)
+        }.recycle()
+
         setContentView(R.layout.activity_main)
 
         val navController = findNavController(R.id.nav_host_fragment)
