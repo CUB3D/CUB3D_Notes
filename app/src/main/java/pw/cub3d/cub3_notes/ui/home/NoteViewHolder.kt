@@ -38,6 +38,7 @@ class NoteViewHolder(
             val unticked = note.checkboxes.filterNot { it.checked }
 
             view.tickedItemCount = note.checkboxes.size - unticked.size
+            view.untickedItemCount = unticked.size
             view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
             view.noteChecks.adapter = HomeCheckboxAdapter(view.root.context, unticked)
             view.noteChecks.visibility = View.VISIBLE
