@@ -43,6 +43,9 @@ class NewNoteViewModel(
 
     fun setNoteType(it: String) {
         GlobalScope.launch { dao.setType(noteId!!, it) }
+        if(it == Note.TYPE_CHECKBOX) {
+            addCheckbox()
+        }
     }
 
     fun addCheckbox() {

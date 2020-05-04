@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
@@ -29,27 +30,25 @@ import javax.inject.Inject
 class NewNoteFragment : Fragment() {
 
     @Inject
-    lateinit var newNoteViewModelFactory: NewNoteViewModelFactory
-    private lateinit var newNoteViewModel: NewNoteViewModel
+    lateinit var viewModelFactory: NewNoteViewModelFactory
+    private val viewModel: NewNoteViewModel by viewModels { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        newNoteViewModel = ViewModelProvider(viewModelStore, newNoteViewModelFactory)
-            .get(NewNoteViewModel::class.java)
 
         arguments?.let {
-            it.getBoolean(NewNoteNavigationController.KEY_NEW_NOTE, false).takeIf { it }?.let { runBlocking { newNoteViewModel.newNote().await() } }
-            it.getLong(NewNoteNavigationController.KEY_NOTE, -1).takeIf { it != -1L }?.let { runBlocking { newNoteViewModel.loadNote(it).await() } }
-            it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> newNoteViewModel.setNoteType(type) }
-            it.getString(NewNoteNavigationController.KEY_NOTE_IMAGE_PATH)?.let { imagePath -> newNoteViewModel.addImage(imagePath) }
+            it.getBoolean(NewNoteNavigationController.KEY_NEW_NOTE, false).takeIf { it }?.let { runBlocking { viewModel.newNote().await() } }
+            it.getLong(NewNoteNavigationController.KEY_NOTE, -1).takeIf { it != -1L }?.let { runBlocking { viewModel.loadNote(it).await() } }
+            it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> viewModel.setNoteType(type) }
+            it.getString(NewNoteNavigationController.KEY_NOTE_IMAGE_PATH)?.let { imagePath -> viewModel.addImage(imagePath) }
         }
 
-        val binding: FragmentNewNoteBinding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_new_note, container, false)
+        val binding = FragmentNewNoteBinding.inflate(inflater, container, false)
 
-        binding.viewModel = newNoteViewModel
+        binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
         return binding.root
@@ -58,9 +57,7 @@ class NewNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        newNoteViewModel.loadNote(arguments?.getLong(NewNoteNavigationController.KEY_NOTE, -1) ?: -1)
-
-        newNoteViewModel.type.observe(viewLifecycleOwner, Observer { type ->
+        viewModel.type.observe(viewLifecycleOwner, Observer { type ->
             if(type == Note.TYPE_CHECKBOX) {
                 createNote_text.visibility = View.GONE
                 createNote_checkBoxes.visibility = View.VISIBLE
@@ -72,25 +69,25 @@ class NewNoteFragment : Fragment() {
             }
         })
 
-        newNoteViewModel.modificationTime.observe(viewLifecycleOwner, Observer {
+        viewModel.modificationTime.observe(viewLifecycleOwner, Observer {
             createNote_lastEdited.text = it
         })
 
-        newNoteViewModel.checkboxes.observe(viewLifecycleOwner, Observer {
+        viewModel.checkboxes.observe(viewLifecycleOwner, Observer {
             println("Updating checkboxes: $it")
             createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { newNoteViewModel.saveCheckbox(it) }, { newNoteViewModel.onCheckboxDelete(it) })
+            createNote_checkBoxes.adapter = CheckBoxAdapter(requireContext(), it, { viewModel.saveCheckbox(it) }, { viewModel.onCheckboxDelete(it) })
         })
 
-        newNoteViewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
+        viewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
             println("Got colours: $it")
             createNote_more_colors.layoutManager = LinearLayoutManager(requireContext())
             createNote_more_colors.adapter = ColoursAdapter(requireContext(), it) {
-                newNoteViewModel.setNoteColour(it.hex_colour)
+                viewModel.setNoteColour(it.hex_colour)
             }
         })
 
-        newNoteViewModel.images.observe(viewLifecycleOwner, Observer {
+        viewModel.images.observe(viewLifecycleOwner, Observer {
             it.firstOrNull()?.let {
                 Glide.with(this@NewNoteFragment)
                     .load(it.getFile(requireContext()))
@@ -98,26 +95,26 @@ class NewNoteFragment : Fragment() {
             }
         })
 
-        newNoteViewModel.title.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
-            newNoteViewModel.onTitleChange(it)
+        viewModel.title.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
+            viewModel.onTitleChange(it)
         })
 
-        newNoteViewModel.text.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
-            newNoteViewModel.onTextChange(it)
+        viewModel.text.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
+            viewModel.onTextChange(it)
         })
 
-        newNoteViewModel.pinned.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
+        viewModel.pinned.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
             Toast.makeText(requireContext(), it.takeIf { it }?.let {  "Pinned" } ?: "Unpinned", Toast.LENGTH_SHORT).show()
         })
 
         createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
-        createNote_pin.setOnClickListener { newNoteViewModel.onPin() }
+        createNote_pin.setOnClickListener { viewModel.onPin() }
         createNote_archive.setOnClickListener {
-            newNoteViewModel.onArchive()
+            viewModel.onArchive()
             findNavController().popBackStack()
         }
 
-        createNote_newItem.setOnClickListener { newNoteViewModel.addCheckbox() }
+        createNote_newItem.setOnClickListener { viewModel.addCheckbox() }
 
         BottomSheetBehavior.from(createNote_moreSheet).state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -137,13 +134,9 @@ class NewNoteFragment : Fragment() {
 
         createNote_more_labels.setOnClickListener {
             findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit, Bundle().apply {
-                putLong(NoteLabelEditFragment.KEY_NOTE_ID, newNoteViewModel.noteAndCheckboxes!!.value!!.note.id)
+                putLong(NoteLabelEditFragment.KEY_NOTE_ID, viewModel.noteAndCheckboxes!!.value!!.note.id)
             })
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     override fun onAttach(context: Context) {
