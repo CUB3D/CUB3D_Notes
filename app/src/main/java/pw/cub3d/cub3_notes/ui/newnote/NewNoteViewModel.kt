@@ -1,7 +1,9 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
-import android.text.util.Linkify
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -9,7 +11,10 @@ import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.database.dao.ColourDao
 import pw.cub3d.cub3_notes.database.dao.ImageDao
 import pw.cub3d.cub3_notes.database.dao.NotesDao
-import pw.cub3d.cub3_notes.database.entity.*
+import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
+import pw.cub3d.cub3_notes.database.entity.ImageEntry
+import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 
 class NewNoteViewModel(
     private val dao: NotesDao,

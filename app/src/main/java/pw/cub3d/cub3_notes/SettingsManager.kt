@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import javax.inject.Inject
 import javax.inject.Singleton

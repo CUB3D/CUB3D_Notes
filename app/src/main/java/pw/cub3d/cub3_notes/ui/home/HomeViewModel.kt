@@ -2,7 +2,6 @@ package pw.cub3d.cub3_notes.ui.home
 
 import androidx.lifecycle.ViewModel
 import pw.cub3d.cub3_notes.database.dao.LabelDao
-import pw.cub3d.cub3_notes.database.dao.NotesDao
 import pw.cub3d.cub3_notes.database.repository.NoteRepository
 
 class HomeViewModel(

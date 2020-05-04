@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private val viewModel: HomeViewModel by viewModels { homeViewModelFactory }
 
     @Inject lateinit var homeViewModelFactory: NotesViewModelFactory
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
@@ -76,7 +76,7 @@ class HomeFragment : Fragment() {
             true
         }
 
-        homeViewModel.labels.observe(viewLifecycleOwner, Observer {
+        viewModel.labels.observe(viewLifecycleOwner, Observer {
             val menu = requireActivity().nav_view.menu.findItem(R.id.hamburger_labels).subMenu
 
             it.forEach {
@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
             }
         })
 
-        homeViewModel.pinnedNotes.observe(viewLifecycleOwner, Observer {
+        viewModel.pinnedNotes.observe(viewLifecycleOwner, Observer {
             if(it.isEmpty()) {
                 home_pinnedNotes.visibility = View.GONE
                 home_pinnedTitle.visibility = View.GONE
@@ -130,7 +130,7 @@ class HomeFragment : Fragment() {
             adapter.selectionTracker = tracker
         })
 
-        homeViewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
+        viewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
             val adapter = NotesAdapter(requireContext(), it) { note -> newNoteNavigationController.editNote(findNavController(), note) }
 
             home_notes.adapter = adapter
@@ -198,10 +198,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        homeViewModel = ViewModelProvider(viewModelStore, homeViewModelFactory)
-            .get(HomeViewModel::class.java)
-
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 

@@ -1,10 +1,7 @@
 package pw.cub3d.cub3_notes.database.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.database.dao.NotesDao
-import pw.cub3d.cub3_notes.database.entity.Note
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
-import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
 class NotesAdapter(
     ctx: Context,

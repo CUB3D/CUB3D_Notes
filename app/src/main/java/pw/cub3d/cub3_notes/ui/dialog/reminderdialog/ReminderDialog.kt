@@ -1,15 +1,11 @@
 package pw.cub3d.cub3_notes.ui.dialog.reminderdialog
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener

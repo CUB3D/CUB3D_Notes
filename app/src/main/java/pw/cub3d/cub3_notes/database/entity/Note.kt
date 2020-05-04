@@ -3,13 +3,10 @@ package pw.cub3d.cub3_notes.database.entity
 import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.squareup.moshi.JsonClass
 import org.threeten.bp.LocalDateTime
-import org.threeten.bp.Month
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 

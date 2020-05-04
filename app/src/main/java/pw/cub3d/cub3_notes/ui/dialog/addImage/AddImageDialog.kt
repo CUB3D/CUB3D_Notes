@@ -3,7 +3,6 @@ package pw.cub3d.cub3_notes.ui.dialog.addImage
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Window
@@ -12,8 +11,6 @@ import kotlinx.android.synthetic.main.dialog_add_image.*
 import pw.cub3d.cub3_notes.BuildConfig
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.StorageManager
-import java.io.File
-import java.util.*
 
 
 class AddImageDialog(

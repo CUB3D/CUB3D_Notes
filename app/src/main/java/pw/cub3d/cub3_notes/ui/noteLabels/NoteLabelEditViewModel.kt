@@ -3,7 +3,6 @@ package pw.cub3d.cub3_notes.ui.noteLabels
 import androidx.lifecycle.*
 import pw.cub3d.cub3_notes.database.dao.LabelDao
 import pw.cub3d.cub3_notes.database.entity.Label
-import pw.cub3d.cub3_notes.database.entity.Note
 
 class NoteLabelEditViewModel(
     private val labelDao: LabelDao

@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes.database.entity
 
 import android.content.Context
-import android.net.Uri
 import android.util.Base64
 import androidx.room.Entity
 import androidx.room.ForeignKey

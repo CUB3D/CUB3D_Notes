@@ -3,7 +3,6 @@ package pw.cub3d.cub3_notes.database.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
-import pw.cub3d.cub3_notes.database.entity.Note
 
 @Dao
 abstract class CheckboxEntryDao {

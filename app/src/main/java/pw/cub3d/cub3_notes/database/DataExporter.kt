@@ -3,7 +3,6 @@ package pw.cub3d.cub3_notes.database
 import android.content.Context
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import pw.cub3d.cub3_notes.database.dao.ImageDao
@@ -11,7 +10,6 @@ import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.database.repository.NoteRepository
 import java.io.File
 import java.nio.charset.Charset
-import java.security.PrivateKey
 import javax.inject.Inject
 
 class DataExporter @Inject constructor(
