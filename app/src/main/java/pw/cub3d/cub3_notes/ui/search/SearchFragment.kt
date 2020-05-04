@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
@@ -27,12 +28,15 @@ import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
 import pw.cub3d.cub3_notes.ui.home.NoteViewHolder
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
+import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
 
 class SearchFragment : Fragment() {
 
     @Inject lateinit var searchViewModelFactory: SearchViewModelFactory
     private val viewModel: SearchViewModel by viewModels { searchViewModelFactory }
+
+    @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +64,7 @@ class SearchFragment : Fragment() {
         viewModel.searchQuery.observe(viewLifecycleOwner, Observer {
             viewModel.getSearchResults(it).observe(viewLifecycleOwner, Observer {
                 search_results.layoutManager = LinearLayoutManager(requireContext())
-                val adapter = NotesAdapter(requireContext(), it, {})
+                val adapter = NotesAdapter(requireContext(), it) { newNoteNavigationController.editNote(findNavController(), it) }
                 search_results.adapter = adapter
 
 

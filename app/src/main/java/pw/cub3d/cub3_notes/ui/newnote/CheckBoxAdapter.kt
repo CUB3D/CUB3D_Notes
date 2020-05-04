@@ -45,7 +45,7 @@ class CheckBoxAdapter(
 }
 
 class CheckBoxViewHolder(
-    private val view: CheckboxEntryBinding,
+    val view: CheckboxEntryBinding,
     private val newNoteViewModel: NewNoteViewModel
 ): RecyclerView.ViewHolder(view.root) {
 
