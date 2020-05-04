@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -31,18 +32,14 @@ import javax.inject.Inject
 class SearchFragment : Fragment() {
 
     @Inject lateinit var searchViewModelFactory: SearchViewModelFactory
-    lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModels { searchViewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentSearchBinding.inflate(inflater, container, false)
-
-        viewModel = ViewModelProvider(viewModelStore, searchViewModelFactory)
-            .get(SearchViewModel::class.java)
         binding.query = viewModel.searchQuery
-
         return binding.root
     }
 

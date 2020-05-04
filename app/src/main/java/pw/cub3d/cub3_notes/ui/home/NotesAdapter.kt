@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
+import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
 class NotesAdapter(
     ctx: Context,
@@ -24,7 +25,7 @@ class NotesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteViewHolder(
-        DataBindingUtil.inflate(inflater, R.layout.note_entry, parent, false),
+        NoteEntryBinding.inflate(inflater, parent, false),
         callback,
         0,
         selectionTracker

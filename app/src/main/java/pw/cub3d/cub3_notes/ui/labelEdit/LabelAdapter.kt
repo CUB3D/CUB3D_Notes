@@ -17,7 +17,7 @@ class LabelAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = LabelViewHolder(
-        DataBindingUtil.inflate(inflater, R.layout.label_entry, parent, false)
+        LabelEntryBinding.inflate(inflater, parent, false)
     )
 
     override fun getItemCount() = labels.size

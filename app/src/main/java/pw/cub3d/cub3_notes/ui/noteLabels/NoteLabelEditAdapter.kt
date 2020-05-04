@@ -25,7 +25,7 @@ class NoteLabelEditAdapter(
 
     override fun getItemCount() = labels.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteLabelEditViewHolder(
-        DataBindingUtil.inflate(layoutInflater, R.layout.note_label_edit_entry, parent, false),
+        NoteLabelEditEntryBinding.inflate(layoutInflater, parent, false),
         dao,
         noteId
     )

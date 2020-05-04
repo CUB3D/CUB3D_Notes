@@ -19,7 +19,7 @@ class ColoursAdapter(
     private val layoutInflater = LayoutInflater.from(frag.requireContext())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ColourViewHolder(
-        DataBindingUtil.inflate(layoutInflater, R.layout.colour_entry, parent, false),
+        ColourEntryBinding.inflate(layoutInflater, parent, false),
         viewModel,
         frag
     )

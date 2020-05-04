@@ -16,7 +16,7 @@ class HomeCheckboxAdapter(
     private val inflater = LayoutInflater.from(ctx)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = HomeCheckboxViewHolder(
-        DataBindingUtil.inflate(inflater, R.layout.home_checkbox_entry, parent, false)
+        HomeCheckboxEntryBinding.inflate(inflater, parent, false)
     )
 
     override fun getItemCount() = checkboxes.size

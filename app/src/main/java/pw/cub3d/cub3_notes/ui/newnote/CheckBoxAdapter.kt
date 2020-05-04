@@ -24,7 +24,7 @@ class CheckBoxAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CheckBoxViewHolder(
-        DataBindingUtil.inflate(layoutInflater, R.layout.checkbox_entry, parent, false),
+        CheckboxEntryBinding.inflate(layoutInflater, parent, false),
         newNoteViewModel
     )
 

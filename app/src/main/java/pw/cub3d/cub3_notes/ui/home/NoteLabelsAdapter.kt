@@ -16,7 +16,7 @@ class NoteLabelsAdapter(
     private val layoutInflater = LayoutInflater.from(ctx)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteLabelEntry(
-        DataBindingUtil.inflate(layoutInflater, R.layout.note_label_entry, parent, false)
+        NoteLabelEntryBinding.inflate(layoutInflater, parent, false)
     )
 
     override fun getItemCount() = labels.size
