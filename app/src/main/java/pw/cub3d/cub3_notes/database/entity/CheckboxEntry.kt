@@ -11,5 +11,6 @@ data class CheckboxEntry(
     var noteId: Long = 0,
     var content: String = "",
     var checked: Boolean = false,
-    val indentLevel: Int = 0
+    val indentLevel: Int = 0,
+    var position: Int = 1
 )

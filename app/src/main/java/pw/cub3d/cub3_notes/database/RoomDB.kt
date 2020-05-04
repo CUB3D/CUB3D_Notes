@@ -99,6 +99,25 @@ object Migrations {
             database.execSQL("CREATE INDEX index_note_label ON note_label (note_id, label_id)")
         }
     }
+
+    val MIGRATE_12_13 = object: Migration(12, 13) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE notes ADD COLUMN deletionTime TEXT")
+        }
+    }
+
+    val MIGRATE_13_14 = object: Migration(13, 14) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE checkbox_entry ADD COLUMN position INTEGER DEFAULT 1 NOT NULL")
+        }
+    }
+
+    val MIGRATE_14_15 = object: Migration(14, 15) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE notes ADD COLUMN position INTEGER DEFAULT 0 NOT NULL")
+            database.execSQL("UPDATE notes SET position = id")
+        }
+    }
 }
 
 @Database(
@@ -110,7 +129,7 @@ object Migrations {
         Colour::class,
         ImageEntry::class
     ],
-    version = 12,
+    version = 15,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
@@ -146,7 +165,10 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_8_9,
                     Migrations.MIGRATE_9_10,
                     Migrations.MIGRATE_10_11,
-                    Migrations.MIGRATE_11_12
+                    Migrations.MIGRATE_11_12,
+                    Migrations.MIGRATE_12_13,
+                    Migrations.MIGRATE_13_14,
+                    Migrations.MIGRATE_14_15
                 //TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()

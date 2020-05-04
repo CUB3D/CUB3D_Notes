@@ -1,12 +1,17 @@
 package pw.cub3d.cub3_notes.activity
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -38,7 +43,19 @@ class MainActivity : AppCompatActivity() {
 
         AndroidInjection.inject(this)
 
-        window.statusBarColor = Color.parseColor("#FAFAFA")
+        // Create notification channels
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannel(NotificationChannel("default", "Defualt", NotificationManager.IMPORTANCE_LOW))
+            }
+        }
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+        obtainStyledAttributes(intArrayOf(R.attr.status_color)).apply {
+            window.statusBarColor = this.getColor(0, Color.WHITE)
+        }.recycle()
+
         setContentView(R.layout.activity_main)
 
         val navController = findNavController(R.id.nav_host_fragment)
@@ -62,6 +79,11 @@ class MainActivity : AppCompatActivity() {
                 drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
+
+        // Check if loaded due to notification click
+        intent.getLongExtra("NOTE_ID", -1).takeIf { it > 0 }?.let {
+            newNoteNavigationController.editNote(navController, it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -74,9 +96,11 @@ class MainActivity : AppCompatActivity() {
         if(item.itemId == R.id.main_changeLayout) {
             if (settingsManager.noteLayout.value!! == Layouts.GRID) {
                 settingsManager.noteLayout.postValue(Layouts.LIST)
+                item.icon = resources.getDrawable(R.drawable.ic_rows, theme)
             }
             if (settingsManager.noteLayout.value!! == Layouts.LIST) {
                 settingsManager.noteLayout.postValue(Layouts.GRID)
+                item.icon = resources.getDrawable(R.drawable.ic_grid, theme)
             }
             return true
         }

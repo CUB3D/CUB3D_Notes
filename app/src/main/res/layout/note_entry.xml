@@ -14,6 +14,9 @@
         <variable
             name="tickedItemCount"
             type="int" />
+        <variable
+            name="untickedItemCount"
+            type="int" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
@@ -29,7 +32,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:outlineProvider="background"
-            app:cardBackgroundColor="@{note.colourId, default=@android:color/white}"
+            app:cardBackgroundColor="@{note.colourId, default=@android:color/transparent}"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,6 +45,22 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:progressDrawable="@drawable/progress_item"
+                    android:id="@+id/note_checkProgress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView4"
+                    app:layout_constraintTop_toTopOf="@+id/textView4"
+                    android:max="@{untickedItemCount + tickedItemCount}"
+                    android:progress="@{tickedItemCount}"
+                    android:visibility="@{tickedItemCount > 0 ? View.VISIBLE : View.GONE, default=visible}" />
 
                 <ImageView
                     android:id="@+id/note_image"
@@ -93,40 +112,69 @@
                     android:id="@+id/note_checks"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:visibility="@{note.type != Note.TYPE_CHECKBOX ? View.GONE : View.VISIBLE, default=visible}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/note_text"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/checkbox_entry" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
                     android:text="@{`+` + tickedItemCount + ` ticked item` + (tickedItemCount > 1 ? `s` : ``), default=`+ 1 ticked item`}"
                     android:visibility="@{tickedItemCount > 0 ? View.VISIBLE : View.GONE, default=visible}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/note_checks" />
+                    app:layout_constraintTop_toBottomOf="@+id/note_checks"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@{note.formattedReminderTime()}"
+                    android:visibility="@{note.timeReminder != null &amp;&amp; note.timeReminder.length() > 0 ? View.VISIBLE : View.GONE, default=visible}"
+                    app:chipStrokeColor="@color/lightGrey"
+                    app:chipStrokeWidth="1dp"
+                    app:chipBackgroundColor="@android:color/transparent"
+                    app:chipIcon="@drawable/ic_clock"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/note_labels"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                    app:layout_constraintStart_toEndOf="@+id/chip5"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/note_label_entry" >
+
+                </androidx.recyclerview.widget.RecyclerView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <View
+            android:id="@+id/note_click_root"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,8 +1,6 @@
 package pw.cub3d.cub3_notes.database.entity
 
 import android.graphics.Color
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.JsonClass
@@ -27,21 +25,13 @@ data class Note(
 
     var timeReminder: String? = null,
 
-    var colour: String = "#ffffff"
+    var colour: String = "#ffffff",
 
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readLong(),
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readByte() != 0.toByte(),
-        parcel.readByte() != 0.toByte(),
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString(),
-        parcel.readString()!!
-    )
+    var deletionTime: String? = null,
 
+    var position: Long = 0
+
+) {
     fun getLocalModificationTime(): String {
         return try {
             ZonedDateTime.parse(this.modificationTime, DateTimeFormatter.ISO_ZONED_DATE_TIME)
@@ -55,41 +45,23 @@ data class Note(
         }
     }
 
-    fun getColourId() = Color.parseColor(colour)
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeLong(id)
-        parcel.writeString(title)
-        parcel.writeString(text)
-        parcel.writeByte(if (pinned) 1 else 0)
-        parcel.writeByte(if (archived) 1 else 0)
-        parcel.writeString(modificationTime)
-        parcel.writeString(type)
-        parcel.writeString(timeReminder)
-        parcel.writeString(colour)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
+    //TODO: enable null background colors
+    //fun getColourId() = Color.parseColor(colour)
+    fun getColourId() = Color.TRANSPARENT
 
     fun updateModificationTime() {
         modificationTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
     }
 
-    companion object CREATOR : Parcelable.Creator<Note> {
+    fun getReminderTimeZoned() = timeReminder?.let { ZonedDateTime.parse(timeReminder) }
+
+    fun formattedReminderTime() = getReminderTimeZoned()?.format(DateTimeFormatter.ofPattern("dd MMM YYYY, HH:mm"))
+
+    companion object {
         const val TYPE_TEXT = "TEXT"
         const val TYPE_CHECKBOX = "CHECK"
         const val TYPE_DRAW = "DRAW"
         const val TYPE_AUDIO = "AUDIO"
         const val TYPE_IMAGE = "IMAGE"
-
-        override fun createFromParcel(parcel: Parcel): Note {
-            return Note(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Note?> {
-            return arrayOfNulls(size)
-        }
     }
 }

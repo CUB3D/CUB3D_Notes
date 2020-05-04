@@ -6,6 +6,10 @@
         <variable
             name="viewModel"
             type="pw.cub3d.cub3_notes.ui.newnote.NewNoteViewModel"/>
+
+        <variable
+            name="noteColour"
+            type="int" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -13,87 +17,130 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-    android:layout_height="match_parent">
+            android:background="@{noteColour}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/createNote_lastEdited"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/createNote_back">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/createNote_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/createNote_back" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:outlineProvider="none"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/createNote_image">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/createNote_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:hint="Title"
+                            android:outlineProvider="none"
+                            android:text="@={viewModel.title, default=`Example note title`}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/createNote_checkBoxes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/checkbox_entry" />
+
+                    <Button
+                        android:id="@+id/createNote_newItem"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@android:color/transparent"
+                        android:text="+ List Item"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/createNote_checkBoxes" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintBottom_toTopOf="@+id/createNote_lastEdited"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/createNote_newItem">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/createNote_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoLink="web|email"
+                            android:background="@android:color/transparent"
+                            android:hint="Note"
+                            android:inputType="textMultiLine"
+                            android:linksClickable="true"
+                            android:text="@={viewModel.text, default=`This is an example multiline note, https://google.com`}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </ScrollView>
 
             <ImageView
-                android:id="@+id/createNote_image"
-                android:layout_width="match_parent"
+                android:id="@+id/createNote_back"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_left" />
+
+            <ImageView
+                android:id="@+id/createNote_archive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/createNote_back" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:outlineProvider="none"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createNote_image">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/createNote_title"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:outlineProvider="none"
-            android:hint="Title"
-            android:text="@={viewModel.title, default=`Example note title`}" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintBottom_toTopOf="@+id/createNote_lastEdited"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createNote_newItem">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/createNote_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="Note"
-                android:linksClickable="true"
-                android:autoLink="web|email"
-                android:inputType="textMultiLine"
-                android:text="@={viewModel.text, default=`This is an example multiline note, https://google.com`}" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/createNote_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_left" />
-
-    <ImageView
-        android:id="@+id/createNote_archive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_package" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_package" />
 
             <ImageView
                 android:id="@+id/createNote_pin"
@@ -105,40 +152,31 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_pin_outline" />
 
-    <TextView
-        android:id="@+id/createNote_lastEdited"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Edited 13th Dec"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <ImageView
+                android:id="@+id/createNote_reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toStartOf="@+id/createNote_archive"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_bell" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/createNote_checkBoxes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/createNote_newItem"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:text="+ List item"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createNote_checkBoxes" />
+            <TextView
+                android:id="@+id/createNote_lastEdited"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="Edited 13th Dec"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
 
         <ImageView
             android:id="@+id/createNote_more"
@@ -151,7 +189,7 @@
             app:srcCompat="@drawable/ic_more_vertical" />
 
         <ImageView
-            android:id="@+id/createNote_plus"
+            android:id="@+id/createNote_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -159,27 +197,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_plus_square" />
-
-            <ImageView
-                android:id="@+id/createNote_reminder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/createNote_archive"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_bell" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/createNote_moreSheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="300dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            android:background="?colorSurface"
             android:orientation="vertical"
-            android:background="#fff">
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="450dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            tools:visibility="invisible">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/createNote_more_delete"
@@ -192,9 +221,9 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="start|center_vertical"
                 android:text="Delete"
-                android:textColor="#000"
+                android:textColor="?android:attr/textColorPrimary"
                 app:icon="@drawable/ic_trash_2"
-                app:iconTint="#000"
+                app:iconTint="?icon_tint"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -211,9 +240,9 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="start|center_vertical"
                 android:text="Make a copy"
-                android:textColor="#000"
+                android:textColor="?android:attr/textColorPrimary"
                 app:icon="@drawable/ic_trash_2"
-                app:iconTint="#000"
+                app:iconTint="?icon_tint"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -230,9 +259,9 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="start|center_vertical"
                 android:text="Send"
-                android:textColor="#000"
+                android:textColor="?android:attr/textColorPrimary"
                 app:icon="@drawable/ic_trash_2"
-                app:iconTint="#000"
+                app:iconTint="?icon_tint"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -249,9 +278,47 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="start|center_vertical"
                 android:text="Labels"
-                android:textColor="#000"
+                android:textColor="?android:attr/textColorPrimary"
                 app:icon="@drawable/ic_tag"
-                app:iconTint="#000"
+                app:iconTint="?icon_tint"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNote_more_restore"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:text="Restore"
+                android:textColor="?android:attr/textColorPrimary"
+                app:icon="@drawable/ic_upload"
+                app:iconTint="?icon_tint"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNote_more_deletePerm"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:text="Delete permanently"
+                android:textColor="?android:attr/textColorPrimary"
+                app:icon="@drawable/ic_x_octagon"
+                app:iconTint="?icon_tint"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -260,9 +327,60 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/createNote_more_colors"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/colour_entry">
 
             </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/createNote_addSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorSurface"
+            android:orientation="vertical"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="450dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            tools:visibility="invisible">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNote_add_photo"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:text="Add Photo"
+                android:textColor="?android:attr/textColorPrimary"
+                app:icon="@drawable/ic_menu_camera"
+                app:iconTint="?icon_tint"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createNote_add_image"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:text="Add image"
+                android:textColor="?android:attr/textColorPrimary"
+                app:icon="@drawable/ic_menu_gallery"
+                app:iconTint="?icon_tint"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

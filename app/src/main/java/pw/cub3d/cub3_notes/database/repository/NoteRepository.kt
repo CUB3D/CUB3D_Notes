@@ -11,8 +11,15 @@ class NoteRepository @Inject constructor(
     private val checkboxEntryDao: CheckboxEntryDao
 ) {
     fun getAllUnpinnedNotes() = notesDao.getAllUnpinnedNotes()
+    fun getAllUnpinnedReminders() = notesDao.getAllUnpinnedReminders()
 
     fun getAllPinnedNotes() = notesDao.getAllPinnedNotes()
+    fun getAllPinnedReminders() = notesDao.getAllPinnedReminders()
 
     suspend fun getAllNotes() = notesDao.getAllNotes()
+
+    suspend fun archiveNote(noteId: Long, state: Boolean) = notesDao.archiveNote(noteId, state)
+
+    suspend fun setNotePosition(id: Long, position: Long) = notesDao.setNotePosition(id, position)
+
 }

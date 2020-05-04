@@ -25,8 +25,12 @@ class NewNoteNavigationController @Inject constructor() {
     }
 
     fun editNote(nav: NavController, note: Note) {
+        editNote(nav, note.id)
+    }
+
+    fun editNote(nav: NavController, noteId: Long) {
         nav.navigate(R.id.nav_new_note, Bundle().apply {
-            putLong(KEY_NOTE, note.id)
+            putLong(KEY_NOTE, noteId)
         })
     }
 

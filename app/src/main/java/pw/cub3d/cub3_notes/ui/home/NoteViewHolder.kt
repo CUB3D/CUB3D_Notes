@@ -16,28 +16,34 @@ class NoteViewHolder(
     private val callback: (Note) -> Unit,
     var pos: Int,
     private val selectionTracker: SelectionTracker<Long>
-): RecyclerView.ViewHolder(view.root) {
+): RecyclerView.ViewHolder(view.root), ProvidesItemDetails {
 
     fun bind(note: NoteAndCheckboxes) {
 
         view.note = note.note
 
-        note.images.firstOrNull()?.let {
+        val image = note.images.firstOrNull()
+
+        if (image != null) {
             view.noteImage.visibility = View.VISIBLE
 
             Glide.with(view.root)
-                .load(it.getFile(view.root.context))
+                .load(image.getFile(view.root.context))
                 .into(view.noteImage)
+        } else {
+            view.noteImage.visibility = View.GONE
         }
 
-        if(note.note.type == Note.TYPE_CHECKBOX) {
-            println("Drawing checkbox note $note")
-
+        if(note.checkboxes.isNotEmpty()) {
             val unticked = note.checkboxes.filterNot { it.checked }
 
             view.tickedItemCount = note.checkboxes.size - unticked.size
+            view.untickedItemCount = unticked.size
             view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
             view.noteChecks.adapter = HomeCheckboxAdapter(view.root.context, unticked)
+            view.noteChecks.visibility = View.VISIBLE
+        } else {
+            view.noteChecks.visibility = View.GONE
         }
 
         println("Drawing labels: $note")
@@ -50,13 +56,17 @@ class NoteViewHolder(
             view.noteLabels.visibility = View.GONE
         }
 
-        view.root.setOnClickListener { callback.invoke(note.note) }
+        view.noteClickRoot.setOnClickListener { callback.invoke(note.note) }
+
+        if(note.isEmpty()) {
+            view.noteTitle.visibility = View.VISIBLE
+        }
     }
 
-    fun getItemDetails(idd: Long?): ItemDetailsLookup.ItemDetails<Long>? {
+    override fun getItemDetails(key: Long): ItemDetailsLookup.ItemDetails<Long> {
         println("Get item details for $this")
         return object: ItemDetailsLookup.ItemDetails<Long>() {
-            override fun getSelectionKey() = idd
+            override fun getSelectionKey() = key
             override fun getPosition() = pos
             override fun inDragRegion(e: MotionEvent): Boolean {
                 return true
@@ -71,6 +81,8 @@ class NoteViewHolder(
             }
         }
     }
+
+    override fun getItemPosition() = pos
 
     fun onSelected() {
         view.isSelected = selectionTracker.isSelected(pos.toLong())

@@ -10,16 +10,33 @@ import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 @Dao
 abstract class NotesDao {
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0")
+    @Query("SELECT * FROM notes")
+    abstract fun getNoteSearchResults(): LiveData<List<NoteAndCheckboxes>>
+
+
+    @Transaction
+    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL ORDER BY position")
     abstract fun getAllUnpinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0")
+    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL AND timeReminder IS NOT NULL ORDER BY position")
+    abstract fun getAllUnpinnedReminders(): LiveData<List<NoteAndCheckboxes>>
+
+    @Transaction
+    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime IS NULL ORDER BY position")
     abstract fun getAllPinnedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE notes.archived = 1")
+    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime IS NULL AND timeReminder IS NOT NULL ORDER BY position")
+    abstract fun getAllPinnedReminders(): LiveData<List<NoteAndCheckboxes>>
+
+    @Transaction
+    @Query("SELECT * FROM notes WHERE notes.archived = 1 AND deletionTime IS NULL")
     abstract fun getAllArchivedNotes(): LiveData<List<NoteAndCheckboxes>>
+
+    @Transaction
+    @Query("SELECT * FROM notes WHERE deletionTime IS NOT NULL")
+    abstract fun getDeletedNotes(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
     @Query("SELECT * FROM notes")
@@ -81,4 +98,19 @@ abstract class NotesDao {
     abstract fun setText(id: Long, text: String, time: String = currentTime())
 
     fun currentTime() = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+
+    @Query("UPDATE notes SET deletionTime = :time WHERE id = :id")
+    abstract fun setDeletionTime(id: Long, time: String? = currentTime())
+
+    @Query("UPDATE notes set deletionTime = NULL WHERE id = :id")
+    abstract fun restoreNote(id: Long)
+
+    @Query("UPDATE notes set timeReminder = :time WHERE id = :id")
+    abstract fun setNoteReminder(id: Long, time: String)
+
+    @Query("DELETE FROM notes WHERE id = :id")
+    abstract fun deletePermanently(id: Long)
+
+    @Query("UPDATE notes set position = :position WHERE id = :id")
+    abstract fun setNotePosition(id: Long, position: Long)
 }

@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_deleted"
+            app:destination="@id/nav_deleted" />
     </fragment>
 
     <fragment
@@ -51,5 +54,28 @@
         android:name="pw.cub3d.cub3_notes.ui.archived.ArchiveFragment"
         android:label="Archive"
         tools:layout="@layout/archive_fragment"/>
+
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="pw.cub3d.cub3_notes.ui.search.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search"/>
+
+    <fragment
+        android:id="@+id/nav_colours"
+        android:name="pw.cub3d.cub3_notes.ui.colours.ColoursFragment"
+        android:label="Colours"
+        tools:layout="@layout/fragment_colours"/>
+
+    <fragment
+        android:id="@+id/nav_deleted"
+        android:name="pw.cub3d.cub3_notes.ui.deleted.DeletedNotesFragment"
+        android:label="Deleted"
+        tools:layout="@layout/fragment_deleted_notes">
+        <action
+            android:id="@+id/action_nav_deleted_to_nav_note_label_edit"
+            app:destination="@id/nav_note_label_edit" />
+    </fragment>
+
 
 </navigation>

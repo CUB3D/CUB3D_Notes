@@ -3,6 +3,7 @@ package pw.cub3d.cub3_notes.database.entity
 import android.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.lang.Exception
 
 @Entity(tableName = "card_colour")
 data class Colour(
@@ -11,5 +12,5 @@ data class Colour(
 
     var hex_colour: String
 ) {
-    fun getColourId() = Color.parseColor(hex_colour)
+    fun getColourId() = try {Color.parseColor(hex_colour) } catch (e: Exception) {Color.BLACK}
 }

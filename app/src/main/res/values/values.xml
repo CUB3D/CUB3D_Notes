@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="icon_tint" format="color"/>
+    <attr name="toolbar_color" format="color"/>
+    <attr name="status_color" format="color"/>
+</resources>
