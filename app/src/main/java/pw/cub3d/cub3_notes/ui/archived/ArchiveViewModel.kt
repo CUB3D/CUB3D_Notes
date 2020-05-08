@@ -2,7 +2,12 @@ package pw.cub3d.cub3_notes.ui.archived
 
 import androidx.lifecycle.ViewModel
 import pw.cub3d.cub3_notes.database.dao.NotesDao
+import javax.inject.Inject
 
-class ArchiveViewModel(notesDao: NotesDao) : ViewModel() {
-    val archivedNotes = notesDao.getAllArchivedNotes()
+class ArchiveViewModel @Inject constructor(
+    notesDao: NotesDao
+): ViewModel() {
+    val archivedNotes by lazy {
+        notesDao.getAllArchivedNotes()
+    }
 }

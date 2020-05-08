@@ -6,10 +6,12 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import io.sentry.Sentry
 import io.sentry.android.AndroidSentryClientFactory
+import pw.cub3d.cub3_notes.dagger.DaggerComponentProvider
 import pw.cub3d.cub3_notes.dagger.DaggerNotesComponent
+import pw.cub3d.cub3_notes.dagger.NotesComponent
 import javax.inject.Inject
 
-class NoteApplication: Application(), HasAndroidInjector {
+class NoteApplication: Application(), HasAndroidInjector, DaggerComponentProvider {
 
     override fun onCreate() {
         super.onCreate()
@@ -17,6 +19,9 @@ class NoteApplication: Application(), HasAndroidInjector {
         DaggerNotesComponent.builder()
             .context(this)
             .build()
+            .apply {
+                comp = this
+            }
             .inject(this)
 
         AndroidThreeTen.init(this)
@@ -28,4 +33,8 @@ class NoteApplication: Application(), HasAndroidInjector {
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
     override fun androidInjector() = dispatchingAndroidInjector
+
+    lateinit var comp: NotesComponent
+    override val component: NotesComponent
+        get() = comp
 }

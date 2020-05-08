@@ -6,6 +6,7 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import pw.cub3d.cub3_notes.NoteApplication
+import pw.cub3d.cub3_notes.ui.archived.ArchiveViewModel
 import javax.inject.Singleton
 
 @Singleton
@@ -18,4 +19,6 @@ interface NotesComponent: AndroidInjector<NoteApplication> {
 
         fun build(): NotesComponent
     }
+
+    fun archiveViewModelFactory(): ViewModelFactory<ArchiveViewModel>
 }

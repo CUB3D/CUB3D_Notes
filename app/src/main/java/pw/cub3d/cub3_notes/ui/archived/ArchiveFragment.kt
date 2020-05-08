@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.archive_fragment.*
 import pw.cub3d.cub3_notes.activity.MainActivity
+import pw.cub3d.cub3_notes.dagger.injector
 import pw.cub3d.cub3_notes.databinding.ArchiveFragmentBinding
 import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
@@ -29,8 +30,7 @@ import javax.inject.Inject
 class ArchiveFragment : Fragment() {
     private lateinit var binding: ArchiveFragmentBinding
 
-    @Inject lateinit var viewModelFactory: ArchiveViewModelFactory
-    private val viewModel: ArchiveViewModel by viewModels { viewModelFactory }
+    private val viewModel: ArchiveViewModel by viewModels { injector.archiveViewModelFactory() }
 
     @Inject lateinit var noteNavigationController: NewNoteNavigationController
 
