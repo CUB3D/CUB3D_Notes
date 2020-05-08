@@ -72,6 +72,11 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/createNote_audio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/createNote_checkBoxes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

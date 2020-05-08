@@ -18,19 +18,18 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.ReminderBroadcastReciever
-import pw.cub3d.cub3_notes.database.dao.CheckboxEntryDao
-import pw.cub3d.cub3_notes.database.dao.ColourDao
-import pw.cub3d.cub3_notes.database.dao.ImageDao
-import pw.cub3d.cub3_notes.database.dao.NotesDao
+import pw.cub3d.cub3_notes.database.dao.*
 import pw.cub3d.cub3_notes.database.entity.*
+import javax.inject.Inject
 
-class NewNoteViewModel(
+class NewNoteViewModel @Inject constructor(
     private val dao: NotesDao,
     private val checkboxEntryDao: CheckboxEntryDao,
     private val colourDao: ColourDao,
     private val imagesDao: ImageDao,
-    private val context: Context
-) : ViewModel() {
+    private val context: Context,
+    private val audioDao: AudioDao
+): ViewModel() {
     val defaultNoteColours = colourDao.getAll().map {
         it + Colour(-1, "")
     }
@@ -44,6 +43,7 @@ class NewNoteViewModel(
     lateinit var pinned: LiveData<Boolean>
     lateinit var checkboxes: LiveData<List<CheckboxEntry>>
     lateinit var images: LiveData<List<ImageEntry>>
+    lateinit var audioClips: LiveData<List<AudioEntry>>
     lateinit var modificationTime: LiveData<String>
     lateinit var colour: LiveData<Int>
     lateinit var deletionTime: LiveData<String?>
@@ -75,11 +75,12 @@ class NewNoteViewModel(
 
         noteAndCheckboxes = dao.getNoteLive(it)
 
-        checkboxes = Transformations.map(noteAndCheckboxes!!) { it.checkboxes }
-        type = Transformations.map(noteAndCheckboxes!!) { it.note.type }
-        images = Transformations.map(noteAndCheckboxes!!) { it.images }
-        modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
-        pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
+        checkboxes = noteAndCheckboxes!!.map { it.checkboxes }
+        type = noteAndCheckboxes!!.map { it.note.type }
+        images = noteAndCheckboxes!!.map { it.images }
+        audioClips = noteAndCheckboxes!!.map { it.audioClips }
+        modificationTime = noteAndCheckboxes!!.map { it.note.getLocalModificationTime() }
+        pinned = noteAndCheckboxes!!.map { it.note.pinned }
         colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
         deletionTime = noteAndCheckboxes!!.map { it.note.deletionTime }
         archived = noteAndCheckboxes!!.map { it.note.archived }
@@ -104,11 +105,12 @@ class NewNoteViewModel(
 
         noteAndCheckboxes = dao.getNoteLive(noteId!!)
 
-        checkboxes = Transformations.map(noteAndCheckboxes!!) { it.checkboxes }
-        type = Transformations.map(noteAndCheckboxes!!) { it.note.type }
-        images = Transformations.map(noteAndCheckboxes!!) { it.images }
-        modificationTime = Transformations.map(noteAndCheckboxes!!) { it.note.getLocalModificationTime() }
-        pinned = Transformations.map(noteAndCheckboxes!!) { it.note.pinned }
+        checkboxes = noteAndCheckboxes!!.map { it.checkboxes }
+        type = noteAndCheckboxes!!.map { it.note.type }
+        images = noteAndCheckboxes!!.map { it.images }
+        audioClips = noteAndCheckboxes!!.map { it.audioClips }
+        modificationTime = noteAndCheckboxes!!.map { it.note.getLocalModificationTime() }
+        pinned = noteAndCheckboxes!!.map { it.note.pinned }
         colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
         deletionTime = noteAndCheckboxes!!.map { it.note.deletionTime }
         archived = noteAndCheckboxes!!.map { it.note.archived }
@@ -191,5 +193,9 @@ class NewNoteViewModel(
 
     fun onCheckboxDeletePermanently() {
         GlobalScope.launch { dao.deletePermanently(noteId!!) }
+    }
+
+    fun addAudioClip(path: String) {
+        GlobalScope.launch { audioDao.save(AudioEntry(0, noteId!!, path)) }
     }
 }

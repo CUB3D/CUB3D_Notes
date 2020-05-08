@@ -10,19 +10,22 @@ import javax.inject.Singleton
 class DatabaseModule {
     @Singleton
     @Provides
-    fun provideNotesDao(database: RoomDB) = database.notesDao()
+    fun RoomDB.provideNotesDao() = notesDao()
     @Singleton
     @Provides
-    fun provideCheckboxEntityDao(database: RoomDB) = database.checkboxEntryDao()
+    fun RoomDB.provideCheckboxEntityDao() = checkboxEntryDao()
     @Singleton
     @Provides
-    fun provideLabelDao(database: RoomDB) = database.labelDao()
+    fun RoomDB.provideLabelDao() = labelDao()
     @Singleton
     @Provides
-    fun provideColoursDao(database: RoomDB) = database.colourDao()
+    fun RoomDB.provideColoursDao() = colourDao()
     @Singleton
     @Provides
-    fun provideImageDao(database: RoomDB) = database.imageDao()
+    fun RoomDB.provideImageDao() = imageDao()
+    @Singleton
+    @Provides
+    fun RoomDB.provideAudioDao() = audioDao()
 
     @Singleton
     @Provides

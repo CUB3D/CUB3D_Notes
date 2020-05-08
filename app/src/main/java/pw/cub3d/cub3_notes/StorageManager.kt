@@ -13,8 +13,10 @@ class StorageManager @Inject constructor(
     private var lastCameraImageFile: File? = null
 
     fun getImagesDir() = File(context.filesDir, "images/").apply { mkdirs() }
+    fun getAudioDir() = File(context.filesDir, "audio/").apply { mkdirs() }
 
     fun getNewImageFile() = File(getImagesDir(), UUID.randomUUID().toString())
+    fun getNewAudioFile() = File(getAudioDir(), UUID.randomUUID().toString())
 
     fun getCameraImageFile() = getNewImageFile().apply {
         lastCameraImageFile = this

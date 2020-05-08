@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_new_note.*
 import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.StorageManager
+import pw.cub3d.cub3_notes.dagger.injector
 import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
@@ -42,15 +43,14 @@ import javax.inject.Inject
 
 class NewNoteFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelFactory: NewNoteViewModelFactory
-    private val viewModel: NewNoteViewModel by viewModels { viewModelFactory }
+    private val viewModel: NewNoteViewModel by viewModels { injector.newNoteViewModelFactory() }
 
     private lateinit var binding: FragmentNewNoteBinding
 
     @Inject lateinit var storageManager: StorageManager
 
     private lateinit var checkBoxAdapter: CheckBoxAdapter
+    private lateinit var audioAdapter: AudioAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,6 +63,7 @@ class NewNoteFragment : Fragment() {
             it.getLong(NewNoteNavigationController.KEY_NOTE, -1).takeIf { it != -1L }?.let { runBlocking { viewModel.loadNote(it).await() } }
             it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> viewModel.setNoteType(type) }
             it.getString(NewNoteNavigationController.KEY_NOTE_IMAGE_PATH)?.let { imagePath -> viewModel.addImage(imagePath) }
+            it.getString(NewNoteNavigationController.KEY_NOTE_AUDIO_PATH)?.let { path -> viewModel.addAudioClip(path) }
         }
 
 
@@ -95,6 +96,15 @@ class NewNoteFragment : Fragment() {
         viewModel.modificationTime.observe(viewLifecycleOwner, Observer {
             createNote_lastEdited.text = it
         })
+
+
+        binding.createNoteAudio.layoutManager = LinearLayoutManager(requireContext())
+        audioAdapter = AudioAdapter(requireContext())
+        binding.createNoteAudio.adapter = audioAdapter
+        viewModel.audioClips.observe(viewLifecycleOwner, Observer {
+            audioAdapter.updateData(it)
+        })
+
 
         createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
         checkBoxAdapter = CheckBoxAdapter(requireContext(), emptyList(), viewModel)

@@ -2,7 +2,8 @@
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
-    android:viewportHeight="24">
+    android:viewportHeight="24"
+    android:tint="?icon_tint">
   <path
       android:pathData="M12,1a3,3 0,0 0,-3 3v8a3,3 0,0 0,6 0V4a3,3 0,0 0,-3 -3z"
       android:strokeLineJoin="round"

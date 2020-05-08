@@ -118,6 +118,17 @@ object Migrations {
             database.execSQL("UPDATE notes SET position = id")
         }
     }
+
+    val MIGRATE_15_16 = object: Migration(15, 16) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("""CREATE TABLE audio(
+                                    id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
+                                    noteId INTEGER NOT NULL DEFAULT 0,
+                                    fileName TEXT NOT NULL DEFAULT ``,
+                                    FOREIGN KEY (noteId) REFERENCES notes(id)
+                            )""".trimMargin())
+        }
+    }
 }
 
 @Database(
@@ -127,9 +138,10 @@ object Migrations {
         Label::class,
         NoteLabel::class,
         Colour::class,
-        ImageEntry::class
+        ImageEntry::class,
+        AudioEntry::class
     ],
-    version = 15,
+    version = 16,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
@@ -138,6 +150,7 @@ abstract class RoomDB: RoomDatabase() {
     abstract fun labelDao(): LabelDao
     abstract fun colourDao(): ColourDao
     abstract fun imageDao(): ImageDao
+    abstract fun audioDao(): AudioDao
 
     companion object {
         @Volatile
@@ -168,7 +181,8 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_11_12,
                     Migrations.MIGRATE_12_13,
                     Migrations.MIGRATE_13_14,
-                    Migrations.MIGRATE_14_15
+                    Migrations.MIGRATE_14_15,
+                    Migrations.MIGRATE_15_16
                 //TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()

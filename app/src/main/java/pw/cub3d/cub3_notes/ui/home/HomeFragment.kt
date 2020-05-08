@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import pw.cub3d.cub3_notes.AudioManager
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.StorageManager
@@ -38,6 +39,7 @@ class HomeFragment : Fragment() {
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
     @Inject lateinit var storageManager: StorageManager
     @Inject lateinit var settingsManager: SettingsManager
+    @Inject lateinit var audioManager: AudioManager
 
     lateinit var pinnedAdapter: NotesAdapter
     lateinit var otherAdapter: NotesAdapter
@@ -228,7 +230,18 @@ class HomeFragment : Fragment() {
         home_takeNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController()) }
         home_new_checkNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
 //        home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_DRAW) }
-//        home_new_voiceNote.setOnClickListener{ newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_AUDIO) }
+        home_new_voiceNote.setOnLongClickListener {
+            audioManager.startRecording()
+            true
+        }
+        home_new_voiceNote.setOnTouchListener { v, event ->
+            if(event.action == MotionEvent.ACTION_UP) {
+                audioManager.stopRecording()?.let {
+                    newNoteNavigationController.navigateNewNoteWithAudio(findNavController(), it.name)
+                }
+            }
+            false
+        }
         home_new_imgNote.setOnClickListener {
             AddImageDialog(requireActivity(), storageManager).show()
         }
