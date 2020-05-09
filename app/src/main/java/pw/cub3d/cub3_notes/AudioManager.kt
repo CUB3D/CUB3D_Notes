@@ -1,5 +1,6 @@
 package pw.cub3d.cub3_notes
 
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import java.io.File
 import javax.inject.Inject
@@ -39,5 +40,17 @@ class AudioManager @Inject constructor(
             return perminantFile
         }
         return null
+    }
+
+    fun playAudio(name: String) {
+        val mp = MediaPlayer()
+
+        try {
+            mp.setDataSource(File(storageManager.getAudioDir(), name).path)
+            mp.prepare()
+            mp.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

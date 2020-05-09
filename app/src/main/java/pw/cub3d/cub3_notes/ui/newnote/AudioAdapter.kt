@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import pw.cub3d.cub3_notes.AudioManager
 import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.database.entity.AudioEntry
 import pw.cub3d.cub3_notes.databinding.AudioEntryBinding
@@ -38,15 +39,7 @@ class AudioAdapter(
 class AudioEntryViewHolder(val binding: AudioEntryBinding): RecyclerView.ViewHolder(binding.root) {
     fun bind(audioEntry: AudioEntry) {
         binding.imageButton2.setOnClickListener {
-            val mp = MediaPlayer()
-
-            try {
-                mp.setDataSource(File(StorageManager(binding.root.context).getAudioDir(), audioEntry.fileName).path)
-                mp.prepare()
-                mp.start()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            AudioManager(StorageManager(binding.root.context)).playAudio(audioEntry.fileName)
         }
     }
 

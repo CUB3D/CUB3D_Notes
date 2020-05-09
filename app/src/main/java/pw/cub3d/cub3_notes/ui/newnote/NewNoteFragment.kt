@@ -101,20 +101,25 @@ class NewNoteFragment : Fragment() {
         })
 
         viewModel.videos.observe(viewLifecycleOwner, Observer {
-            val v = it.first()
+            it.firstOrNull()?.let { v ->
 
-            val player = SimpleExoPlayer.Builder(requireContext()).build()
+                val player = SimpleExoPlayer.Builder(requireContext()).build()
 
-            val dataSourceFactory = DefaultDataSourceFactory(requireContext(), Util.getUserAgent(requireContext(), "Notes"))
-            val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(
-                File(storageManager.getVideoDir(), v.fileName).toUri()
-            )
+                val dataSourceFactory = DefaultDataSourceFactory(
+                    requireContext(),
+                    Util.getUserAgent(requireContext(), "Notes")
+                )
+                val videoSource =
+                    ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(
+                        File(storageManager.getVideoDir(), v.fileName).toUri()
+                    )
 
-            binding.createNoteVideo.player = player
-            player.prepare(videoSource)
-            //TODO: release the player
+                binding.createNoteVideo.player = player
+                player.prepare(videoSource)
+                //TODO: release the player
 
-            binding.createNoteVideo.visibility = View.VISIBLE
+                binding.createNoteVideo.visibility = View.VISIBLE
+            }
         })
 
         binding.createNoteAudio.layoutManager = LinearLayoutManager(requireContext())
