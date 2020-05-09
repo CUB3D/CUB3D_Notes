@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -13,15 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import dagger.android.support.AndroidSupportInjection
+import pw.cub3d.cub3_notes.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentColoursBinding
 import javax.inject.Inject
 
 
 class ColoursFragment : Fragment() {
 
-    @Inject
-    lateinit var coloursViewModelFactory: ColoursViewModelFactory
-    lateinit var viewModel: ColoursViewModel
+    private val viewModel: ColoursViewModel by viewModels { injector.coloursViewModelFactory() }
     lateinit var binding: FragmentColoursBinding
 
     override fun onCreateView(
@@ -32,17 +32,8 @@ class ColoursFragment : Fragment() {
         return binding.root
     }
 
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(
-            viewModelStore,
-            coloursViewModelFactory
-        ).get(ColoursViewModel::class.java)
 
         viewModel.colours.observe(viewLifecycleOwner, Observer {
             binding.coloursRecycler.layoutManager = LinearLayoutManager(requireContext())

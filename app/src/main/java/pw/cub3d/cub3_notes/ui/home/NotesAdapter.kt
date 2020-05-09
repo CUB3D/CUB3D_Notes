@@ -14,7 +14,7 @@ import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 class NotesAdapter(
     ctx: Context,
     public var notes: List<NoteAndCheckboxes>,
-    private val callback: (Note)->Unit
+    private val callback: (Note, NoteEntryBinding)->Unit
 ) : RecyclerView.Adapter<NoteViewHolder>() {
     lateinit var selectionTracker: SelectionTracker<Long>
 

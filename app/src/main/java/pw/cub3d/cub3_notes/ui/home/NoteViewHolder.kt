@@ -15,7 +15,7 @@ import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
 class NoteViewHolder(
     private val view: NoteEntryBinding,
-    private val callback: (Note) -> Unit,
+    private val callback: (Note, NoteEntryBinding) -> Unit,
     var pos: Int,
     private val selectionTracker: SelectionTracker<Long>
 ): RecyclerView.ViewHolder(view.root), ProvidesItemDetails {
@@ -67,7 +67,7 @@ class NoteViewHolder(
             view.notePlayAudio.visibility = View.GONE
         }
 
-        view.noteClickRoot.setOnClickListener { callback.invoke(note.note) }
+        view.noteClickRoot.setOnClickListener { callback.invoke(note.note, view) }
 
         if(note.isEmpty()) {
             view.noteEmptyNotice.visibility = View.VISIBLE

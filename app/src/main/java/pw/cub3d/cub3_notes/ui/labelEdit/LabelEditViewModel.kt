@@ -6,8 +6,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.database.dao.LabelDao
 import pw.cub3d.cub3_notes.database.entity.Label
+import javax.inject.Inject
 
-class LabelEditViewModel(
+class LabelEditViewModel @Inject constructor(
     private val labelDao: LabelDao
 ): ViewModel() {
     val labels = labelDao.getAll()

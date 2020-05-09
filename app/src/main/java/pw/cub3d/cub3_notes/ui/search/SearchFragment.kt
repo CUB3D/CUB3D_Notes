@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_search.*
 
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentSearchBinding
 import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
@@ -33,8 +34,7 @@ import javax.inject.Inject
 
 class SearchFragment : Fragment() {
 
-    @Inject lateinit var searchViewModelFactory: SearchViewModelFactory
-    private val viewModel: SearchViewModel by viewModels { searchViewModelFactory }
+    private val viewModel: SearchViewModel by viewModels { injector.searchViewModelFactory() }
 
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
 
@@ -64,7 +64,7 @@ class SearchFragment : Fragment() {
         viewModel.searchQuery.observe(viewLifecycleOwner, Observer {
             viewModel.getSearchResults(it).observe(viewLifecycleOwner, Observer {
                 search_results.layoutManager = LinearLayoutManager(requireContext())
-                val adapter = NotesAdapter(requireContext(), it) { newNoteNavigationController.editNote(findNavController(), it) }
+                val adapter = NotesAdapter(requireContext(), it) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
                 search_results.adapter = adapter
 
 

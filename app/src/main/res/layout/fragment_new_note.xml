@@ -77,7 +77,8 @@
                             android:background="@android:color/transparent"
                             android:hint="Title"
                             android:outlineProvider="none"
-                            android:text="@={viewModel.title, default=`Example note title`}" />
+                            android:text="@={viewModel.title, default=`Example note title`}"
+                            android:transitionName="@{viewModel.noteId + `_title`}"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.recyclerview.widget.RecyclerView

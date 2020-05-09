@@ -157,7 +157,7 @@ class HomeFragment : Fragment() {
         ItemTouchHelper(pinnedNoteItemTouchHelperCallback).attachToRecyclerView(home_pinnedNotes)
         ItemTouchHelper(otherNoteItemTouchHelperCallback).attachToRecyclerView(home_notes)
 
-        pinnedAdapter = NotesAdapter(requireContext(), emptyList()) { note -> newNoteNavigationController.editNote(findNavController(), note) }
+        pinnedAdapter = NotesAdapter(requireContext(), emptyList()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
         home_pinnedNotes.adapter = pinnedAdapter
         val keyProvider = MyItemKeyProvider(home_pinnedNotes)
 
@@ -187,7 +187,7 @@ class HomeFragment : Fragment() {
             pinnedAdapter.updateData(it)
         })
 
-        otherAdapter = NotesAdapter(requireContext(), emptyList()) { note -> newNoteNavigationController.editNote(findNavController(), note) }
+        otherAdapter = NotesAdapter(requireContext(), emptyList()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
         home_notes.adapter = otherAdapter
 
         val otherKeyProvider = MyItemKeyProvider(home_notes)

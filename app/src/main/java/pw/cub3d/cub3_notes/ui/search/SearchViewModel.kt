@@ -5,8 +5,11 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pw.cub3d.cub3_notes.database.dao.NotesDao
+import javax.inject.Inject
 
-class SearchViewModel(private val notesDao: NotesDao): ViewModel() {
+class SearchViewModel @Inject constructor(
+    private val notesDao: NotesDao
+): ViewModel() {
     val searchQuery = MutableLiveData<String>()
 
     fun getSearchResults(query: String) = notesDao.getNoteSearchResults().filter {

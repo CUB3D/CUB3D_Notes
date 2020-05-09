@@ -52,7 +52,7 @@ class ArchiveFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Archive"
 
         archive_recycler.layoutManager = GridLayoutManager(requireContext(), 2)
-        archive_recycler.adapter = NotesAdapter(requireContext(), emptyList()) { note -> noteNavigationController.editNote(findNavController(), note) }
+        archive_recycler.adapter = NotesAdapter(requireContext(), emptyList()) { note,v  -> noteNavigationController.editNote(findNavController(), note, v) }
 
         val keyProvider = MyItemKeyProvider(archive_recycler)
 

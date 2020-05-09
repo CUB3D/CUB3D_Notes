@@ -5,8 +5,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.database.dao.ColourDao
 import pw.cub3d.cub3_notes.database.entity.Colour
+import javax.inject.Inject
 
-class ColoursViewModel(
+class ColoursViewModel @Inject constructor(
     private val colourDao: ColourDao
 ): ViewModel() {
     fun addColour(color: String) {

@@ -1,9 +1,12 @@
 package pw.cub3d.cub3_notes.ui.nav
 
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.NavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,14 +27,20 @@ class NewNoteNavigationController @Inject constructor() {
         })
     }
 
-    fun editNote(nav: NavController, note: Note) {
-        editNote(nav, note.id)
+    fun editNote(nav: NavController, note: Note, binding: NoteEntryBinding) {
+        editNote(nav, note.id,
+            binding.noteTitle to "${note.id}_title"
+        )
     }
 
-    fun editNote(nav: NavController, noteId: Long) {
+    fun editNote(nav: NavController, note: Note, vararg sharedElements: Pair<View, String>) {
+        editNote(nav, note.id, *sharedElements)
+    }
+
+    fun editNote(nav: NavController, noteId: Long, vararg sharedElements: Pair<View, String>) {
         nav.navigate(R.id.nav_new_note, Bundle().apply {
             putLong(KEY_NOTE, noteId)
-        })
+        }, null, FragmentNavigatorExtras(*sharedElements))
     }
 
     fun navigateNewNoteWithAudio(nav: NavController, name: String) {

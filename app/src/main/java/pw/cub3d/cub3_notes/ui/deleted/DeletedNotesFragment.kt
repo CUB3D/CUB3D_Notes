@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.activity.MainActivity
+import pw.cub3d.cub3_notes.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentDeletedNotesBinding
 import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
@@ -36,8 +37,8 @@ import javax.inject.Inject
 
 
 class DeletedNotesFragment : Fragment() {
-    @Inject lateinit var viewModelFactory: DeletedNotesViewModelFactory
-    val viewModel: DeletedNotesViewModel by viewModels { viewModelFactory }
+    val viewModel: DeletedNotesViewModel by viewModels { injector.deleteNoteViewModelFactory() }
+
     lateinit var binding: FragmentDeletedNotesBinding
 
     @Inject lateinit var navigationController: NewNoteNavigationController
@@ -64,8 +65,8 @@ class DeletedNotesFragment : Fragment() {
         })
 
         binding.deletedRecycler.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-        binding.deletedRecycler.adapter = NotesAdapter(requireContext(), emptyList()) {
-            navigationController.editNote(findNavController(), it)
+        binding.deletedRecycler.adapter = NotesAdapter(requireContext(), emptyList()) { note, v ->
+            navigationController.editNote(findNavController(), note, v)
         }.apply { adapter = this }
 
         val keyProvider = MyItemKeyProvider(binding.deletedRecycler)

@@ -3,9 +3,10 @@ package pw.cub3d.cub3_notes.ui.noteLabels
 import androidx.lifecycle.*
 import pw.cub3d.cub3_notes.database.dao.LabelDao
 import pw.cub3d.cub3_notes.database.entity.Label
+import javax.inject.Inject
 
-class NoteLabelEditViewModel(
-    private val labelDao: LabelDao
+class NoteLabelEditViewModel @Inject constructor(
+    val labelDao: LabelDao
 ): ViewModel() {
     var noteId = MutableLiveData(0L)
 

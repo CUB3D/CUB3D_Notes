@@ -3,6 +3,7 @@ package pw.cub3d.cub3_notes.ui.newnote
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +54,12 @@ class NewNoteFragment : Fragment() {
 
     private lateinit var checkBoxAdapter: CheckBoxAdapter
     private lateinit var audioAdapter: AudioAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+        sharedElementReturnTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
