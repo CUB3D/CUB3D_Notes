@@ -23,6 +23,7 @@ import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
+import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import java.io.File
 import java.util.*
@@ -144,6 +145,33 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 AddImageDialog.closeIfOpen()
+            }
+            if (requestCode == AddVideoDialog.PICK_VIDEO) {
+                // Copy the given video to the local storage
+                println("Pick video")
+                val fileUri = data!!.data!!
+                val uuid = UUID.randomUUID().toString()
+                val imagesDir = File(filesDir, "video/").apply {
+                    mkdirs()
+                }
+
+                val outFile = File(imagesDir, uuid)
+
+                contentResolver.openInputStream(fileUri)!!.copyTo(outFile.outputStream())
+
+                newNoteNavigationController.navigateNewNoteWithVideo(findNavController(R.id.nav_host_fragment), uuid)
+            }
+            if (requestCode == AddVideoDialog.TAKE_VIDEO) {
+                println("Take video")
+
+                // Will always return true, unless app is restarted between images
+                storageManager.getLastCameraVideoUUID()?.let {
+                    newNoteNavigationController.navigateNewNoteWithVideo(findNavController(R.id.nav_host_fragment),
+                        it
+                    )
+                }
+
+                AddVideoDialog.closeIfOpen()
             }
         } else {
             println("Result: failed")

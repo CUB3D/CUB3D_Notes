@@ -20,7 +20,10 @@ data class NoteAndCheckboxes(
     val images: List<ImageEntry>,
 
     @Relation(parentColumn = "id", entityColumn = "noteId")
-    val audioClips: List<AudioEntry>
+    val audioClips: List<AudioEntry>,
+
+    @Relation(parentColumn = "id", entityColumn = "noteId")
+    val videos: List<VideoEntry>
 ) {
     fun isEmpty() = note.title.isEmpty() && note.text.isEmpty() && checkboxes.isEmpty() && images.isEmpty()
 }

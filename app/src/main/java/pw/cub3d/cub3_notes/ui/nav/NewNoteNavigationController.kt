@@ -42,11 +42,20 @@ class NewNoteNavigationController @Inject constructor() {
         })
     }
 
+    fun navigateNewNoteWithVideo(nav: NavController, videoPath: String) {
+        nav.navigate(R.id.nav_new_note, Bundle().apply {
+            putString(KEY_NOTE_TYPE, Note.TYPE_VIDEO)
+            putString(KEY_NOTE_VIDEO_PATH, videoPath)
+            putBoolean(KEY_NEW_NOTE, true)
+        })
+    }
+
     companion object {
         const val KEY_NOTE_TYPE = "NOTE_TYPE"
         const val KEY_NOTE = "NOTE"
         const val KEY_NOTE_IMAGE_PATH = "NOTE_IMAGE_PATH"
         const val KEY_NOTE_AUDIO_PATH = "NOTE_AUDIO_PATH"
+        const val KEY_NOTE_VIDEO_PATH = "NOTE_VIDEO_PATH"
         const val KEY_NEW_NOTE = "NOTE_NEW"
     }
 }

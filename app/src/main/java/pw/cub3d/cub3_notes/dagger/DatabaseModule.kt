@@ -26,6 +26,9 @@ class DatabaseModule {
     @Singleton
     @Provides
     fun RoomDB.provideAudioDao() = audioDao()
+    @Singleton
+    @Provides
+    fun RoomDB.provideVideoDao() = videoDao()
 
     @Singleton
     @Provides

@@ -6,8 +6,9 @@ import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.database.dao.LabelDao
 import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.database.repository.NoteRepository
+import javax.inject.Inject
 
-class HomeViewModel(
+class HomeViewModel @Inject constructor(
     private val notesRepository: NoteRepository,
     private val labelDao: LabelDao
 ) : ViewModel() {

@@ -28,7 +28,8 @@ class NewNoteViewModel @Inject constructor(
     private val colourDao: ColourDao,
     private val imagesDao: ImageDao,
     private val context: Context,
-    private val audioDao: AudioDao
+    private val audioDao: AudioDao,
+    private val videoDao: VideoDao
 ): ViewModel() {
     val defaultNoteColours = colourDao.getAll().map {
         it + Colour(-1, "")
@@ -44,6 +45,7 @@ class NewNoteViewModel @Inject constructor(
     lateinit var checkboxes: LiveData<List<CheckboxEntry>>
     lateinit var images: LiveData<List<ImageEntry>>
     lateinit var audioClips: LiveData<List<AudioEntry>>
+    lateinit var videos: LiveData<List<VideoEntry>>
     lateinit var modificationTime: LiveData<String>
     lateinit var colour: LiveData<Int>
     lateinit var deletionTime: LiveData<String?>
@@ -79,6 +81,7 @@ class NewNoteViewModel @Inject constructor(
         type = noteAndCheckboxes!!.map { it.note.type }
         images = noteAndCheckboxes!!.map { it.images }
         audioClips = noteAndCheckboxes!!.map { it.audioClips }
+        videos = noteAndCheckboxes!!.map { it.videos }.distinctUntilChanged()
         modificationTime = noteAndCheckboxes!!.map { it.note.getLocalModificationTime() }
         pinned = noteAndCheckboxes!!.map { it.note.pinned }
         colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
@@ -109,6 +112,7 @@ class NewNoteViewModel @Inject constructor(
         type = noteAndCheckboxes!!.map { it.note.type }
         images = noteAndCheckboxes!!.map { it.images }
         audioClips = noteAndCheckboxes!!.map { it.audioClips }
+        videos = noteAndCheckboxes!!.map { it.videos }.distinctUntilChanged()
         modificationTime = noteAndCheckboxes!!.map { it.note.getLocalModificationTime() }
         pinned = noteAndCheckboxes!!.map { it.note.pinned }
         colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
@@ -197,5 +201,9 @@ class NewNoteViewModel @Inject constructor(
 
     fun addAudioClip(path: String) {
         GlobalScope.launch { audioDao.save(AudioEntry(0, noteId!!, path)) }
+    }
+
+    fun addVideo(path: String) {
+        GlobalScope.launch { videoDao.save(VideoEntry(0, noteId!!, path)) }
     }
 }

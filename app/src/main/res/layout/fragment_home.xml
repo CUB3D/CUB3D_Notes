@@ -129,12 +129,18 @@
             android:src="@drawable/ic_mic" />
 
         <ImageView
-            android:tint="?icon_tint"
+            android:id="@+id/home_new_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_video"/>
+
+        <ImageView
             android:id="@+id/home_new_imgNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_menu_gallery" />
+            android:src="@drawable/ic_image" />
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 

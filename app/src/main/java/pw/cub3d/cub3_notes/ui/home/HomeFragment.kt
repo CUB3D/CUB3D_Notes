@@ -25,16 +25,17 @@ import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.SettingsManager
 import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.activity.MainActivity
+import pw.cub3d.cub3_notes.dagger.injector
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
+import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
-    @Inject lateinit var homeViewModelFactory: NotesViewModelFactory
-    private val viewModel: HomeViewModel by viewModels { homeViewModelFactory }
+    private val viewModel: HomeViewModel by viewModels { injector.homeViewModelFactory() }
 
     @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
     @Inject lateinit var storageManager: StorageManager
@@ -241,6 +242,9 @@ class HomeFragment : Fragment() {
                 }
             }
             false
+        }
+        home_new_video.setOnClickListener {
+            AddVideoDialog(requireActivity(), storageManager).show()
         }
         home_new_imgNote.setOnClickListener {
             AddImageDialog(requireActivity(), storageManager).show()

@@ -2,19 +2,17 @@ package pw.cub3d.cub3_notes.ui.newnote
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.get
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.*
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
@@ -23,6 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_new_note.*
@@ -30,14 +32,14 @@ import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.StorageManager
 import pw.cub3d.cub3_notes.dagger.injector
-import pw.cub3d.cub3_notes.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 
-import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
+import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
+import java.io.File
 import javax.inject.Inject
 
 
@@ -64,6 +66,7 @@ class NewNoteFragment : Fragment() {
             it.getString(NewNoteNavigationController.KEY_NOTE_TYPE)?.let { type -> viewModel.setNoteType(type) }
             it.getString(NewNoteNavigationController.KEY_NOTE_IMAGE_PATH)?.let { imagePath -> viewModel.addImage(imagePath) }
             it.getString(NewNoteNavigationController.KEY_NOTE_AUDIO_PATH)?.let { path -> viewModel.addAudioClip(path) }
+            it.getString(NewNoteNavigationController.KEY_NOTE_VIDEO_PATH)?.let { path -> viewModel.addVideo(path) }
         }
 
 
@@ -97,6 +100,22 @@ class NewNoteFragment : Fragment() {
             createNote_lastEdited.text = it
         })
 
+        viewModel.videos.observe(viewLifecycleOwner, Observer {
+            val v = it.first()
+
+            val player = SimpleExoPlayer.Builder(requireContext()).build()
+
+            val dataSourceFactory = DefaultDataSourceFactory(requireContext(), Util.getUserAgent(requireContext(), "Notes"))
+            val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(
+                File(storageManager.getVideoDir(), v.fileName).toUri()
+            )
+
+            binding.createNoteVideo.player = player
+            player.prepare(videoSource)
+            //TODO: release the player
+
+            binding.createNoteVideo.visibility = View.VISIBLE
+        })
 
         binding.createNoteAudio.layoutManager = LinearLayoutManager(requireContext())
         audioAdapter = AudioAdapter(requireContext())
@@ -286,10 +305,10 @@ class NewNoteFragment : Fragment() {
             }
         }
         binding.createNoteAddPhoto.setOnClickListener {
-            AddImageDialog(requireActivity(), storageManager).takePhoto()
+            AddVideoDialog(requireActivity(), storageManager).takeVideo()
         }
         binding.createNoteAddImage.setOnClickListener {
-            AddImageDialog(requireActivity(), storageManager).pickImage()
+            AddVideoDialog(requireActivity(), storageManager).pickVideo()
         }
 
 

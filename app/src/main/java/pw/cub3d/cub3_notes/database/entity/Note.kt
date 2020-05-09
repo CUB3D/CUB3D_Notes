@@ -63,5 +63,6 @@ data class Note(
         const val TYPE_DRAW = "DRAW"
         const val TYPE_AUDIO = "AUDIO"
         const val TYPE_IMAGE = "IMAGE"
+        const val TYPE_VIDEO = "VIDEO"
     }
 }

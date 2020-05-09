@@ -12,22 +12,22 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Add Image"
+        android:text="Add Video"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addImage_takePhoto"
+        android:id="@+id/addVideo_takeVideo"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Take Photo"
-        app:icon="@drawable/ic_camera" />
+        android:text="Record Video"
+        app:icon="@drawable/ic_video" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addImage_chooseImage"
+        android:id="@+id/addVideo_chooseImage"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,6 +35,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Choose Image"
+        android:text="Choose Video"
         app:icon="@drawable/ic_image" />
 </LinearLayout>

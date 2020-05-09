@@ -111,4 +111,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'com.pes.materialcolorpicker:library:1.2.5'
+
+    // Video playback
+    implementation 'com.google.android.exoplayer:exoplayer:2.11.4'
 }
