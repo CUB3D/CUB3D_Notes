@@ -3,12 +3,11 @@ package pw.cub3d.cub3_notes.ui.newnote
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.R
-import pw.cub3d.cub3_notes.database.entity.Colour
+import pw.cub3d.cub3_notes.core.database.entity.Colour
 import pw.cub3d.cub3_notes.databinding.ColourEntryBinding
 
 class ColoursAdapter(

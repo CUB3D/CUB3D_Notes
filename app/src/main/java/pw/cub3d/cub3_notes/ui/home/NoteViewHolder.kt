@@ -7,10 +7,10 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import pw.cub3d.cub3_notes.AudioManager
-import pw.cub3d.cub3_notes.StorageManager
-import pw.cub3d.cub3_notes.database.entity.Note
-import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
+import pw.cub3d.cub3_notes.core.manager.AudioManager
+import pw.cub3d.cub3_notes.core.manager.StorageManager
+import pw.cub3d.cub3_notes.core.database.entity.Note
+import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
 class NoteViewHolder(
@@ -60,7 +60,8 @@ class NoteViewHolder(
 
         if(note.audioClips.isNotEmpty()) {
             view.notePlayAudio.setOnClickListener {
-                AudioManager(StorageManager(view.root.context)).playAudio(note.audioClips.first().fileName)
+                AudioManager(StorageManager(view.root.context))
+                    .playAudio(note.audioClips.first().fileName)
             }
             view.notePlayAudio.visibility = View.VISIBLE
         } else {

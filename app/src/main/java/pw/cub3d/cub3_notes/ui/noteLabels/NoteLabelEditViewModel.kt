@@ -1,8 +1,8 @@
 package pw.cub3d.cub3_notes.ui.noteLabels
 
 import androidx.lifecycle.*
-import pw.cub3d.cub3_notes.database.dao.LabelDao
-import pw.cub3d.cub3_notes.database.entity.Label
+import pw.cub3d.cub3_notes.core.database.dao.LabelDao
+import pw.cub3d.cub3_notes.core.database.entity.Label
 import javax.inject.Inject
 
 class NoteLabelEditViewModel @Inject constructor(

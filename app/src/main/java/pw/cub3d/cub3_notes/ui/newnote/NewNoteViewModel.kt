@@ -2,7 +2,6 @@ package pw.cub3d.cub3_notes.ui.newnote
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -18,8 +17,8 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.ReminderBroadcastReciever
-import pw.cub3d.cub3_notes.database.dao.*
-import pw.cub3d.cub3_notes.database.entity.*
+import pw.cub3d.cub3_notes.core.database.dao.*
+import pw.cub3d.cub3_notes.core.database.entity.*
 import javax.inject.Inject
 
 class NewNoteViewModel @Inject constructor(

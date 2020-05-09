@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.selection.SelectionPredicates
@@ -18,8 +17,8 @@ import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.archive_fragment.*
-import pw.cub3d.cub3_notes.activity.MainActivity
-import pw.cub3d.cub3_notes.dagger.injector
+import pw.cub3d.cub3_notes.ui.MainActivity
+import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.ArchiveFragmentBinding
 import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider

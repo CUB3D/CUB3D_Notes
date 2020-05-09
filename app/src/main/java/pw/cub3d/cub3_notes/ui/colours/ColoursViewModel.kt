@@ -3,8 +3,8 @@ package pw.cub3d.cub3_notes.ui.colours
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pw.cub3d.cub3_notes.database.dao.ColourDao
-import pw.cub3d.cub3_notes.database.entity.Colour
+import pw.cub3d.cub3_notes.core.database.dao.ColourDao
+import pw.cub3d.cub3_notes.core.database.entity.Colour
 import javax.inject.Inject
 
 class ColoursViewModel @Inject constructor(

@@ -3,15 +3,13 @@ package pw.cub3d.cub3_notes.ui.noteLabels
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pw.cub3d.cub3_notes.R
-import pw.cub3d.cub3_notes.database.dao.LabelDao
-import pw.cub3d.cub3_notes.database.entity.Label
-import pw.cub3d.cub3_notes.database.entity.NoteLabel
+import pw.cub3d.cub3_notes.core.database.dao.LabelDao
+import pw.cub3d.cub3_notes.core.database.entity.Label
+import pw.cub3d.cub3_notes.core.database.entity.NoteLabel
 import pw.cub3d.cub3_notes.databinding.NoteLabelEditEntryBinding
 
 class NoteLabelEditAdapter(

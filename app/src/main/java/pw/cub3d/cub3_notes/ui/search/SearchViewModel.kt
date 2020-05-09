@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import pw.cub3d.cub3_notes.database.dao.NotesDao
+import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(

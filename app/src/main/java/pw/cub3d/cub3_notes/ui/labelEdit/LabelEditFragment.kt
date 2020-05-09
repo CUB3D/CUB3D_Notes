@@ -1,6 +1,5 @@
 package pw.cub3d.cub3_notes.ui.labelEdit
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_label_edit.*
-import pw.cub3d.cub3_notes.dagger.injector
+import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentLabelEditBinding
-import javax.inject.Inject
 
 class LabelEditFragment : Fragment() {
     private val labelEditViewModel: LabelEditViewModel by viewModels { injector.labelEditViewModelFactory() }

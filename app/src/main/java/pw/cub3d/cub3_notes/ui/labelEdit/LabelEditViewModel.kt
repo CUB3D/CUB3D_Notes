@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pw.cub3d.cub3_notes.database.dao.LabelDao
-import pw.cub3d.cub3_notes.database.entity.Label
+import pw.cub3d.cub3_notes.core.database.dao.LabelDao
+import pw.cub3d.cub3_notes.core.database.entity.Label
 import javax.inject.Inject
 
 class LabelEditViewModel @Inject constructor(

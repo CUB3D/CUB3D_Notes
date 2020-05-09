@@ -10,7 +10,7 @@ import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.dialog_add_image.*
 import pw.cub3d.cub3_notes.BuildConfig
 import pw.cub3d.cub3_notes.R
-import pw.cub3d.cub3_notes.StorageManager
+import pw.cub3d.cub3_notes.core.manager.StorageManager
 
 
 class AddImageDialog(

@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import pw.cub3d.cub3_notes.database.entity.Colour
+import pw.cub3d.cub3_notes.core.database.entity.Colour
 import pw.cub3d.cub3_notes.databinding.ColourEditEntryBinding
 
 class ColoursAdapter(

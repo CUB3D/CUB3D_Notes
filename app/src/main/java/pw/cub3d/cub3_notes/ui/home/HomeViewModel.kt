@@ -3,9 +3,9 @@ package pw.cub3d.cub3_notes.ui.home
 import androidx.lifecycle.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pw.cub3d.cub3_notes.database.dao.LabelDao
-import pw.cub3d.cub3_notes.database.entity.NoteAndCheckboxes
-import pw.cub3d.cub3_notes.database.repository.NoteRepository
+import pw.cub3d.cub3_notes.core.database.dao.LabelDao
+import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
+import pw.cub3d.cub3_notes.core.database.repository.NoteRepository
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(

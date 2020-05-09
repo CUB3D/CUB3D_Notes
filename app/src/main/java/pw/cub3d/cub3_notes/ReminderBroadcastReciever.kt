@@ -6,11 +6,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import dagger.android.AndroidInjection
-import dagger.android.support.AndroidSupportInjection
-import pw.cub3d.cub3_notes.activity.MainActivity
-import pw.cub3d.cub3_notes.database.dao.NotesDao
+import pw.cub3d.cub3_notes.ui.MainActivity
+import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import javax.inject.Inject
 
 class ReminderBroadcastReciever: BroadcastReceiver() {

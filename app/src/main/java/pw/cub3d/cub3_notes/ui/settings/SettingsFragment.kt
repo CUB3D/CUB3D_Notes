@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.R
-import pw.cub3d.cub3_notes.database.DataExporter
-import pw.cub3d.cub3_notes.sync.OpenTasksSyncManager
+import pw.cub3d.cub3_notes.core.database.DataExporter
+import pw.cub3d.cub3_notes.core.sync.OpenTasksSyncManager
 import java.io.File
 import javax.inject.Inject
 

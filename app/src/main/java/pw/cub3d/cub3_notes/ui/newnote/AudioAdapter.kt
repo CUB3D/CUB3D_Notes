@@ -1,16 +1,13 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
-import android.R.attr.path
 import android.content.Context
-import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import pw.cub3d.cub3_notes.AudioManager
-import pw.cub3d.cub3_notes.StorageManager
-import pw.cub3d.cub3_notes.database.entity.AudioEntry
+import pw.cub3d.cub3_notes.core.manager.AudioManager
+import pw.cub3d.cub3_notes.core.manager.StorageManager
+import pw.cub3d.cub3_notes.core.database.entity.AudioEntry
 import pw.cub3d.cub3_notes.databinding.AudioEntryBinding
-import java.io.File
 
 
 class AudioAdapter(
@@ -39,7 +36,8 @@ class AudioAdapter(
 class AudioEntryViewHolder(val binding: AudioEntryBinding): RecyclerView.ViewHolder(binding.root) {
     fun bind(audioEntry: AudioEntry) {
         binding.imageButton2.setOnClickListener {
-            AudioManager(StorageManager(binding.root.context)).playAudio(audioEntry.fileName)
+            AudioManager(StorageManager(binding.root.context))
+                .playAudio(audioEntry.fileName)
         }
     }
 

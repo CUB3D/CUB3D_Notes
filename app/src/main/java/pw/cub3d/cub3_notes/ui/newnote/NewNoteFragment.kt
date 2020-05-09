@@ -31,9 +31,9 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_new_note.*
 import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
-import pw.cub3d.cub3_notes.StorageManager
-import pw.cub3d.cub3_notes.dagger.injector
-import pw.cub3d.cub3_notes.database.entity.Note
+import pw.cub3d.cub3_notes.core.manager.StorageManager
+import pw.cub3d.cub3_notes.core.dagger.injector
+import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog

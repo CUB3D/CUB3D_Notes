@@ -6,9 +6,9 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import io.sentry.Sentry
 import io.sentry.android.AndroidSentryClientFactory
-import pw.cub3d.cub3_notes.dagger.DaggerComponentProvider
-import pw.cub3d.cub3_notes.dagger.DaggerNotesComponent
-import pw.cub3d.cub3_notes.dagger.NotesComponent
+import pw.cub3d.cub3_notes.core.dagger.DaggerComponentProvider
+import pw.cub3d.cub3_notes.core.dagger.DaggerNotesComponent
+import pw.cub3d.cub3_notes.core.dagger.NotesComponent
 import javax.inject.Inject
 
 class NoteApplication: Application(), HasAndroidInjector, DaggerComponentProvider {
