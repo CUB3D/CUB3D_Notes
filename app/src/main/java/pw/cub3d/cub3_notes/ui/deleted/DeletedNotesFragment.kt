@@ -14,7 +14,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
@@ -53,7 +52,7 @@ class DeletedNotesFragment : Fragment() {
 
 
         binding.deletedRecycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, settingsManager)
-        binding.deletedRecycler.adapter = NotesAdapter(requireContext(), emptyList()) { note, v ->
+        binding.deletedRecycler.adapter = NotesAdapter(requireContext()) { note, v ->
             navigationController.editNote(findNavController(), note, v)
         }.apply { adapter = this }
 

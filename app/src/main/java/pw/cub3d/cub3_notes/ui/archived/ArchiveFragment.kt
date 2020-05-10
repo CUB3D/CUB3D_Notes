@@ -14,7 +14,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
-import androidx.recyclerview.widget.GridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.archive_fragment.*
 import pw.cub3d.cub3_notes.ui.MainActivity
@@ -54,7 +53,7 @@ class ArchiveFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Archive"
 
         archive_recycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, settingsManager)
-        archive_recycler.adapter = NotesAdapter(requireContext(), emptyList()) { note,v  -> noteNavigationController.editNote(findNavController(), note, v) }
+        archive_recycler.adapter = NotesAdapter(requireContext()) { note, v  -> noteNavigationController.editNote(findNavController(), note, v) }
 
         val keyProvider = MyItemKeyProvider(archive_recycler)
 

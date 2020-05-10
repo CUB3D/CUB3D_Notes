@@ -53,27 +53,28 @@ class SearchFragment : Fragment() {
             }
         }
 
+        search_results.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = NotesAdapter(requireContext()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
+        search_results.adapter = adapter
+
+        val keyProvider = MyItemKeyProvider(search_results)
+
+        val tracker = SelectionTracker.Builder(
+            "search-selection",
+            search_results,
+            keyProvider,
+            ItemDetailsProvider(search_results, keyProvider),
+            StorageStrategy.createLongStorage()
+        )
+            .withSelectionPredicate(SelectionPredicates.createSelectAnything())
+            .build()
+
+
+        adapter.selectionTracker = tracker
+
         viewModel.searchQuery.observe(viewLifecycleOwner, Observer {
             viewModel.getSearchResults(it).observe(viewLifecycleOwner, Observer {
-                search_results.layoutManager = LinearLayoutManager(requireContext())
-                val adapter = NotesAdapter(requireContext(), it) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
-                search_results.adapter = adapter
-
-
-                val keyProvider = MyItemKeyProvider(search_results)
-
-                val tracker = SelectionTracker.Builder(
-                    "search-selection",
-                    search_results,
-                    keyProvider,
-                    ItemDetailsProvider(search_results, keyProvider),
-                    StorageStrategy.createLongStorage()
-                )
-                    .withSelectionPredicate(SelectionPredicates.createSelectAnything())
-                    .build()
-
-
-                adapter.selectionTracker = tracker
+                adapter.updateData(it)
             })
         })
     }

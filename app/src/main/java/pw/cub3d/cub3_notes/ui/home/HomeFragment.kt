@@ -16,7 +16,6 @@ import androidx.recyclerview.selection.*
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -146,7 +145,7 @@ class HomeFragment : Fragment() {
         ItemTouchHelper(pinnedNoteItemTouchHelperCallback).attachToRecyclerView(home_pinnedNotes)
         ItemTouchHelper(otherNoteItemTouchHelperCallback).attachToRecyclerView(home_notes)
 
-        pinnedAdapter = NotesAdapter(requireContext(), emptyList()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
+        pinnedAdapter = NotesAdapter(requireContext()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
         home_pinnedNotes.adapter = pinnedAdapter
         val keyProvider = MyItemKeyProvider(home_pinnedNotes)
 
@@ -176,7 +175,7 @@ class HomeFragment : Fragment() {
             pinnedAdapter.updateData(it)
         })
 
-        otherAdapter = NotesAdapter(requireContext(), emptyList()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
+        otherAdapter = NotesAdapter(requireContext()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
         home_notes.adapter = otherAdapter
 
         val otherKeyProvider = MyItemKeyProvider(home_notes)
