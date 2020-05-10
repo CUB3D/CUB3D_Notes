@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="pw.cub3d.cub3_notes.database.entity.Label" />
+            type="pw.cub3d.cub3_notes.core.database.entity.Label" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

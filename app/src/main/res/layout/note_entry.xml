@@ -5,10 +5,10 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="pw.cub3d.cub3_notes.database.entity.Note"/>
+        <import type="pw.cub3d.cub3_notes.core.database.entity.Note"/>
         <variable
             name="note"
-            type="pw.cub3d.cub3_notes.database.entity.Note"/>
+            type="pw.cub3d.cub3_notes.core.database.entity.Note"/>
         <variable
             name="isSelected"
             type="Boolean" />

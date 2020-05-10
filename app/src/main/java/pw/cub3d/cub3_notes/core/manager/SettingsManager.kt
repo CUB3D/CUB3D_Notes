@@ -1,7 +1,10 @@
 package pw.cub3d.cub3_notes.core.manager
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,12 +23,32 @@ class SettingsManager @Inject constructor(
         }
     }
 
+    private val _theme = MutableLiveData(Themes.SYSTEM)
+    val theme: LiveData<Themes> = _theme
+
+    fun setTheme(theme: Themes) {
+        _theme.postValue(theme)
+        sharedPrefs.edit().apply {
+            putInt("THEME", theme.id)
+            apply()
+        }
+    }
+
+
+
     init {
         noteLayout.postValue(Layouts.valueOf(sharedPrefs.getString("NOTE_LAYOUT", Layouts.GRID.name)!!))
+        _theme.postValue(sharedPrefs.getInt("THEME", Themes.SYSTEM.id).let { id -> Themes.values().find { it.id == id }} )
     }
 }
 
 enum class Layouts(val grid_size: Int) {
     LIST(1),
     GRID(2)
+}
+
+enum class Themes(val id: Int, val nightMode: Int) {
+    SYSTEM(0, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM),
+    LIGHT(1, AppCompatDelegate.MODE_NIGHT_NO),
+    DARK(2, AppCompatDelegate.MODE_NIGHT_YES)
 }

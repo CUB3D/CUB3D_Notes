@@ -21,6 +21,7 @@ import pw.cub3d.cub3_notes.core.manager.SettingsManager
 import pw.cub3d.cub3_notes.ui.MainActivity
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentDeletedNotesBinding
+import pw.cub3d.cub3_notes.ui.NoteLayoutManager
 import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
@@ -50,13 +51,8 @@ class DeletedNotesFragment : Fragment() {
         (requireActivity() as AppCompatActivity).setupActionBarWithNavController(findNavController(), (requireActivity() as MainActivity).appBarConfiguration)
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Deleted"
 
-        settingsManager.noteLayout.observe(viewLifecycleOwner, Observer {
-            (binding.deletedRecycler.layoutManager as StaggeredGridLayoutManager).apply {
-                spanCount = it.grid_size
-            }
-        })
 
-        binding.deletedRecycler.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+        binding.deletedRecycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, settingsManager)
         binding.deletedRecycler.adapter = NotesAdapter(requireContext(), emptyList()) { note, v ->
             navigationController.editNote(findNavController(), note, v)
         }.apply { adapter = this }

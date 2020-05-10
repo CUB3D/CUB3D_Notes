@@ -14,6 +14,7 @@ import pw.cub3d.cub3_notes.ui.labelEdit.LabelEditViewModel
 import pw.cub3d.cub3_notes.ui.newnote.NewNoteViewModel
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditViewModel
 import pw.cub3d.cub3_notes.ui.search.SearchViewModel
+import pw.cub3d.cub3_notes.ui.settings.SettingsViewModel
 import javax.inject.Singleton
 
 @Singleton
@@ -35,4 +36,5 @@ interface NotesComponent: AndroidInjector<NoteApplication> {
     fun noteLabelEditViewModelFactory(): ViewModelFactory<NoteLabelEditViewModel>
     fun labelEditViewModelFactory(): ViewModelFactory<LabelEditViewModel>
     fun coloursViewModelFactory(): ViewModelFactory<ColoursViewModel>
+    fun settingsViewModelFactory(): ViewModelFactory<SettingsViewModel>
 }

@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.GlobalScope
@@ -14,29 +16,30 @@ import kotlinx.coroutines.launch
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.DataExporter
+import pw.cub3d.cub3_notes.core.manager.Themes
 import pw.cub3d.cub3_notes.core.sync.OpenTasksSyncManager
+import pw.cub3d.cub3_notes.databinding.FragmentSettingsBinding
 import java.io.File
 import javax.inject.Inject
 
 
 class SettingsFragment : Fragment() {
 
-    @Inject
-    lateinit var dataExporter: DataExporter
+    private lateinit var binding: FragmentSettingsBinding
+    private val viewModel: SettingsViewModel by viewModels { injector.settingsViewModelFactory() }
 
-    @Inject lateinit var openTasksSyncManager: OpenTasksSyncManager
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_settings, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        FragmentSettingsBinding.inflate(inflater, container, false)
+        .apply { binding = this }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setting_export.setOnClickListener {
             GlobalScope.launch {
-                dataExporter.exportToFile(
+                viewModel.dataExporter.exportToFile(
                     File(
                         "/sdcard/cub3d_notes_export_${ZonedDateTime.now().format(
                             DateTimeFormatter.ISO_LOCAL_DATE_TIME
@@ -47,12 +50,19 @@ class SettingsFragment : Fragment() {
         }
 
         settings_test_sync.setOnClickListener {
-            openTasksSyncManager.test()
+            viewModel.openTasksSyncManager.test()
         }
-    }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        AndroidSupportInjection.inject(this)
+        binding.settingsThemeSystem.setOnClickListener { viewModel.settingsManager.setTheme(Themes.SYSTEM) }
+        binding.settingsThemeLight.setOnClickListener { viewModel.settingsManager.setTheme(Themes.LIGHT) }
+        binding.settingsThemeDark.setOnClickListener { viewModel.settingsManager.setTheme(Themes.DARK) }
+
+        viewModel.settingsManager.theme.observe(viewLifecycleOwner, Observer { theme ->
+            when (theme) {
+                Themes.SYSTEM -> binding.settingsThemeSystem.isChecked = true
+                Themes.LIGHT -> binding.settingsThemeLight.isChecked = true
+                Themes.DARK -> binding.settingsThemeDark.isChecked = true
+            }
+        })
     }
 }

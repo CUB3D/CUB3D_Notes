@@ -5,7 +5,7 @@
     <data>
         <variable
             name="colour"
-            type="pw.cub3d.cub3_notes.database.entity.Colour" />
+            type="pw.cub3d.cub3_notes.core.database.entity.Colour" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

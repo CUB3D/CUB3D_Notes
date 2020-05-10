@@ -19,7 +19,9 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.archive_fragment.*
 import pw.cub3d.cub3_notes.ui.MainActivity
 import pw.cub3d.cub3_notes.core.dagger.injector
+import pw.cub3d.cub3_notes.core.manager.SettingsManager
 import pw.cub3d.cub3_notes.databinding.ArchiveFragmentBinding
+import pw.cub3d.cub3_notes.ui.NoteLayoutManager
 import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
@@ -32,6 +34,7 @@ class ArchiveFragment : Fragment() {
     private val viewModel: ArchiveViewModel by viewModels { injector.archiveViewModelFactory() }
 
     @Inject lateinit var noteNavigationController: NewNoteNavigationController
+    @Inject lateinit var settingsManager: SettingsManager
 
 
     override fun onCreateView(
@@ -50,7 +53,7 @@ class ArchiveFragment : Fragment() {
         (requireActivity() as AppCompatActivity).setupActionBarWithNavController(findNavController(), (requireActivity() as MainActivity).appBarConfiguration)
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Archive"
 
-        archive_recycler.layoutManager = GridLayoutManager(requireContext(), 2)
+        archive_recycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, settingsManager)
         archive_recycler.adapter = NotesAdapter(requireContext(), emptyList()) { note,v  -> noteNavigationController.editNote(findNavController(), note, v) }
 
         val keyProvider = MyItemKeyProvider(archive_recycler)

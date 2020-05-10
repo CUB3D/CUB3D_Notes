@@ -27,6 +27,7 @@ import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.ui.MainActivity
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
+import pw.cub3d.cub3_notes.ui.NoteLayoutManager
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
@@ -56,20 +57,8 @@ class HomeFragment : Fragment() {
         requireActivity().nav_view.menu.getItem(0).isChecked = true;
 
 
-        home_pinnedNotes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        home_notes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
-        settingsManager.noteLayout.observe(viewLifecycleOwner, Observer {
-            println("Layout changed to: $it")
-
-            (home_pinnedNotes.layoutManager as StaggeredGridLayoutManager).apply {
-                spanCount = it.grid_size
-            }
-
-            (home_notes.layoutManager as StaggeredGridLayoutManager).apply {
-                spanCount = it.grid_size
-            }
-        })
+        home_pinnedNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, settingsManager)
+        home_notes.layoutManager = NoteLayoutManager(viewLifecycleOwner, settingsManager)
 
         requireActivity().nav_view.setNavigationItemSelectedListener {
             println("Nav item selected: $it")

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="checkboxEntry"
-            type="pw.cub3d.cub3_notes.database.entity.CheckboxEntry"/>
+            type="pw.cub3d.cub3_notes.core.database.entity.CheckboxEntry"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout3"

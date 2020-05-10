@@ -51,11 +51,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        settingsManager.theme.observe(this, androidx.lifecycle.Observer {
+            AppCompatDelegate.setDefaultNightMode(it.nightMode)
 
-        obtainStyledAttributes(intArrayOf(R.attr.status_color)).apply {
-            window.statusBarColor = this.getColor(0, Color.WHITE)
-        }.recycle()
+            obtainStyledAttributes(intArrayOf(R.attr.status_color)).apply {
+                window.statusBarColor = this.getColor(0, Color.RED)
+            }.recycle()
+        })
 
         setContentView(R.layout.activity_main)
 
