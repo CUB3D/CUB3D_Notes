@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
+import io.noties.markwon.Markwon
 import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
@@ -14,6 +15,8 @@ class NotesAdapter(
     private val callback: (Note, NoteEntryBinding) -> Unit
 ) : RecyclerView.Adapter<NoteViewHolder>() {
     var notes = emptyList<NoteAndCheckboxes>()
+
+    val markwon = Markwon.builder(ctx).build()
 
     lateinit var selectionTracker: SelectionTracker<Long>
 
@@ -27,7 +30,8 @@ class NotesAdapter(
         NoteEntryBinding.inflate(inflater, parent, false),
         callback,
         0,
-        selectionTracker
+        selectionTracker,
+        markwon
     )
 
     override fun getItemCount() = notes.size

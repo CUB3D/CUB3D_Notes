@@ -7,6 +7,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import io.noties.markwon.Markwon
 import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.core.manager.AudioManager
@@ -17,12 +18,16 @@ class NoteViewHolder(
     private val view: NoteEntryBinding,
     private val callback: (Note, NoteEntryBinding) -> Unit,
     var pos: Int,
-    private val selectionTracker: SelectionTracker<Long>
+    private val selectionTracker: SelectionTracker<Long>,
+    private val markwon: Markwon
 ): RecyclerView.ViewHolder(view.root), ProvidesItemDetails {
 
     fun bind(note: NoteAndCheckboxes) {
 
         view.note = note.note
+
+        markwon.setMarkdown(view.noteTitle, note.note.title)
+        markwon.setMarkdown(view.noteText, note.note.text)
 
         val image = note.images.firstOrNull()
 

@@ -40,10 +40,6 @@ android {
     }
 }
 
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -111,4 +107,17 @@ dependencies {
 
     // Video playback
     implementation 'com.google.android.exoplayer:exoplayer:2.11.4'
+
+    //Markwon
+    final def  markwon_version =  '4.3.1'
+    implementation  "io.noties.markwon:core:$markwon_version"
+    implementation  "io.noties.markwon:editor:$markwon_version"
+    implementation  "io.noties.markwon:ext-latex:$markwon_version"
+    implementation  "io.noties.markwon:ext-strikethrough:$markwon_version"
+    implementation  "io.noties.markwon:ext-tables:$markwon_version"
+    implementation  "io.noties.markwon:ext-tasklist:$markwon_version"
+    implementation  "io.noties.markwon:html:$markwon_version"
+    implementation  "io.noties.markwon:image-glide:$markwon_version"
+    implementation  "io.noties.markwon:linkify:$markwon_version"
+//    implementation  "io.noties.markwon:syntax-highlight:$markwon_version"
 }

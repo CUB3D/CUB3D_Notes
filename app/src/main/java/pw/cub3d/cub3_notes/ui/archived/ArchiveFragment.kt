@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.archive_fragment.*
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.ArchiveFragmentBinding
