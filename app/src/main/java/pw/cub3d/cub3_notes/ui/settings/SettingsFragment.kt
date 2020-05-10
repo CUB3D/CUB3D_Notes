@@ -1,13 +1,17 @@
 package pw.cub3d.cub3_notes.ui.settings
 
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.eazypermissions.common.model.PermissionResult
+import com.eazypermissions.coroutinespermission.PermissionManager
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,19 +37,39 @@ class SettingsFragment : Fragment() {
 
         setting_export.setOnClickListener {
             GlobalScope.launch {
-                viewModel.dataExporter.exportToFile(
-                    File(
-                        "/sdcard/cub3d_notes_export_${ZonedDateTime.now().format(
-                            DateTimeFormatter.ISO_LOCAL_DATE_TIME
-                        )}.json"
-                    )
+                val permissionRequest = PermissionManager.requestPermissions(
+                    this@SettingsFragment,
+                    1,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
+
+                when (permissionRequest) {
+                    is PermissionResult.PermissionGranted -> {
+                        viewModel.dataExporter.exportToFile(
+                            File(
+                                "/sdcard/notes_export_${ZonedDateTime.now().format(
+                                    DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                                )}.json"
+                            )
+                        )
+                    }
+                    is PermissionResult.PermissionDenied -> {
+                        Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()
+                    }
+                    is PermissionResult.ShowRational -> {
+                        Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()
+                    }
+                    is PermissionResult.PermissionDeniedPermanently -> {
+                        Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         }
 
         settings_test_sync.setOnClickListener {
             viewModel.openTasksSyncManager.test()
         }
+        settings_test_sync.visibility = View.GONE
 
         // Theme settings
         binding.settingsThemeSystem.setOnClickListener { viewModel.settingsManager.setTheme(Themes.SYSTEM) }

@@ -169,6 +169,10 @@ class HomeFragment : Fragment() {
         home_takeNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController()) }
         home_new_checkNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
 //        home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_DRAW) }
+        home_new_voiceNote.setOnClickListener {
+            Toast.makeText(requireContext(), "Hold to record", Toast.LENGTH_SHORT).show()
+        }
+
         home_new_voiceNote.setOnLongClickListener {
             viewModel.audioManager.startRecording()
             true
