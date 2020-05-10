@@ -1,6 +1,5 @@
 package pw.cub3d.cub3_notes.ui.archived
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,23 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.recyclerview.selection.SelectionPredicates
-import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StorageStrategy
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.archive_fragment.*
-import pw.cub3d.cub3_notes.ui.MainActivity
 import pw.cub3d.cub3_notes.core.dagger.injector
-import pw.cub3d.cub3_notes.core.manager.SettingsManager
 import pw.cub3d.cub3_notes.databinding.ArchiveFragmentBinding
+import pw.cub3d.cub3_notes.ui.MainActivity
 import pw.cub3d.cub3_notes.ui.NoteLayoutManager
 import pw.cub3d.cub3_notes.ui.NoteSelectionTrackerFactory
 import pw.cub3d.cub3_notes.ui.bind
-import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
-import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
-import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
-import javax.inject.Inject
 
 class ArchiveFragment : Fragment() {
     private lateinit var binding: ArchiveFragmentBinding

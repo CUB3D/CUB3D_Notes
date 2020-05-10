@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import pw.cub3d.cub3_notes.core.manager.AutoCompleteManager
 import pw.cub3d.cub3_notes.core.database.entity.CheckboxEntry
+import pw.cub3d.cub3_notes.core.manager.AutoCompleteManager
 import pw.cub3d.cub3_notes.databinding.CheckboxEntryBinding
 
 class CheckBoxAdapter(

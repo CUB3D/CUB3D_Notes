@@ -3,7 +3,6 @@ package pw.cub3d.cub3_notes.core.database.entity
 import android.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.lang.Exception
 
 @Entity(tableName = "card_colour")
 data class Colour(

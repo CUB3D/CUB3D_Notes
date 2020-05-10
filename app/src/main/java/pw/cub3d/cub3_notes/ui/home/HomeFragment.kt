@@ -1,6 +1,5 @@
 package pw.cub3d.cub3_notes.ui.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -15,23 +14,17 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
-import pw.cub3d.cub3_notes.core.manager.AudioManager
-import pw.cub3d.cub3_notes.core.manager.SettingsManager
-import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.ui.MainActivity
 import pw.cub3d.cub3_notes.ui.NoteLayoutManager
 import pw.cub3d.cub3_notes.ui.NoteSelectionTrackerFactory
 import pw.cub3d.cub3_notes.ui.bind
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
-import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
-import javax.inject.Inject
 
 
 class HomeFragment : Fragment() {

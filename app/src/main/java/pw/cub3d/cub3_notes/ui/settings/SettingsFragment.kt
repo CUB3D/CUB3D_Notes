@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes.ui.settings
 
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,20 +8,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
-import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
-import pw.cub3d.cub3_notes.core.database.DataExporter
 import pw.cub3d.cub3_notes.core.manager.Themes
-import pw.cub3d.cub3_notes.core.sync.OpenTasksSyncManager
 import pw.cub3d.cub3_notes.databinding.FragmentSettingsBinding
 import java.io.File
-import javax.inject.Inject
 
 
 class SettingsFragment : Fragment() {

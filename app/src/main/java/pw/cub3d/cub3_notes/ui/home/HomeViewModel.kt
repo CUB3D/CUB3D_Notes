@@ -1,6 +1,8 @@
 package pw.cub3d.cub3_notes.ui.home
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.core.database.dao.LabelDao

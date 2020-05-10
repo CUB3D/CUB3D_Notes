@@ -7,10 +7,10 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import pw.cub3d.cub3_notes.core.manager.AudioManager
-import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
+import pw.cub3d.cub3_notes.core.manager.AudioManager
+import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
 class NoteViewHolder(

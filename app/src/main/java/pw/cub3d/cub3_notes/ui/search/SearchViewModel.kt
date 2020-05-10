@@ -1,7 +1,5 @@
 package pw.cub3d.cub3_notes.ui.search
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pw.cub3d.cub3_notes.core.database.dao.NotesDao

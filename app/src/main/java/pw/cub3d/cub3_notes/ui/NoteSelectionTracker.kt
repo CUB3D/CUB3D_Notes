@@ -2,7 +2,6 @@ package pw.cub3d.cub3_notes.ui
 
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
 import pw.cub3d.cub3_notes.ui.home.NoteViewHolder
 

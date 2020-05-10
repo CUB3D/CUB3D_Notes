@@ -1,8 +1,5 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context

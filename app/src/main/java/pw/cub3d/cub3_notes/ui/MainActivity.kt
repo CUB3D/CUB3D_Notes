@@ -18,8 +18,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import pw.cub3d.cub3_notes.core.manager.Layouts
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.core.manager.Layouts
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
