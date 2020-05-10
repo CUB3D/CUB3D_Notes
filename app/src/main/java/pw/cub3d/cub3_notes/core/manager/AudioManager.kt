@@ -45,13 +45,13 @@ class AudioManager @Inject constructor(
                 }
             }
             is PermissionResult.PermissionDenied -> {
-                Toast.makeText(frag.requireContext(), "Mic permission needed", Toast.LENGTH_SHORT).show()
+                frag.requireActivity().runOnUiThread { Toast.makeText(frag.requireContext(), "Mic permission needed", Toast.LENGTH_SHORT).show() }
             }
             is PermissionResult.ShowRational -> {
-                Toast.makeText(frag.requireContext(), "Mic permission needed", Toast.LENGTH_SHORT).show()
+                frag.requireActivity().runOnUiThread { Toast.makeText(frag.requireContext(), "Mic permission needed", Toast.LENGTH_SHORT).show() }
             }
             is PermissionResult.PermissionDeniedPermanently -> {
-                Toast.makeText(frag.requireContext(), "Mic permission needed", Toast.LENGTH_SHORT).show()
+                frag.requireActivity().runOnUiThread { Toast.makeText(frag.requireContext(), "Mic permission needed", Toast.LENGTH_SHORT).show() }
             }
         }
     }

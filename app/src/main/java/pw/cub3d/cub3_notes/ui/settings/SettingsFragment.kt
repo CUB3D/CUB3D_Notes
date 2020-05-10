@@ -54,13 +54,19 @@ class SettingsFragment : Fragment() {
                         )
                     }
                     is PermissionResult.PermissionDenied -> {
-                        Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()
+                        requireActivity().runOnUiThread {
+                            Toast.makeText(
+                                requireContext(),
+                                "Storage permission needed",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                     is PermissionResult.ShowRational -> {
-                        Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()
+                        requireActivity().runOnUiThread { Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()}
                     }
                     is PermissionResult.PermissionDeniedPermanently -> {
-                        Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()
+                        requireActivity().runOnUiThread {Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()}
                     }
                 }
             }
