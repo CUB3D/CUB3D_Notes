@@ -33,11 +33,23 @@ class SettingsManager @Inject constructor(
         }
     }
 
+    private val _sidenav = MutableLiveData(true)
+    val sideNavEnabled: LiveData<Boolean> = _sidenav
+
+    fun setSideNavEnabled(b: Boolean) {
+        _sidenav.postValue(b)
+        sharedPrefs.edit().apply {
+            putBoolean("SIDENAV_ENABLED", b)
+            apply()
+        }
+    }
+
 
 
     init {
         noteLayout.postValue(Layouts.valueOf(sharedPrefs.getString("NOTE_LAYOUT", Layouts.GRID.name)!!))
         _theme.postValue(sharedPrefs.getInt("THEME", Themes.SYSTEM.id).let { id -> Themes.values().find { it.id == id }} )
+        _sidenav.postValue(sharedPrefs.getBoolean("SIDENAV_ENABLED", false))
     }
 }
 

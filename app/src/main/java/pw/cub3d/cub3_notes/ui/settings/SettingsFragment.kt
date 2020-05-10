@@ -58,5 +58,14 @@ class SettingsFragment : Fragment() {
                 Themes.DARK -> binding.settingsThemeDark.isChecked = true
             }
         })
+
+        binding.settingsSitenavOn.setOnClickListener { viewModel.settingsManager.setSideNavEnabled(true) }
+        binding.settingsSidenavOff.setOnClickListener { viewModel.settingsManager.setSideNavEnabled(false) }
+        viewModel.settingsManager.sideNavEnabled.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                true -> binding.settingsSitenavOn.isChecked = true
+                false -> binding.settingsSidenavOff.isChecked = true
+            }
+        })
     }
 }

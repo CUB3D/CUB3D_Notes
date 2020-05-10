@@ -187,6 +187,7 @@
             app:icon="@drawable/ic_trash_2" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_more_settings"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

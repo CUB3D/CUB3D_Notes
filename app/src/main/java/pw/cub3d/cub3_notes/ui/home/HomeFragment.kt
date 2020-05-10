@@ -5,15 +5,18 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import io.sentry.core.protocol.App
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
@@ -36,12 +39,36 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-        (requireActivity() as AppCompatActivity).setupActionBarWithNavController(findNavController(), (requireActivity() as MainActivity).appBarConfiguration)
-        requireActivity().nav_view.setupWithNavController(findNavController())
-        (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Search your notes"
-        (requireActivity() as AppCompatActivity).toolbar.setOnClickListener { findNavController().navigate(R.id.nav_search) }
-        requireActivity().nav_view.menu.getItem(0).isChecked = true;
+        (requireActivity() as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar!!.title = "Search your notes"
+            toolbar.setOnClickListener {
+                findNavController().navigate(
+                    R.id.nav_search
+                )
+            }
+        }
+
+        viewModel.settingsManager.sideNavEnabled.observe(viewLifecycleOwner, Observer {
+            if(it) {
+                (requireActivity() as AppCompatActivity).apply {
+                    setupActionBarWithNavController(
+                        findNavController(),
+                        (requireActivity() as MainActivity).appBarConfiguration
+                    )
+                    nav_view.setupWithNavController(findNavController())
+
+                    nav_view.menu.getItem(0).isChecked = true;
+
+                    drawer_layout.setDrawerLockMode(
+                        DrawerLayout.LOCK_MODE_UNLOCKED
+                    )
+                }
+
+            } else {
+                (requireActivity() as AppCompatActivity).drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
+        })
 
 
         home_pinnedNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
@@ -159,6 +186,10 @@ class HomeFragment : Fragment() {
         viewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
             otherAdapter.updateData(it)
         })
+
+        home_more_settings.setOnClickListener {
+            findNavController().navigate(R.id.nav_settings)
+        }
 
         home_takeNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController()) }
         home_new_checkNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
