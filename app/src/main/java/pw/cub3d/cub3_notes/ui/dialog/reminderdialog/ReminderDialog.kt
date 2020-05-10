@@ -82,8 +82,8 @@ class ReminderDialog(
     }
 
     fun simpleDialog() {
-        datePicker(OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-            timePicker(com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute, second ->
+        datePicker(OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+            timePicker(com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute, second ->
                 // Month of year is 0 indexed
                 val date = LocalDate.of(year, monthOfYear + 1, dayOfMonth)
                 val time = LocalTime.of(hourOfDay, minute, second)
@@ -105,7 +105,7 @@ class ReminderDialog(
         reminder_cancel.setOnClickListener { dismiss() }
 
         reminder_save.setOnClickListener {
-            val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//            val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
 //            setAlarm(context, ZonedDateTime.now().plusSeconds(10).toEpochSecond(),
 //                PendingIntent.getBroadcast(context, 0, Intent(context, ReminderBroadcastReciever::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT)
@@ -115,7 +115,7 @@ class ReminderDialog(
 
 
         val callback =
-            OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 println("Date selected: $year$monthOfYear$dayOfMonth")
                 TODO("SET THE SELECTED DATE")
             }

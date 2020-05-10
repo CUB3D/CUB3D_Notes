@@ -7,6 +7,7 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
@@ -174,10 +177,12 @@ class HomeFragment : Fragment() {
         }
 
         home_new_voiceNote.setOnLongClickListener {
-            viewModel.audioManager.startRecording()
+            lifecycleScope.launch {
+                viewModel.audioManager.startRecording(this@HomeFragment)
+            }
             true
         }
-        home_new_voiceNote.setOnTouchListener { v, event ->
+        home_new_voiceNote.setOnTouchListener { _, event ->
             if(event.action == MotionEvent.ACTION_UP) {
                 viewModel.audioManager.stopRecording()?.let {
                     viewModel.newNoteNavigationController.navigateNewNoteWithAudio(findNavController(), it.name)
