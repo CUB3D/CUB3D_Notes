@@ -12,10 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentDeletedNotesBinding
-import pw.cub3d.cub3_notes.ui.MainActivity
-import pw.cub3d.cub3_notes.ui.NoteLayoutManager
-import pw.cub3d.cub3_notes.ui.NoteSelectionTrackerFactory
-import pw.cub3d.cub3_notes.ui.bind
+import pw.cub3d.cub3_notes.ui.*
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
 
 

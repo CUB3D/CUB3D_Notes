@@ -3,29 +3,21 @@ package pw.cub3d.cub3_notes.ui.home
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import io.sentry.core.protocol.App
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
-import pw.cub3d.cub3_notes.ui.MainActivity
-import pw.cub3d.cub3_notes.ui.NoteLayoutManager
-import pw.cub3d.cub3_notes.ui.NoteSelectionTrackerFactory
-import pw.cub3d.cub3_notes.ui.bind
+import pw.cub3d.cub3_notes.ui.*
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 
@@ -39,37 +31,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (requireActivity() as AppCompatActivity).apply {
-            setSupportActionBar(toolbar)
-            supportActionBar!!.title = "Search your notes"
-            toolbar.setOnClickListener {
-                findNavController().navigate(
-                    R.id.nav_search
-                )
-            }
-        }
-
-        viewModel.settingsManager.sideNavEnabled.observe(viewLifecycleOwner, Observer {
-            if(it) {
-                (requireActivity() as AppCompatActivity).apply {
-                    setupActionBarWithNavController(
-                        findNavController(),
-                        (requireActivity() as MainActivity).appBarConfiguration
-                    )
-                    nav_view.setupWithNavController(findNavController())
-
-                    nav_view.menu.getItem(0).isChecked = true;
-
-                    drawer_layout.setDrawerLockMode(
-                        DrawerLayout.LOCK_MODE_UNLOCKED
-                    )
-                }
-
-            } else {
-                (requireActivity() as AppCompatActivity).drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            }
-        })
-
+        ToolbarController.setupToolbar(viewModel.settingsManager, this, home_appBar, toolbar, "Search your notes")
+        ToolbarController.setupSideNav(viewModel.settingsManager, this)
 
         home_pinnedNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
         home_notes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
@@ -187,9 +150,21 @@ class HomeFragment : Fragment() {
             otherAdapter.updateData(it)
         })
 
-        home_more_settings.setOnClickListener {
-            findNavController().navigate(R.id.nav_settings)
+        home_more_toggle.setOnClickListener {
+            BottomSheetBehavior.from(home_more_sheet).state = when (BottomSheetBehavior.from(home_more_sheet).state) {
+                BottomSheetBehavior.STATE_COLLAPSED -> BottomSheetBehavior.STATE_EXPANDED
+                BottomSheetBehavior.STATE_EXPANDED -> BottomSheetBehavior.STATE_COLLAPSED
+                else -> BottomSheetBehavior.STATE_COLLAPSED
+            }
         }
+        BottomSheetBehavior.from(home_more_sheet).state = BottomSheetBehavior.STATE_COLLAPSED
+
+        home_more_settings.setOnClickListener { findNavController().navigate(R.id.nav_settings) }
+        home_more_archive.setOnClickListener { findNavController().navigate(R.id.nav_archive) }
+        home_more_deleted.setOnClickListener { findNavController().navigate(R.id.nav_deleted) }
+
+        home_search.setOnClickListener { findNavController().navigate(R.id.nav_search) }
+
 
         home_takeNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController()) }
         home_new_checkNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }

@@ -44,12 +44,24 @@ class SettingsManager @Inject constructor(
         }
     }
 
+    private val _toolbar = MutableLiveData(true)
+    val toolbarEnabled: LiveData<Boolean> = _toolbar
+
+    fun setToolbarEnabled(b: Boolean) {
+        _toolbar.postValue(b)
+        sharedPrefs.edit().apply {
+            putBoolean("TOOLBAR_ENABLED", b)
+            apply()
+        }
+    }
+
 
 
     init {
         noteLayout.postValue(Layouts.valueOf(sharedPrefs.getString("NOTE_LAYOUT", Layouts.GRID.name)!!))
         _theme.postValue(sharedPrefs.getInt("THEME", Themes.SYSTEM.id).let { id -> Themes.values().find { it.id == id }} )
         _sidenav.postValue(sharedPrefs.getBoolean("SIDENAV_ENABLED", false))
+        _toolbar.postValue(sharedPrefs.getBoolean("TOOLBAR_ENABLED", false))
     }
 }
 

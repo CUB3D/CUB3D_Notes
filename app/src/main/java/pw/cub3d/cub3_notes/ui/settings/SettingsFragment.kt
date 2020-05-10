@@ -47,6 +47,7 @@ class SettingsFragment : Fragment() {
             viewModel.openTasksSyncManager.test()
         }
 
+        // Theme settings
         binding.settingsThemeSystem.setOnClickListener { viewModel.settingsManager.setTheme(Themes.SYSTEM) }
         binding.settingsThemeLight.setOnClickListener { viewModel.settingsManager.setTheme(Themes.LIGHT) }
         binding.settingsThemeDark.setOnClickListener { viewModel.settingsManager.setTheme(Themes.DARK) }
@@ -59,12 +60,23 @@ class SettingsFragment : Fragment() {
             }
         })
 
+        // Sidenav settings
         binding.settingsSitenavOn.setOnClickListener { viewModel.settingsManager.setSideNavEnabled(true) }
         binding.settingsSidenavOff.setOnClickListener { viewModel.settingsManager.setSideNavEnabled(false) }
         viewModel.settingsManager.sideNavEnabled.observe(viewLifecycleOwner, Observer {
             when (it) {
                 true -> binding.settingsSitenavOn.isChecked = true
                 false -> binding.settingsSidenavOff.isChecked = true
+            }
+        })
+
+        // Toolbar settings
+        binding.settingsToolbarOn.setOnClickListener { viewModel.settingsManager.setToolbarEnabled(true) }
+        binding.settingsToolbarOff.setOnClickListener { viewModel.settingsManager.setToolbarEnabled(false) }
+        viewModel.settingsManager.toolbarEnabled.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                true -> binding.settingsToolbarOn.isChecked = true
+                false -> binding.settingsToolbarOff.isChecked = true
             }
         })
     }

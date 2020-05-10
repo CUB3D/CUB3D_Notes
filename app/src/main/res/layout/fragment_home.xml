@@ -107,6 +107,7 @@
         app:hideOnScroll="false">
 
         <ImageView
+            android:id="@+id/home_more_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -148,6 +149,13 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_image" />
 
+        <ImageView
+            android:id="@+id/home_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_search"/>
+
     </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -161,6 +169,7 @@
 
 
     <LinearLayout
+        android:id="@+id/home_more_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?colorSurface"
@@ -171,6 +180,7 @@
         tools:visibility="gone">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_more_archive"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -179,6 +189,7 @@
             app:icon="@drawable/ic_package" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_more_deleted"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
