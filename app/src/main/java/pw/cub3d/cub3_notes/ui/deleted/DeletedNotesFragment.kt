@@ -17,10 +17,9 @@ import androidx.recyclerview.selection.StorageStrategy
 import dagger.android.support.AndroidSupportInjection
 
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
-import pw.cub3d.cub3_notes.ui.MainActivity
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentDeletedNotesBinding
-import pw.cub3d.cub3_notes.ui.NoteLayoutManager
+import pw.cub3d.cub3_notes.ui.*
 import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
 import pw.cub3d.cub3_notes.ui.home.MyItemKeyProvider
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
@@ -32,9 +31,6 @@ class DeletedNotesFragment : Fragment() {
     val viewModel: DeletedNotesViewModel by viewModels { injector.deleteNoteViewModelFactory() }
 
     lateinit var binding: FragmentDeletedNotesBinding
-
-    @Inject lateinit var navigationController: NewNoteNavigationController
-    @Inject lateinit var settingsManager: SettingsManager
 
     lateinit var adapter: NotesAdapter
 
@@ -51,33 +47,14 @@ class DeletedNotesFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Deleted"
 
 
-        binding.deletedRecycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, settingsManager)
-        binding.deletedRecycler.adapter = NotesAdapter(requireContext()) { note, v ->
-            navigationController.editNote(findNavController(), note, v)
-        }.apply { adapter = this }
+        binding.deletedRecycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
+        adapter = NotesAdapter(requireContext()) { note, v -> viewModel.noteNavigationController.editNote(findNavController(), note, v) }
+        binding.deletedRecycler.adapter = adapter
 
-        val keyProvider = MyItemKeyProvider(binding.deletedRecycler)
-
-        val tracker = SelectionTracker.Builder(
-            "deleted-selection",
-            binding.deletedRecycler,
-            keyProvider,
-            ItemDetailsProvider(binding.deletedRecycler, keyProvider),
-            StorageStrategy.createLongStorage()
-        )
-            .withSelectionPredicate(SelectionPredicates.createSelectAnything())
-            .build()
-
-        adapter.selectionTracker = tracker
-
+        NoteSelectionTrackerFactory.buildTracker("deleted-selection", binding.deletedRecycler).bind(adapter)
 
         viewModel.deletedNotes.observe(viewLifecycleOwner, Observer {
             adapter.updateData(it)
         })
-    }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
     }
 }

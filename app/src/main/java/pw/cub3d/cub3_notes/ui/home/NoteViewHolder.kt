@@ -68,6 +68,16 @@ class NoteViewHolder(
             view.notePlayAudio.visibility = View.GONE
         }
 
+        if(note.videos.isNotEmpty()) {
+            view.notePlayAudio.setOnClickListener {
+                AudioManager(StorageManager(view.root.context))
+                    .playAudio(note.videos.first().fileName)
+            }
+            view.notePlayAudio.visibility = View.VISIBLE
+        } else {
+            view.notePlayAudio.visibility = View.GONE
+        }
+
         view.noteClickRoot.setOnClickListener { callback.invoke(note.note, view) }
 
         if(note.isEmpty()) {

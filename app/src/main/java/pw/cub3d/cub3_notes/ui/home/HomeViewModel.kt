@@ -6,9 +6,17 @@ import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.core.database.dao.LabelDao
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.core.database.repository.NoteRepository
+import pw.cub3d.cub3_notes.core.manager.AudioManager
+import pw.cub3d.cub3_notes.core.manager.SettingsManager
+import pw.cub3d.cub3_notes.core.manager.StorageManager
+import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
+    val newNoteNavigationController: NewNoteNavigationController,
+    val storageManager: StorageManager,
+    val settingsManager: SettingsManager,
+    val audioManager: AudioManager,
     private val notesRepository: NoteRepository,
     private val labelDao: LabelDao
 ) : ViewModel() {

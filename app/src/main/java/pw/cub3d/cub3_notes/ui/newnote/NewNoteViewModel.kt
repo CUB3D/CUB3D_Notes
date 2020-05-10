@@ -19,9 +19,11 @@ import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.ReminderBroadcastReciever
 import pw.cub3d.cub3_notes.core.database.dao.*
 import pw.cub3d.cub3_notes.core.database.entity.*
+import pw.cub3d.cub3_notes.core.manager.StorageManager
 import javax.inject.Inject
 
 class NewNoteViewModel @Inject constructor(
+    val storageManager: StorageManager,
     private val dao: NotesDao,
     private val checkboxEntryDao: CheckboxEntryDao,
     private val colourDao: ColourDao,

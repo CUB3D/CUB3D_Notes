@@ -34,6 +34,8 @@ import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
+import pw.cub3d.cub3_notes.core.utils.distinctUntilChangedBy
+import pw.cub3d.cub3_notes.core.utils.ignoreFirstValue
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
 
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
@@ -49,8 +51,6 @@ class NewNoteFragment : Fragment() {
     private val viewModel: NewNoteViewModel by viewModels { injector.newNoteViewModelFactory() }
 
     private lateinit var binding: FragmentNewNoteBinding
-
-    @Inject lateinit var storageManager: StorageManager
 
     private lateinit var checkBoxAdapter: CheckBoxAdapter
     private lateinit var audioAdapter: AudioAdapter
@@ -118,7 +118,7 @@ class NewNoteFragment : Fragment() {
                 )
                 val videoSource =
                     ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(
-                        File(storageManager.getVideoDir(), v.fileName).toUri()
+                        File(viewModel.storageManager.getVideoDir(), v.fileName).toUri()
                     )
 
                 binding.createNoteVideo.player = player
@@ -201,7 +201,7 @@ class NewNoteFragment : Fragment() {
         ItemTouchHelper(callback).attachToRecyclerView(createNote_checkBoxes)
 
         //TODO sort in room junction
-        viewModel.checkboxes.map { it.sortedBy { it.position } }.distinctUntilChanged { old, new -> old.map { it.id } == new.map { it.id } }.observe(viewLifecycleOwner, Observer { checkboxes ->
+        viewModel.checkboxes.map { it.sortedBy { it.position } }.distinctUntilChangedBy { old, new -> old.map { it.id } == new.map { it.id } }.observe(viewLifecycleOwner, Observer { checkboxes ->
             println("Updating checkboxes: $checkboxes")
             checkBoxAdapter.updateData(checkboxes)
         })
@@ -317,10 +317,10 @@ class NewNoteFragment : Fragment() {
             }
         }
         binding.createNoteAddPhoto.setOnClickListener {
-            AddVideoDialog(requireActivity(), storageManager).takeVideo()
+            AddVideoDialog(requireActivity(), viewModel.storageManager).takeVideo()
         }
         binding.createNoteAddImage.setOnClickListener {
-            AddVideoDialog(requireActivity(), storageManager).pickVideo()
+            AddVideoDialog(requireActivity(), viewModel.storageManager).pickVideo()
         }
 
 
@@ -342,45 +342,4 @@ class NewNoteFragment : Fragment() {
             })
         }
     }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 }
-
-fun <T> ignoreFirstAssignment(data: LiveData<T>): LiveData<T> = MediatorLiveData<T>().apply {
-    var updates = 0
-    addSource(data) {
-        if(updates > 0) {
-            value = it
-        }
-        updates += 1
-    }
-}
-
-fun <T> distinctUntilLengthChanges(data: LiveData<List<T>>): LiveData<List<T>> = MediatorLiveData<List<T>>().apply {
-    addSource(data) {
-        if(value == null || value!!.size != it.size) {
-            value = it
-        }
-    }
-}
-
-fun <T> distinctUntilChangedPred(data:  LiveData<T>, predicate: (old: T, new: T)->Boolean) = MediatorLiveData<T>().apply {
-    addSource(data) {
-        if(value != null && it != null) {
-            if(!predicate(value!!, it)) {
-                value = it
-            }
-        } else {
-            value = it
-        }
-    }
-}
-
-fun <T> LiveData<T>.distinctUntilChanged(predicate: (old: T, new: T) -> Boolean) = distinctUntilChangedPred(this, predicate)
-
-fun <T> LiveData<T>.ignoreFirstValue() = ignoreFirstAssignment(this)
-
-fun <T> LiveData<List<T>>.distinctUntilLengthChanged() = distinctUntilLengthChanges(this)

@@ -12,35 +12,30 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.selection.*
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import pw.cub3d.cub3_notes.core.manager.AudioManager
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.core.dagger.injector
+import pw.cub3d.cub3_notes.core.database.entity.Note
+import pw.cub3d.cub3_notes.core.manager.AudioManager
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.ui.MainActivity
-import pw.cub3d.cub3_notes.core.dagger.injector
-import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.ui.NoteLayoutManager
+import pw.cub3d.cub3_notes.ui.NoteSelectionTrackerFactory
+import pw.cub3d.cub3_notes.ui.bind
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels { injector.homeViewModelFactory() }
-
-    @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
-    @Inject lateinit var storageManager: StorageManager
-    @Inject lateinit var settingsManager: SettingsManager
-    @Inject lateinit var audioManager: AudioManager
 
     lateinit var pinnedAdapter: NotesAdapter
     lateinit var otherAdapter: NotesAdapter
@@ -56,8 +51,8 @@ class HomeFragment : Fragment() {
         requireActivity().nav_view.menu.getItem(0).isChecked = true;
 
 
-        home_pinnedNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, settingsManager)
-        home_notes.layoutManager = NoteLayoutManager(viewLifecycleOwner, settingsManager)
+        home_pinnedNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
+        home_notes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
 
         requireActivity().nav_view.setNavigationItemSelectedListener {
             println("Nav item selected: $it")
@@ -145,22 +140,10 @@ class HomeFragment : Fragment() {
         ItemTouchHelper(pinnedNoteItemTouchHelperCallback).attachToRecyclerView(home_pinnedNotes)
         ItemTouchHelper(otherNoteItemTouchHelperCallback).attachToRecyclerView(home_notes)
 
-        pinnedAdapter = NotesAdapter(requireContext()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
+        pinnedAdapter = NotesAdapter(requireContext()) { note, v -> viewModel.newNoteNavigationController.editNote(findNavController(), note, v) }
         home_pinnedNotes.adapter = pinnedAdapter
-        val keyProvider = MyItemKeyProvider(home_pinnedNotes)
 
-        val tracker = SelectionTracker.Builder(
-            "notes-pin-selection",
-            home_pinnedNotes,
-            keyProvider,
-            ItemDetailsProvider(home_pinnedNotes, keyProvider),
-            StorageStrategy.createLongStorage()
-        )
-            .withSelectionPredicate(SelectionPredicates.createSelectAnything())
-            .build()
-
-        pinnedAdapter.selectionTracker = tracker
-
+        NoteSelectionTrackerFactory.buildTracker("note-pin-selection", home_pinnedNotes).bind(pinnedAdapter)
 
         viewModel.pinnedNotes.observe(viewLifecycleOwner, Observer {
             if(it.isEmpty()) {
@@ -175,67 +158,35 @@ class HomeFragment : Fragment() {
             pinnedAdapter.updateData(it)
         })
 
-        otherAdapter = NotesAdapter(requireContext()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
+        otherAdapter = NotesAdapter(requireContext()) { note, v -> viewModel.newNoteNavigationController.editNote(findNavController(), note, v) }
         home_notes.adapter = otherAdapter
 
-        val otherKeyProvider = MyItemKeyProvider(home_notes)
-
-        val otherTracker = SelectionTracker.Builder(
-            "notes-selection",
-            home_notes,
-            otherKeyProvider,
-            ItemDetailsProvider(home_notes, otherKeyProvider),
-            StorageStrategy.createLongStorage()
-        )
-            .withSelectionPredicate(SelectionPredicates.createSelectAnything())
-            .build()
-
-        otherTracker.addObserver(object: SelectionTracker.SelectionObserver<Long>() {
-            override fun onItemStateChanged(key: Long, selected: Boolean) {
-                println("Item state change: $key, $selected")
-                home_notes.findViewHolderForAdapterPosition(otherKeyProvider.getPosition(key))?.let {
-                    (it as NoteViewHolder).onSelected()
-                }
-            }
-
-            override fun onSelectionChanged() {
-            }
-
-            override fun onSelectionRestored() {
-                println("Selection restored")
-            }
-
-            override fun onSelectionRefresh() {
-                println("Selection refreshed")
-            }
-        })
-
-        otherAdapter.selectionTracker = otherTracker
+        NoteSelectionTrackerFactory.buildTracker("note-selection", home_notes).bind(otherAdapter)
 
         viewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
             otherAdapter.updateData(it)
         })
 
-        home_takeNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController()) }
-        home_new_checkNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
+        home_takeNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController()) }
+        home_new_checkNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
 //        home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_DRAW) }
         home_new_voiceNote.setOnLongClickListener {
-            audioManager.startRecording()
+            viewModel.audioManager.startRecording()
             true
         }
         home_new_voiceNote.setOnTouchListener { v, event ->
             if(event.action == MotionEvent.ACTION_UP) {
-                audioManager.stopRecording()?.let {
-                    newNoteNavigationController.navigateNewNoteWithAudio(findNavController(), it.name)
+                viewModel.audioManager.stopRecording()?.let {
+                    viewModel.newNoteNavigationController.navigateNewNoteWithAudio(findNavController(), it.name)
                 }
             }
             false
         }
         home_new_video.setOnClickListener {
-            AddVideoDialog(requireActivity(), storageManager).show()
+            AddVideoDialog(requireActivity(), viewModel.storageManager).show()
         }
         home_new_imgNote.setOnClickListener {
-            AddImageDialog(requireActivity(), storageManager).show()
+            AddImageDialog(requireActivity(), viewModel.storageManager).show()
         }
     }
 
@@ -245,27 +196,5 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
-    }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-}
-
-interface ProvidesItemDetails {
-    fun getItemDetails(key: Long): ItemDetailsLookup.ItemDetails<Long>
-    fun getItemPosition(): Int
-}
-
-class ItemDetailsProvider(private val recycler: RecyclerView, private val keyProvider: ItemKeyProvider<Long>) : ItemDetailsLookup<Long>() {
-    override fun getItemDetails(e: MotionEvent): ItemDetails<Long>? {
-        recycler.findChildViewUnder(e.x, e.y)?.let { v ->
-            val holder: ViewHolder = recycler.getChildViewHolder(v)
-            if (holder is ProvidesItemDetails) {
-                return holder.getItemDetails(keyProvider.getKey(holder.getItemPosition())!!)
-            }
-        }
-        return null
     }
 }

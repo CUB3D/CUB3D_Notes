@@ -28,8 +28,6 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModels { injector.searchViewModelFactory() }
 
-    @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,16 +52,16 @@ class SearchFragment : Fragment() {
         }
 
         search_results.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = NotesAdapter(requireContext()) { note, v -> newNoteNavigationController.editNote(findNavController(), note, v) }
+        val adapter = NotesAdapter(requireContext()) { note, v -> viewModel.newNoteNavigationController.editNote(findNavController(), note, v) }
         search_results.adapter = adapter
 
-        val keyProvider = MyItemKeyProvider(search_results)
+        val itemDetailsProvider = ItemDetailsProvider(search_results)
 
         val tracker = SelectionTracker.Builder(
             "search-selection",
             search_results,
-            keyProvider,
-            ItemDetailsProvider(search_results, keyProvider),
+            itemDetailsProvider.keyProvider,
+            itemDetailsProvider,
             StorageStrategy.createLongStorage()
         )
             .withSelectionPredicate(SelectionPredicates.createSelectAnything())
@@ -78,5 +76,4 @@ class SearchFragment : Fragment() {
             })
         })
     }
-
 }
