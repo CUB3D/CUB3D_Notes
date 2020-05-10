@@ -152,12 +152,12 @@ class HomeFragment : Fragment() {
 
         home_more_toggle.setOnClickListener {
             BottomSheetBehavior.from(home_more_sheet).state = when (BottomSheetBehavior.from(home_more_sheet).state) {
-                BottomSheetBehavior.STATE_COLLAPSED -> BottomSheetBehavior.STATE_EXPANDED
-                BottomSheetBehavior.STATE_EXPANDED -> BottomSheetBehavior.STATE_COLLAPSED
-                else -> BottomSheetBehavior.STATE_COLLAPSED
+                BottomSheetBehavior.STATE_HIDDEN -> BottomSheetBehavior.STATE_EXPANDED
+                BottomSheetBehavior.STATE_EXPANDED -> BottomSheetBehavior.STATE_HIDDEN
+                else -> BottomSheetBehavior.STATE_HIDDEN
             }
         }
-        BottomSheetBehavior.from(home_more_sheet).state = BottomSheetBehavior.STATE_COLLAPSED
+        BottomSheetBehavior.from(home_more_sheet).state = BottomSheetBehavior.STATE_HIDDEN
 
         home_more_settings.setOnClickListener { findNavController().navigate(R.id.nav_settings) }
         home_more_archive.setOnClickListener { findNavController().navigate(R.id.nav_archive) }

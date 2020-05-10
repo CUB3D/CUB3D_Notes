@@ -176,8 +176,7 @@
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="450dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        tools:visibility="gone">
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/home_more_archive"

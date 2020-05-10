@@ -309,12 +309,9 @@ class NewNoteFragment : Fragment() {
                 }
             }
         }
-        binding.createNoteAddPhoto.setOnClickListener {
-            AddVideoDialog(requireActivity(), viewModel.storageManager).takeVideo()
-        }
-        binding.createNoteAddImage.setOnClickListener {
-            AddVideoDialog(requireActivity(), viewModel.storageManager).pickVideo()
-        }
+        binding.createNoteAddPhoto.setOnClickListener { AddVideoDialog(requireActivity(), viewModel.storageManager).takeVideo() }
+        binding.createNoteAddImage.setOnClickListener { AddVideoDialog(requireActivity(), viewModel.storageManager).pickVideo() }
+        binding.createNoteAddCheckbox.setOnClickListener { viewModel.addCheckbox() }
 
 
         createNote_reminder.setOnClickListener {
@@ -334,5 +331,8 @@ class NewNoteFragment : Fragment() {
                 putLong(NoteLabelEditFragment.KEY_NOTE_ID, viewModel.noteAndCheckboxes!!.value!!.note.id)
             })
         }
+
+        binding.createNoteMoreCopy.visibility = View.GONE
+        binding.createNoteMoreShare.visibility = View.GONE
     }
 }
