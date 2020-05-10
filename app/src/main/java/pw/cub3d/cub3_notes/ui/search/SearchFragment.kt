@@ -15,18 +15,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.*
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentSearchBinding
+import pw.cub3d.cub3_notes.ui.NoteSelectionTrackerFactory
+import pw.cub3d.cub3_notes.ui.bind
 import pw.cub3d.cub3_notes.ui.home.ItemDetailsProvider
+import pw.cub3d.cub3_notes.ui.home.NoteLabelsAdapter
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
 
 class SearchFragment : Fragment() {
 
+    private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModels { injector.searchViewModelFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentSearchBinding.inflate(inflater, container, false)
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding.query = viewModel.searchQuery
         return binding.root
     }
@@ -44,25 +48,17 @@ class SearchFragment : Fragment() {
         val adapter = NotesAdapter(requireContext()) { note, v -> viewModel.newNoteNavigationController.editNote(findNavController(), note, v) }
         search_results.adapter = adapter
 
-        val itemDetailsProvider = ItemDetailsProvider(search_results)
+        NoteSelectionTrackerFactory.buildTracker("search-selection", binding.searchResults).bind(adapter)
 
-        val tracker = SelectionTracker.Builder(
-            "search-selection",
-            search_results,
-            itemDetailsProvider.keyProvider,
-            itemDetailsProvider,
-            StorageStrategy.createLongStorage()
-        )
-            .withSelectionPredicate(SelectionPredicates.createSelectAnything())
-            .build()
+        binding.searchLabels.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        viewModel.labels.observe(viewLifecycleOwner, Observer { labels ->
+            binding.searchLabels.adapter = SearchLabelsAdapter(requireContext(), labels) {
+                viewModel.searchQuery.value = it.title
+            }
+        })
 
-
-        adapter.selectionTracker = tracker
-
-        viewModel.searchQuery.observe(viewLifecycleOwner, Observer {
-            viewModel.getSearchResults(it).observe(viewLifecycleOwner, Observer {
-                adapter.updateData(it)
-            })
+        viewModel.getSearchResults().observe(viewLifecycleOwner, Observer {
+            adapter.updateData(it)
         })
     }
 }
