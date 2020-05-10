@@ -15,21 +15,21 @@ import pw.cub3d.cub3_notes.core.manager.SettingsManager
 
 object ToolbarController {
     fun setupToolbar(settingsManager: SettingsManager, fragment: Fragment, appBarLayout: AppBarLayout, toolbar: Toolbar, title: String) {
+        (fragment.requireActivity() as MainActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar!!.title = title
+
+            setupActionBarWithNavController(
+                fragment.findNavController(),
+                appBarConfiguration
+            )
+        }
+
         settingsManager.toolbarEnabled.observe(fragment.viewLifecycleOwner, Observer {
             if(it) {
-                (fragment.requireActivity() as MainActivity).apply {
-                    setSupportActionBar(toolbar)
-                    supportActionBar!!.title = title
-
-                    setupActionBarWithNavController(
-                        fragment.findNavController(),
-                        appBarConfiguration
-                    )
-                }
-
                 appBarLayout.visibility = View.VISIBLE
             } else {
-                (fragment.requireActivity() as AppCompatActivity).setSupportActionBar(null)
+//                (fragment.requireActivity() as AppCompatActivity).setSupportActionBar(null)
                 appBarLayout.visibility = View.GONE
             }
         })

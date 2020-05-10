@@ -133,7 +133,7 @@ class NewNoteViewModel @Inject constructor(
     }
 
     fun addCheckbox() {
-        GlobalScope.launch { checkboxEntryDao.insert(CheckboxEntry(noteId = noteId!!, position = checkboxes.value?.lastOrNull()?.position?.plus(1) ?: 1)) }
+        GlobalScope.launch { checkboxEntryDao.insert(CheckboxEntry(noteId = noteId!!, position = (checkboxes.value?.maxBy { it.position }?.position?.plus(1) ?: 1))) }
     }
 
     fun onCheckboxChecked(checkboxEntry: CheckboxEntry, checked: Boolean) {
@@ -150,8 +150,8 @@ class NewNoteViewModel @Inject constructor(
         GlobalScope.launch { checkboxEntryDao.setText(entry.id, text) }
     }
 
-    fun upadateCheckboxPosition(entry: CheckboxEntry, position: Int) {
-        GlobalScope.launch { checkboxEntryDao.setPosition(entry.id, position) }
+    fun upadateCheckboxPosition(positions: List<Pair<Long, Int>>) {
+        GlobalScope.launch { checkboxEntryDao.setPositions(positions) }
     }
 
     fun setNoteReminder(zonedDateTime: ZonedDateTime) {

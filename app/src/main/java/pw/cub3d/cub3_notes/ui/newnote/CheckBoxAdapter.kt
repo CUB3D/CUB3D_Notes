@@ -47,8 +47,13 @@ class CheckBoxViewHolder(
     private val newNoteViewModel: NewNoteViewModel
 ): RecyclerView.ViewHolder(view.root) {
 
+    var enabled = false
+
     fun bind(checkboxEntry: CheckboxEntry) {
         println("Bound check ${checkboxEntry}")
+
+        enabled = false
+
         view.checkboxEntryCheck.isChecked = checkboxEntry.checked
 
         view.checkboxEntryDelete.setOnClickListener {
@@ -57,6 +62,8 @@ class CheckBoxViewHolder(
         }
 
         view.checkboxEntryCheck.setOnCheckedChangeListener { _, isChecked ->
+            if (!enabled) { println("Ignoring check change"); return@setOnCheckedChangeListener}
+
             println("check updated $checkboxEntry to $isChecked")
             newNoteViewModel.onCheckboxChecked(checkboxEntry, isChecked)
         }
@@ -66,8 +73,11 @@ class CheckBoxViewHolder(
             view.root.context
         ).food))
         view.checkboxEntryText.doAfterTextChanged { it ->
+            if (!enabled) { println("Ignoring text change"); return@doAfterTextChanged}
             println("Text changed to: $it")
             newNoteViewModel.onCheckboxTextChange(checkboxEntry, it.toString())
         }
+
+        enabled = true
     }
 }

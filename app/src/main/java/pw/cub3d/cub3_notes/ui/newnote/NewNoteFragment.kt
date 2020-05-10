@@ -161,11 +161,14 @@ class NewNoteFragment : Fragment() {
                 oldList.remove(selectedItem)
                 oldList.add(targetIndex, selectedItem)
 
-                oldList.forEach {
-                    viewModel.upadateCheckboxPosition(it, oldList.indexOf(it))
+                val newPositions = oldList.mapIndexed { index, checkboxEntry ->
+                    checkboxEntry.id to index
                 }
 
-                (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
+                viewModel.upadateCheckboxPosition(newPositions)
+
+                (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyItemChanged(viewHolder.adapterPosition)
+                (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyItemChanged(target.adapterPosition)
 
                 return true
             }
@@ -177,8 +180,6 @@ class NewNoteFragment : Fragment() {
                         checkBoxAdapter.checkboxEntries[viewHolder.adapterPosition],
                         true
                     )
-                    //TODO: is this the correct pos
-                    (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
                 }
 
                 if (direction == ItemTouchHelper.RIGHT) {
@@ -186,9 +187,9 @@ class NewNoteFragment : Fragment() {
                         checkBoxAdapter.checkboxEntries[viewHolder.adapterPosition],
                         false
                     )
-                    //TODO: is this the correct pos
-                    (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyDataSetChanged()
                 }
+
+                (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyItemChanged(viewHolder.adapterPosition)
             }
         }
         ItemTouchHelper(callback).attachToRecyclerView(createNote_checkBoxes)
@@ -199,12 +200,12 @@ class NewNoteFragment : Fragment() {
             checkBoxAdapter.updateData(checkboxes)
         })
 
-        checkBoxAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                val vh = binding.createNoteCheckBoxes.findViewHolderForAdapterPosition((binding.createNoteCheckBoxes.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()) as CheckBoxViewHolder
-                vh.view.checkboxEntryText.requestFocus()
-            }
-        })
+//        checkBoxAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+//                val vh = binding.createNoteCheckBoxes.findViewHolderForAdapterPosition((binding.createNoteCheckBoxes.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()) as CheckBoxViewHolder
+//                vh.view.checkboxEntryText.requestFocus()
+//            }
+//        })
 
         viewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
             createNote_more_colors.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

@@ -43,4 +43,11 @@ abstract class CheckboxEntryDao {
 
     @Query("UPDATE checkbox_entry SET position = :position WHERE id = :id")
     abstract fun setPosition(id: Long, position: Int)
+
+    @Transaction
+    open fun setPositions(positions: List<Pair<Long, Int>>) {
+        positions.forEach {
+            setPosition(it.first, it.second)
+        }
+    }
 }
