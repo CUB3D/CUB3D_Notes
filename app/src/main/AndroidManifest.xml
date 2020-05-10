@@ -43,6 +43,8 @@
 
         <receiver android:name=".ReminderBroadcastReciever"/>
 
+        <meta-data android:name="io.sentry.dsn" android:value="https://a53e05e0eccb4bac9c4dd5aae56bcbc3@o289707.ingest.sentry.io/1869522" />
+
     </application>
 
 </manifest>

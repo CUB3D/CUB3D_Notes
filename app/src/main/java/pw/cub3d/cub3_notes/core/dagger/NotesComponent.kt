@@ -3,9 +3,9 @@ package pw.cub3d.cub3_notes.core.dagger
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
-import dagger.android.AndroidInjectionModule
-import dagger.android.AndroidInjector
-import pw.cub3d.cub3_notes.NoteApplication
+import pw.cub3d.cub3_notes.core.database.dao.NotesDao
+import pw.cub3d.cub3_notes.core.manager.StorageManager
+import pw.cub3d.cub3_notes.ui.MainActivityViewModel
 import pw.cub3d.cub3_notes.ui.archived.ArchiveViewModel
 import pw.cub3d.cub3_notes.ui.colours.ColoursViewModel
 import pw.cub3d.cub3_notes.ui.deleted.DeletedNotesViewModel
@@ -18,8 +18,8 @@ import pw.cub3d.cub3_notes.ui.settings.SettingsViewModel
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [ AndroidInjectionModule::class, DatabaseModule::class, ScreenBindingModule::class ])
-interface NotesComponent: AndroidInjector<NoteApplication> {
+@Component(modules = [ DatabaseModule::class ])
+interface NotesComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
@@ -27,6 +27,8 @@ interface NotesComponent: AndroidInjector<NoteApplication> {
 
         fun build(): NotesComponent
     }
+
+    fun mainViewModelFactory(): ViewModelFactory<MainActivityViewModel>
 
     fun homeViewModelFactory(): ViewModelFactory<HomeViewModel>
     fun archiveViewModelFactory(): ViewModelFactory<ArchiveViewModel>
@@ -37,4 +39,6 @@ interface NotesComponent: AndroidInjector<NoteApplication> {
     fun labelEditViewModelFactory(): ViewModelFactory<LabelEditViewModel>
     fun coloursViewModelFactory(): ViewModelFactory<ColoursViewModel>
     fun settingsViewModelFactory(): ViewModelFactory<SettingsViewModel>
+
+    fun notesDao(): NotesDao
 }

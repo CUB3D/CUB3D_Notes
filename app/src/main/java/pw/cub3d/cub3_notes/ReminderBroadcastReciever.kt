@@ -6,16 +6,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import dagger.android.AndroidInjection
+import pw.cub3d.cub3_notes.core.dagger.getInjector
 import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import pw.cub3d.cub3_notes.ui.MainActivity
-import javax.inject.Inject
 
 class ReminderBroadcastReciever: BroadcastReceiver() {
-    @Inject lateinit var notesDao: NotesDao
+    lateinit var notesDao: NotesDao
 
     override fun onReceive(context: Context, intent: Intent) {
-        AndroidInjection.inject(this, context)
+        notesDao = getInjector(context).notesDao()
 
         println("Got broadcast")
 

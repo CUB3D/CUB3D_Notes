@@ -10,15 +10,17 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.manager.Layouts
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
@@ -29,20 +31,21 @@ import java.io.File
 import java.util.*
 import javax.inject.Inject
 
+class MainActivityViewModel @Inject constructor(
+    val newNoteNavigationController: NewNoteNavigationController,
+    val storageManager: StorageManager,
+    val settingsManager: SettingsManager
+): ViewModel()
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var appBarConfiguration: AppBarConfiguration
 
-    @Inject lateinit var newNoteNavigationController: NewNoteNavigationController
-
-    @Inject lateinit var storageManager: StorageManager
-    @Inject lateinit var settingsManager: SettingsManager
+    val viewModel: MainActivityViewModel by viewModels { injector.mainViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AndroidInjection.inject(this)
 
         // Create notification channels
         (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        settingsManager.theme.observe(this, androidx.lifecycle.Observer {
+        viewModel.settingsManager.theme.observe(this, androidx.lifecycle.Observer {
             AppCompatDelegate.setDefaultNightMode(it.nightMode)
 
             obtainStyledAttributes(intArrayOf(R.attr.status_color)).apply {
@@ -85,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
         // Check if loaded due to notification click
         intent.getLongExtra("NOTE_ID", -1).takeIf { it > 0 }?.let {
-            newNoteNavigationController.editNote(navController, it)
+            viewModel.newNoteNavigationController.editNote(navController, it)
         }
     }
 
@@ -97,12 +100,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.main_changeLayout) {
-            if (settingsManager.noteLayout.value!! == Layouts.GRID) {
-                settingsManager.noteLayout.postValue(Layouts.LIST)
+            if (viewModel.settingsManager.noteLayout.value!! == Layouts.GRID) {
+                viewModel.settingsManager.noteLayout.postValue(Layouts.LIST)
                 item.icon = resources.getDrawable(R.drawable.ic_rows, theme)
             }
-            if (settingsManager.noteLayout.value!! == Layouts.LIST) {
-                settingsManager.noteLayout.postValue(Layouts.GRID)
+            if (viewModel.settingsManager.noteLayout.value!! == Layouts.LIST) {
+                viewModel.settingsManager.noteLayout.postValue(Layouts.GRID)
                 item.icon = resources.getDrawable(R.drawable.ic_grid, theme)
             }
             return true
@@ -134,14 +137,14 @@ class MainActivity : AppCompatActivity() {
 
                 contentResolver.openInputStream(fileUri)!!.copyTo(outFile.outputStream())
 
-                newNoteNavigationController.navigateNewNoteWithImage(findNavController(R.id.nav_host_fragment), uuid)
+                viewModel.newNoteNavigationController.navigateNewNoteWithImage(findNavController(R.id.nav_host_fragment), uuid)
             }
             if (requestCode == AddImageDialog.TAKE_PHOTO) {
                 println("Take photo")
 
                 // Will always return true, unless app is restarted between images
-                storageManager.getLastCameraImageUUID()?.let {
-                    newNoteNavigationController.navigateNewNoteWithImage(findNavController(R.id.nav_host_fragment),
+                viewModel.storageManager.getLastCameraImageUUID()?.let {
+                    viewModel.newNoteNavigationController.navigateNewNoteWithImage(findNavController(R.id.nav_host_fragment),
                         it
                     )
                 }
@@ -161,14 +164,14 @@ class MainActivity : AppCompatActivity() {
 
                 contentResolver.openInputStream(fileUri)!!.copyTo(outFile.outputStream())
 
-                newNoteNavigationController.navigateNewNoteWithVideo(findNavController(R.id.nav_host_fragment), uuid)
+                viewModel.newNoteNavigationController.navigateNewNoteWithVideo(findNavController(R.id.nav_host_fragment), uuid)
             }
             if (requestCode == AddVideoDialog.TAKE_VIDEO) {
                 println("Take video")
 
                 // Will always return true, unless app is restarted between images
-                storageManager.getLastCameraVideoUUID()?.let {
-                    newNoteNavigationController.navigateNewNoteWithVideo(findNavController(R.id.nav_host_fragment),
+                viewModel.storageManager.getLastCameraVideoUUID()?.let {
+                    viewModel.newNoteNavigationController.navigateNewNoteWithVideo(findNavController(R.id.nav_host_fragment),
                         it
                     )
                 }
