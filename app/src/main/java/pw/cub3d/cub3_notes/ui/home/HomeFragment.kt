@@ -131,7 +131,7 @@ class HomeFragment : Fragment() {
 
         NoteSelectionTrackerFactory.buildTracker("note-pin-selection", home_pinnedNotes).bind(pinnedAdapter)
 
-        viewModel.pinnedNotes.observe(viewLifecycleOwner, Observer {
+        viewModel.pinned.observe(viewLifecycleOwner, Observer {
             if(it.isEmpty()) {
                 home_pinnedNotes.visibility = View.GONE
                 home_pinnedTitle.visibility = View.GONE
@@ -149,7 +149,7 @@ class HomeFragment : Fragment() {
 
         NoteSelectionTrackerFactory.buildTracker("note-selection", home_notes).bind(otherAdapter)
 
-        viewModel.unpinnedNotes.observe(viewLifecycleOwner, Observer {
+        viewModel.unpinned.observe(viewLifecycleOwner, Observer {
             otherAdapter.updateData(it)
         })
 
@@ -168,6 +168,10 @@ class HomeFragment : Fragment() {
 
         home_search.setOnClickListener { findNavController().navigate(R.id.nav_search) }
 
+        viewModel.settingsManager.quickNoteEnabled.observe(viewLifecycleOwner, Observer {
+            val v = if(it) View.VISIBLE else View.GONE
+            home_new_checkNote.visibility = v
+        })
 
         home_takeNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController()) }
         home_new_checkNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }

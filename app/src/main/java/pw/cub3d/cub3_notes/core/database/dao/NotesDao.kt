@@ -15,8 +15,8 @@ abstract class NotesDao {
     abstract fun getNoteSearchResults(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE pinned = :pinned")
-    abstract fun getNotes(pinned: Boolean): Flow<List<NoteAndCheckboxes>>
+    @Query("SELECT * FROM notes WHERE pinned = :pinned AND archived = :archived")
+    abstract fun getNotes(pinned: Boolean, archived: Boolean): Flow<List<NoteAndCheckboxes>>
 
 
     @Transaction

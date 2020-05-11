@@ -1,14 +1,13 @@
 package pw.cub3d.cub3_notes.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.core.database.dao.LabelDao
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
+import pw.cub3d.cub3_notes.core.database.repository.FilterType
 import pw.cub3d.cub3_notes.core.database.repository.NoteRepository
+import pw.cub3d.cub3_notes.core.database.repository.SortTypes
 import pw.cub3d.cub3_notes.core.manager.AudioManager
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
@@ -33,27 +32,18 @@ class HomeViewModel @Inject constructor(
     }
 
     fun setShowOnlyReminders(b: Boolean) {
-        showOnlyReminders.value = b
+        filter.postValue(FilterType.REMINDERS)
     }
 
-    private val showOnlyReminders = MutableLiveData(false)
-
-    val unpinnedNotes = showOnlyReminders.switchMap {
-        when (it) {
-            true -> notesRepository.getAllUnpinnedReminders()
-            false -> notesRepository.getAllUnpinnedNotes()
-        }
-    }
-    val pinnedNotes = showOnlyReminders.switchMap {
-        when (it) {
-            true -> notesRepository.getAllPinnedReminders()
-            false -> notesRepository.getAllPinnedNotes()
-        }
-    }
     val labels = labelDao.getAll()
 
 
-    val filter = MutableLiveData<Int>()
-    val sort = MutableLiveData<Int>()
-    val p = notesRepository.getNotes(filter, sort, MutableLiveData(true))
+    val filter = MutableLiveData(FilterType.ALL)
+    val sort = MutableLiveData(SortTypes.MANUAL)
+    val pinned by lazy {
+        notesRepository.getNotes(filter, sort, true, archived = false).asLiveData()
+    }
+    val unpinned by lazy {
+        notesRepository.getNotes(filter, sort, false, archived = false).asLiveData()
+    }
 }

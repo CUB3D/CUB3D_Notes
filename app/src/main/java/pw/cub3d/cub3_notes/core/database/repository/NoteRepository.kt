@@ -30,23 +30,62 @@ class NoteRepository @Inject constructor(
 
     suspend fun setNotePosition(id: Long, position: Long) = notesDao.setNotePosition(id, position)
 
-    fun getNotes(filter: MutableLiveData<Int>, sort: MutableLiveData<Int>, pinned: MutableLiveData<Boolean>): Flow<NoteAndCheckboxes> = flow {
+    fun getNotes(filter: MutableLiveData<FilterType>, sort: MutableLiveData<SortTypes>, pinned: Boolean, archived: Boolean): Flow<List<NoteAndCheckboxes>> = flow {
         filter.asFlow().collect { filter ->
             sort.asFlow().collect { sort ->
-                pinned.asFlow().collect { pinned ->
-                    notesDao.getNotes(pinned).collect {
+                    notesDao.getNotes(pinned, archived).collect {
                         it.sortedBy {
                             when (sort) {
-                                0 -> it.note.position
-                                1 -> ZonedDateTime.parse(it.note.creationTime).toEpochSecond()
-                                2 -> ZonedDateTime.parse(it.note.modificationTime).toEpochSecond()
+                                SortTypes.MANUAL -> it.note.position
+                                SortTypes.CREATED_ASC, SortTypes.CREATED_DSC -> ZonedDateTime.parse(
+                                    it.note.creationTime
+                                ).toEpochSecond()
+                                SortTypes.MODIFY_ASC, SortTypes.MODIFY_DSC -> ZonedDateTime.parse(it.note.modificationTime)
+                                    .toEpochSecond()
+                                SortTypes.VIEW_ASC, SortTypes.VIEW_DSC -> ZonedDateTime.parse(it.note.viewTime)
+                                    .toEpochSecond()
                                 else -> it.note.id
                             }
-                        }.forEach { emit(it) }
-                    }
+                        }
+                        .run { if(sort in arrayOf(SortTypes.TITLE_ALPHABETICAL, SortTypes.TITLE_REVERSE_ALPHABETICAL)) sortedBy { it.note.title } else this }
+                        .run { if(sort.reverse) reversed() else this }
+                        .filter {
+                            when(filter) {
+                                FilterType.ALL -> true
+                                FilterType.REMINDERS -> !it.note.timeReminder.isNullOrEmpty()
+                                FilterType.TAGGED -> it.labels.isNotEmpty()
+                                FilterType.AUDIO -> it.audioClips.isNotEmpty()
+                                FilterType.VIDEO -> it.videos.isNotEmpty()
+                                FilterType.IMAGE -> it.images.isNotEmpty()
+                                FilterType.CHECKBOX -> it.checkboxes.isNotEmpty()
+                                else -> true // Should never happen
+                            }
+                        }.let { emit(it) }
                 }
             }
         }
     }
+}
+
+enum class FilterType {
+    ALL,
+    REMINDERS,
+    TAGGED,
+    AUDIO,
+    VIDEO,
+    IMAGE,
+    CHECKBOX
+}
+
+enum class SortTypes(val reverse: Boolean = false) {
+    MANUAL,
+    CREATED_ASC,
+    CREATED_DSC(true),
+    MODIFY_ASC,
+    MODIFY_DSC(true),
+    VIEW_ASC,
+    VIEW_DSC(true),
+    TITLE_ALPHABETICAL,
+    TITLE_REVERSE_ALPHABETICAL(true),
 
 }

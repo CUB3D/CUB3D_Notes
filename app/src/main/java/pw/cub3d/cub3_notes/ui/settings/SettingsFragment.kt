@@ -109,5 +109,15 @@ class SettingsFragment : Fragment() {
                 false -> binding.settingsToolbarOff.isChecked = true
             }
         })
+
+        // Quicknote
+        binding.settingsQuicknoteOn.setOnClickListener { viewModel.settingsManager.setQuickNoteEnabled(true) }
+        binding.settingsQuicnoteOff.setOnClickListener { viewModel.settingsManager.setQuickNoteEnabled(false) }
+        viewModel.settingsManager.quickNoteEnabled.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                true -> binding.settingsQuicknoteOn.isChecked = true
+                false -> binding.settingsQuicnoteOff.isChecked = true
+            }
+        })
     }
 }
