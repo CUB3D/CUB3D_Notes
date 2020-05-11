@@ -20,6 +20,8 @@ import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
+import pw.cub3d.cub3_notes.core.database.repository.FilterType
+import pw.cub3d.cub3_notes.core.database.repository.SortTypes
 import pw.cub3d.cub3_notes.ui.*
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
@@ -200,6 +202,17 @@ class HomeFragment : Fragment() {
         home_new_imgNote.setOnClickListener {
             AddImageDialog(requireActivity(), viewModel.storageManager).show()
         }
+
+
+        home_filter.setOnClickListener {  }
+        home_filter_reminder.setOnClickListener { viewModel.filter.postValue(FilterType.REMINDERS); }
+        home_filter_audio.setOnClickListener { viewModel.filter.postValue(FilterType.AUDIO); }
+        home_filter_check.setOnClickListener { viewModel.filter.postValue(FilterType.CHECKBOX); }
+        home_filter_image.setOnClickListener { viewModel.filter.postValue(FilterType.IMAGE); }
+        home_filter_video.setOnClickListener { viewModel.filter.postValue(FilterType.VIDEO); }
+        home_filter_tag.setOnClickListener { viewModel.filter.postValue(FilterType.TAGGED); }
+        home_filter_all.setOnClickListener { viewModel.filter.postValue(FilterType.ALL);}
+
     }
 
     override fun onCreateView(

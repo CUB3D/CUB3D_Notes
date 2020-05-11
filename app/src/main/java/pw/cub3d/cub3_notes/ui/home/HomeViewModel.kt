@@ -1,7 +1,9 @@
 package pw.cub3d.cub3_notes.ui.home
 
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.core.database.dao.LabelDao
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
@@ -41,9 +43,13 @@ class HomeViewModel @Inject constructor(
     val filter = MutableLiveData(FilterType.ALL)
     val sort = MutableLiveData(SortTypes.MANUAL)
     val pinned by lazy {
-        notesRepository.getNotes(filter, sort, true, archived = false).asLiveData()
+        liveData<List<NoteAndCheckboxes>>(viewModelScope.coroutineContext + Dispatchers.IO) {
+            emitSource(notesRepository.getNotes(filter, sort, true, archived = false).flowOn(Dispatchers.IO).asLiveData())
+        }
     }
     val unpinned by lazy {
-        notesRepository.getNotes(filter, sort, false, archived = false).asLiveData()
+        liveData<List<NoteAndCheckboxes>>(viewModelScope.coroutineContext + Dispatchers.IO) {
+            emitSource(notesRepository.getNotes(filter, sort, false, archived = false).flowOn(Dispatchers.IO).asLiveData())
+        }
     }
 }

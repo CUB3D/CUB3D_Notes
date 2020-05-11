@@ -156,6 +156,13 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_search"/>
 
+        <ImageView
+            android:id="@+id/home_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_filter"/>
+
     </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -166,6 +173,79 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_anchor="@id/bar" />
+
+    <LinearLayout
+        android:id="@+id/home_filter_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorSurface"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="450dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_filter_all"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="All"
+            app:icon="@drawable/ic_plus_square" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_filter_reminder"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Reminders only"
+            app:icon="@drawable/ic_clock" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_filter_tag"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Labels only"
+            app:icon="@drawable/ic_tag" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_filter_audio"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Audio only"
+            app:icon="@drawable/ic_mic" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_filter_video"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Video only"
+            app:icon="@drawable/ic_play_circle" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_filter_image"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Image only"
+            app:icon="@drawable/ic_image" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_filter_check"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Checkbox only"
+            app:icon="@drawable/ic_check_square" />
+    </LinearLayout>
 
 
     <LinearLayout
