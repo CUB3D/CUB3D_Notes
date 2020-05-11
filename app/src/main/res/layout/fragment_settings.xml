@@ -7,15 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.settings.SettingsFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-
-    <Button
-        android:id="@+id/setting_export"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Export data" />
+    tools:context=".ui.settings.SettingsFragment"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp">
 
     <Button
         android:id="@+id/settings_test_sync"
@@ -105,5 +99,11 @@
             android:layout_height="wrap_content"
             android:text="Off"/>
     </com.google.android.material.chip.ChipGroup>
+
+    <Button
+        android:id="@+id/setting_export"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Export data" />
 </LinearLayout>
 </layout>

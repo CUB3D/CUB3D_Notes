@@ -25,7 +25,7 @@ data class Note(
 
     var timeReminder: String? = null,
 
-    var colour: String = "#ffffff",
+    var colour: String? = null,
 
     var deletionTime: String? = null,
 
@@ -45,9 +45,7 @@ data class Note(
         }
     }
 
-    //TODO: enable null background colors
-    //fun getColourId() = Color.parseColor(colour)
-    fun getColourId() = Color.TRANSPARENT
+    fun getColourId() = colour?.let {Color.parseColor(it) } ?: Color.TRANSPARENT
 
     fun updateModificationTime() {
         modificationTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
