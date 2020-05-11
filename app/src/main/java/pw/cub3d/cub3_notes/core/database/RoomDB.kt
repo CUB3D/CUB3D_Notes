@@ -140,6 +140,39 @@ object Migrations {
                             )""".trimMargin())
         }
     }
+
+    val MIGRATE_17_18 = object: Migration(17, 18) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+
+            database.execSQL("PRAGMA foreign_keys=OFF")
+
+            database.execSQL("""CREATE TABLE new_notes(
+                                    id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
+                                    title TEXT NOT NULL DEFAULT ``,
+                                    text TEXT NOT NULL DEFAULT ``,
+                                    pinned INTEGER NOT NULL DEFAULT 0,
+                                    archived INTEGER NOT NULL DEFAULT 0,
+                                    modificationTime TEXT NOT NULL DEFAULT ``,
+                                    type TEXT NOT NULL DEFAULT ``,
+                                    timeReminder TEXT DEFAULT null,
+                                    colour TEXT DEFAULT null,
+                                    deletionTime TEXT DEFAULT null,
+                                    position INTEGER NOT NULL DEFAULT 0,
+                                    creationTime TEXT NOT NULL DEFAULT ``,
+                                    viewTime TEXT NOT NULL DEFAULT ``
+                            )""".trimMargin())
+
+            database.execSQL("INSERT INTO new_notes SELECT id, title, text, pinned, archived, modificationTime, type, timeReminder, null, deletionTime, position, modificationTime, modificationTime FROM notes")
+
+            database.execSQL("DROP TABLE notes")
+
+            database.execSQL("ALTER TABLE new_notes RENAME TO notes")
+
+            database.execSQL("PRAGMA foreign_keys=ON")
+
+            database.execSQL("VACUUM")
+        }
+    }
 }
 
 @Database(
@@ -153,7 +186,7 @@ object Migrations {
         AudioEntry::class,
         VideoEntry::class
     ],
-    version = 17,
+    version = 18,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
@@ -196,7 +229,8 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_13_14,
                     Migrations.MIGRATE_14_15,
                     Migrations.MIGRATE_15_16,
-                    Migrations.MIGRATE_16_17
+                    Migrations.MIGRATE_16_17,
+                    Migrations.MIGRATE_17_18
                 //TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()

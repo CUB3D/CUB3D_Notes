@@ -8,9 +8,10 @@ import pw.cub3d.cub3_notes.core.database.entity.Colour
 import pw.cub3d.cub3_notes.databinding.ColourEditEntryBinding
 
 class ColoursAdapter(
-    ctx: Context,
-    private val colours: List<Colour>
+    ctx: Context
 ) : RecyclerView.Adapter<ColourViewHolder>() {
+    var colours = emptyList<Colour>()
+
     private val layoutInflater = LayoutInflater.from(ctx)
 
     init {
@@ -27,6 +28,11 @@ class ColoursAdapter(
 
     override fun onBindViewHolder(holder: ColourViewHolder, position: Int) {
         holder.bind(colours[position])
+    }
+
+    fun updateData(entry: List<Colour>) {
+        this.colours = entry
+        notifyDataSetChanged()
     }
 }
 

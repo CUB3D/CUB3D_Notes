@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 17,
-    "identityHash": "27dbbf587129fb3a7224e27a32bb1d47",
+    "version": 18,
+    "identityHash": "42549af935a917775cd22e0c6b39477b",
     "entities": [
       {
         "tableName": "notes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `text` TEXT NOT NULL, `pinned` INTEGER NOT NULL, `archived` INTEGER NOT NULL, `modificationTime` TEXT NOT NULL, `type` TEXT NOT NULL, `timeReminder` TEXT, `colour` TEXT NOT NULL, `deletionTime` TEXT, `position` INTEGER NOT NULL, `creationTime` TEXT NOT NULL, `viewTime` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `text` TEXT NOT NULL, `pinned` INTEGER NOT NULL, `archived` INTEGER NOT NULL, `modificationTime` TEXT NOT NULL, `type` TEXT NOT NULL, `timeReminder` TEXT, `colour` TEXT, `deletionTime` TEXT, `position` INTEGER NOT NULL, `creationTime` TEXT NOT NULL, `viewTime` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -60,7 +60,7 @@
             "fieldPath": "colour",
             "columnName": "colour",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "deletionTime",
@@ -382,7 +382,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '27dbbf587129fb3a7224e27a32bb1d47')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '42549af935a917775cd22e0c6b39477b')"
     ]
   }
 }

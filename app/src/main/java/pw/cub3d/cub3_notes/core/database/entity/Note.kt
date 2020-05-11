@@ -29,7 +29,10 @@ data class Note(
 
     var deletionTime: String? = null,
 
-    var position: Long = 0
+    var position: Long = 0,
+
+    var creationTime: String = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
+    var viewTime: String = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
 
 ) {
     fun getLocalModificationTime(): String {

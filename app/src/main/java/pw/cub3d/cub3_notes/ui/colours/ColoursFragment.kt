@@ -31,26 +31,31 @@ class ColoursFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.colours.observe(viewLifecycleOwner, Observer {
-            binding.coloursRecycler.layoutManager = LinearLayoutManager(requireContext())
-            binding.coloursRecycler.adapter = ColoursAdapter(requireContext(), it)
+        binding.coloursRecycler.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = ColoursAdapter(requireContext())
+        binding.coloursRecycler.adapter = adapter
 
-            val itemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ) = false
+        val itemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ) = false
 
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    if(direction == ItemTouchHelper.RIGHT) {
-                        viewModel.deleteColour(it.find { it.id == viewHolder.itemId }!!)
-                    }
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                if(direction == ItemTouchHelper.RIGHT) {
+                    val it = adapter.colours
+                    viewModel.deleteColour(it.find { it.id == viewHolder.itemId }!!)
                 }
             }
+        }
 
-            val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-            itemTouchHelper.attachToRecyclerView(binding.coloursRecycler)
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(binding.coloursRecycler)
+
+
+        viewModel.colours.observe(viewLifecycleOwner, Observer {
+            adapter.updateData(it)
         })
 
         binding.coloursAdd.setOnClickListener {
