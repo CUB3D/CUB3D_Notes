@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 17,
-    "identityHash": "504dd15ad07c8fb8e417b9c200a7d84a",
+    "identityHash": "27dbbf587129fb3a7224e27a32bb1d47",
     "entities": [
       {
         "tableName": "notes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `text` TEXT NOT NULL, `pinned` INTEGER NOT NULL, `archived` INTEGER NOT NULL, `modificationTime` TEXT NOT NULL, `type` TEXT NOT NULL, `timeReminder` TEXT, `colour` TEXT NOT NULL, `deletionTime` TEXT, `position` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `text` TEXT NOT NULL, `pinned` INTEGER NOT NULL, `archived` INTEGER NOT NULL, `modificationTime` TEXT NOT NULL, `type` TEXT NOT NULL, `timeReminder` TEXT, `colour` TEXT NOT NULL, `deletionTime` TEXT, `position` INTEGER NOT NULL, `creationTime` TEXT NOT NULL, `viewTime` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -72,6 +72,18 @@
             "fieldPath": "position",
             "columnName": "position",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creationTime",
+            "columnName": "creationTime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "viewTime",
+            "columnName": "viewTime",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -370,7 +382,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '504dd15ad07c8fb8e417b9c200a7d84a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '27dbbf587129fb3a7224e27a32bb1d47')"
     ]
   }
 }

@@ -1,5 +1,6 @@
 package pw.cub3d.cub3_notes.ui.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
@@ -50,4 +51,9 @@ class HomeViewModel @Inject constructor(
         }
     }
     val labels = labelDao.getAll()
+
+
+    val filter = MutableLiveData<Int>()
+    val sort = MutableLiveData<Int>()
+    val p = notesRepository.getNotes(filter, sort, MutableLiveData(true))
 }

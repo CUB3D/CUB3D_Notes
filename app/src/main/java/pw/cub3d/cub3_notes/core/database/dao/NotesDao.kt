@@ -2,6 +2,7 @@ package pw.cub3d.cub3_notes.core.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.core.database.entity.Note
@@ -12,6 +13,10 @@ abstract class NotesDao {
     @Transaction
     @Query("SELECT * FROM notes")
     abstract fun getNoteSearchResults(): LiveData<List<NoteAndCheckboxes>>
+
+    @Transaction
+    @Query("SELECT * FROM notes WHERE pinned = :pinned")
+    abstract fun getNotes(pinned: Boolean): Flow<List<NoteAndCheckboxes>>
 
 
     @Transaction

@@ -153,7 +153,7 @@ object Migrations {
         AudioEntry::class,
         VideoEntry::class
     ],
-    version = 17,
+    version = 18,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
