@@ -15,11 +15,11 @@ class LabelEditViewModel @Inject constructor(
 
     var newLabelName = MutableLiveData<String>("")
 
-    fun saveNewLabel() {
+    fun saveNewLabel(colour: String?) {
         println("Saving: $newLabelName")
         GlobalScope.launch {
             newLabelName.value.takeIf { it?.isNotEmpty() ?: false }?.let {
-                labelDao.insert(Label(title = it))
+                labelDao.insert(Label(title = it, colour = colour))
                 newLabelName.postValue("")
             }
         }

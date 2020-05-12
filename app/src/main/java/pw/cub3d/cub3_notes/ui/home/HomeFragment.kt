@@ -227,6 +227,8 @@ class HomeFragment : Fragment() {
         binding.homeSortViewDsc.setOnClickListener { viewModel.sort.postValue(SortTypes.VIEW_DSC) }
         binding.homeSortAlpha.setOnClickListener { viewModel.sort.postValue(SortTypes.TITLE_ALPHABETICAL) }
         binding.homeSortAlphaReverse.setOnClickListener { viewModel.sort.postValue(SortTypes.TITLE_REVERSE_ALPHABETICAL) }
+
+        binding.homeLabels.setOnClickListener { findNavController().navigate(R.id.nav_label_edit) }
     }
 
     override fun onCreateView(

@@ -171,6 +171,12 @@ object Migrations {
             database.execSQL("PRAGMA foreign_keys=ON")
         }
     }
+
+    val MIGRATE_18_19 = object: Migration(18, 19) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE labels ADD COLUMN colour TEXT DEFAULT null")
+        }
+    }
 }
 
 @Database(
@@ -184,7 +190,7 @@ object Migrations {
         AudioEntry::class,
         VideoEntry::class
     ],
-    version = 18,
+    version = 19,
     exportSchema = true
 )
 abstract class RoomDB: RoomDatabase() {
@@ -228,7 +234,8 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_14_15,
                     Migrations.MIGRATE_15_16,
                     Migrations.MIGRATE_16_17,
-                    Migrations.MIGRATE_17_18
+                    Migrations.MIGRATE_17_18,
+                    Migrations.MIGRATE_18_19
                 //TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()

@@ -8,15 +8,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import kotlinx.android.synthetic.main.fragment_label_edit.*
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentLabelEditBinding
 
 class LabelEditFragment : Fragment() {
+    private lateinit var binding: FragmentLabelEditBinding
     private val labelEditViewModel: LabelEditViewModel by viewModels { injector.labelEditViewModelFactory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = FragmentLabelEditBinding.inflate(layoutInflater, container, false)
+        binding = FragmentLabelEditBinding.inflate(layoutInflater, container, false)
         binding.viewModel = labelEditViewModel
         return binding.root
     }
@@ -24,14 +26,26 @@ class LabelEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        editLabel_confirm.setOnClickListener {
-            labelEditViewModel.saveNewLabel()
+        binding.editLabelConfirm.setOnClickListener {
+            val cp = ColorPicker(requireActivity(), 200, 200, 0)
+            cp.show()
+            cp.enableAutoClose()
+            cp.setCallback { color ->
+                labelEditViewModel.saveNewLabel("#${Integer.toHexString(color)}")
+            }
+            cp.setOnDismissListener {
+                println("Dismiss")
+                labelEditViewModel.saveNewLabel(null)
+            }
         }
 
+        binding.editLabelRecycler.layoutManager = LinearLayoutManager(requireContext())
+
         labelEditViewModel.labels.observe(viewLifecycleOwner, Observer {
-            editLabel_recycler.layoutManager = LinearLayoutManager(requireContext())
-            editLabel_recycler.adapter = LabelAdapter(requireContext(), it)
+            binding.editLabelRecycler.adapter = LabelAdapter(requireContext(), it)
         })
+
+        binding.editLabelNewText.requestFocus()
     }
 
 }
