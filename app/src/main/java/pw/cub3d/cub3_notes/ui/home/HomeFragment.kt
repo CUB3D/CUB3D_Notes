@@ -22,12 +22,15 @@ import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.repository.FilterType
 import pw.cub3d.cub3_notes.core.database.repository.SortTypes
+import pw.cub3d.cub3_notes.databinding.FragmentHomeBinding
+import pw.cub3d.cub3_notes.databinding.HomeCheckboxEntryBinding
 import pw.cub3d.cub3_notes.ui.*
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 
 
 class HomeFragment : Fragment() {
+    private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels { injector.homeViewModelFactory() }
 
     lateinit var pinnedAdapter: NotesAdapter
@@ -172,7 +175,9 @@ class HomeFragment : Fragment() {
 
         viewModel.settingsManager.quickNoteEnabled.observe(viewLifecycleOwner, Observer {
             val v = if(it) View.VISIBLE else View.GONE
-            home_new_checkNote.visibility = v
+            binding.homeNewCheckNote.visibility = v
+            binding.homeNewImgNote.visibility = v
+            binding.homeNewVideo.visibility = v
         })
 
         home_takeNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController()) }
@@ -203,23 +208,34 @@ class HomeFragment : Fragment() {
             AddImageDialog(requireActivity(), viewModel.storageManager).show()
         }
 
+        BottomSheetBehavior.from(binding.homeFilterSheet).state = BottomSheetBehavior.STATE_HIDDEN
+        home_filter.setOnClickListener { BottomSheetBehavior.from(binding.homeFilterSheet).state = if(BottomSheetBehavior.from(binding.homeFilterSheet).state == BottomSheetBehavior.STATE_HIDDEN) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN }
+        home_filter_reminder.setOnClickListener { viewModel.filter.postValue(FilterType.REMINDERS) }
+        home_filter_audio.setOnClickListener { viewModel.filter.postValue(FilterType.AUDIO) }
+        home_filter_check.setOnClickListener { viewModel.filter.postValue(FilterType.CHECKBOX) }
+        home_filter_image.setOnClickListener { viewModel.filter.postValue(FilterType.IMAGE) }
+        home_filter_video.setOnClickListener { viewModel.filter.postValue(FilterType.VIDEO) }
+        home_filter_tag.setOnClickListener { viewModel.filter.postValue(FilterType.TAGGED) }
+        home_filter_all.setOnClickListener { viewModel.filter.postValue(FilterType.ALL)}
 
-        home_filter.setOnClickListener {  }
-        home_filter_reminder.setOnClickListener { viewModel.filter.postValue(FilterType.REMINDERS); }
-        home_filter_audio.setOnClickListener { viewModel.filter.postValue(FilterType.AUDIO); }
-        home_filter_check.setOnClickListener { viewModel.filter.postValue(FilterType.CHECKBOX); }
-        home_filter_image.setOnClickListener { viewModel.filter.postValue(FilterType.IMAGE); }
-        home_filter_video.setOnClickListener { viewModel.filter.postValue(FilterType.VIDEO); }
-        home_filter_tag.setOnClickListener { viewModel.filter.postValue(FilterType.TAGGED); }
-        home_filter_all.setOnClickListener { viewModel.filter.postValue(FilterType.ALL);}
 
+        BottomSheetBehavior.from(binding.homeSortSheet).state = BottomSheetBehavior.STATE_HIDDEN
+        binding.homeSort.setOnClickListener { BottomSheetBehavior.from(binding.homeSortSheet).state = if(BottomSheetBehavior.from(binding.homeSortSheet).state == BottomSheetBehavior.STATE_HIDDEN) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN }
+
+        binding.homeSortManual.setOnClickListener { viewModel.sort.postValue(SortTypes.MANUAL) }
+        binding.homeSortCreatedAsc.setOnClickListener { viewModel.sort.postValue(SortTypes.CREATED_ASC) }
+        binding.homeSortCreatedDsc.setOnClickListener { viewModel.sort.postValue(SortTypes.CREATED_DSC) }
+        binding.homeSortChangeAsc.setOnClickListener { viewModel.sort.postValue(SortTypes.MODIFY_ASC) }
+        binding.homeSortChangeDsc.setOnClickListener { viewModel.sort.postValue(SortTypes.MODIFY_DSC) }
+        binding.homeSortViewAsc.setOnClickListener { viewModel.sort.postValue(SortTypes.VIEW_ASC) }
+        binding.homeSortViewDsc.setOnClickListener { viewModel.sort.postValue(SortTypes.VIEW_DSC) }
+        binding.homeSortAlpha.setOnClickListener { viewModel.sort.postValue(SortTypes.TITLE_ALPHABETICAL) }
+        binding.homeSortAlphaReverse.setOnClickListener { viewModel.sort.postValue(SortTypes.TITLE_REVERSE_ALPHABETICAL) }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+    ) = FragmentHomeBinding.inflate(inflater, container, false).apply { binding = this }.root
 }

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -163,6 +164,13 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_filter"/>
 
+        <ImageView
+            android:id="@+id/home_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_sort"/>
+
     </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -247,6 +255,98 @@
             app:icon="@drawable/ic_check_square" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/home_sort_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorSurface"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="450dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_sort_manual"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Manual"
+            app:icon="@drawable/ic_package" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_sort_created_asc"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Creation time (Asc)"
+            app:icon="@drawable/ic_plus_square" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_sort_created_dsc"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Creation time (Dsc)"
+            app:icon="@drawable/ic_plus_square" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_sort_change_asc"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Modification time (Asc)"
+            app:icon="@drawable/ic_mic" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_sort_change_dsc"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Modification time (Dsc)"
+            app:icon="@drawable/ic_play_circle" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_sort_view_asc"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Last view time asc"
+            app:icon="@drawable/ic_image" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_sort_view_dsc"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Last view time dsc"
+            app:icon="@drawable/ic_check_square" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_sort_alpha"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Alphabetical"
+            app:icon="@drawable/ic_check_square" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_sort_alpha_reverse"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Alphabetical (reversed)"
+            app:icon="@drawable/ic_check_square" />
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:id="@+id/home_more_sheet"
@@ -287,3 +387,4 @@
 
     </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
