@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="pinnedEmpty"
+            type="Boolean" />
+        <variable
+            name="otherEmpty"
+            type="Boolean" />
+    </data>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,6 +29,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/home_emptyNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:visibility="@{pinnedEmpty &amp;&amp; otherEmpty ? View.VISIBLE : View.GONE, default=gone}">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No notes yet!"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/home_pinnedTitle"
@@ -107,20 +137,23 @@
         app:fabAlignmentMode="end"
         app:hideOnScroll="false">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/home_more_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_more_vertical"/>
+            android:padding="4dp"
+            android:src="@drawable/ic_more_vertical"
+            android:background="@drawable/button_background_circle_ripple"
+            android:contentDescription="Open more"/>
 
-        <ImageView
-            android:tint="?icon_tint"
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/home_new_checkNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_check_square" />
+            android:padding="4dp"
+            android:src="@drawable/ic_check_square"
+            android:background="@drawable/button_background_circle_ripple"
+            android:contentDescription="Create new checkbox note"/>
 
 <!--        <ImageView-->
 <!--            android:id="@+id/home_new_penNote"-->
@@ -129,12 +162,14 @@
 <!--            android:layout_margin="16dp"-->
 <!--            android:src="@drawable/ic_pen_tool" />-->
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/home_new_voiceNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_mic" />
+            android:padding="4dp"
+            android:src="@drawable/ic_mic"
+            android:background="@drawable/button_background_circle_ripple"
+            android:contentDescription="Create new voice note"/>
 
         <ImageView
             android:id="@+id/home_new_video"
@@ -150,26 +185,32 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_image" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/home_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_search"/>
+            android:padding="4dp"
+            android:src="@drawable/ic_search"
+            android:background="@drawable/button_background_circle_ripple"
+            android:contentDescription="Search"/>
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/home_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_filter"/>
+            android:padding="4dp"
+            android:src="@drawable/ic_filter"
+            android:background="@drawable/button_background_circle_ripple"
+            android:contentDescription="Filter"/>
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/home_sort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_sort"/>
+            android:padding="4dp"
+            android:src="@drawable/ic_sort"
+            android:background="@drawable/button_background_circle_ripple"
+            android:contentDescription="Sort"/>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 

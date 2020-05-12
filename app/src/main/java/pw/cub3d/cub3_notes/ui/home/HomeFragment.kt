@@ -133,6 +133,8 @@ class HomeFragment : Fragment() {
         NoteSelectionTrackerFactory.buildTracker("note-pin-selection", binding.homePinnedNotes).bind(pinnedAdapter)
 
         viewModel.pinned.observe(viewLifecycleOwner, Observer {
+            binding.pinnedEmpty = it.isEmpty()
+
             if(it.isEmpty()) {
                 binding.homePinnedNotes.visibility = View.GONE
                 binding.homePinnedTitle.visibility = View.GONE
@@ -151,6 +153,8 @@ class HomeFragment : Fragment() {
         NoteSelectionTrackerFactory.buildTracker("note-selection", binding.homeNotes).bind(otherAdapter)
 
         viewModel.unpinned.observe(viewLifecycleOwner, Observer {
+            binding.otherEmpty = it.isEmpty()
+
             otherAdapter.updateData(it)
         })
 
@@ -229,5 +233,9 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentHomeBinding.inflate(inflater, container, false).apply { binding = this }.root
+    ) = FragmentHomeBinding.inflate(inflater, container, false).apply {
+        binding = this
+        pinnedEmpty = false
+        otherEmpty = false
+    }.root
 }
