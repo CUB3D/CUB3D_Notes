@@ -16,14 +16,13 @@ class OpenTasksSyncManager @Inject constructor(
     private val context: Context,
     private val notesDao: NotesDao
 ) {
-    private var contentProviderClient: ContentProviderClient?
-
-    init {
-        val yourURI = Uri.parse("content://org.dmfs.tasks/")
-        contentProviderClient = context.contentResolver.acquireContentProviderClient(yourURI)
-    }
+    private var contentProviderClient: ContentProviderClient? = null
 
     fun test() {
+        val yourURI = Uri.parse("content://org.dmfs.tasks/")
+
+        contentProviderClient = context.contentResolver.acquireContentProviderClient(yourURI)
+
         val t = contentProviderClient!!.query(Uri.parse("content://org.dmfs.tasks/tasklists"), null, null, null, null)!!
 
         println("TEST")

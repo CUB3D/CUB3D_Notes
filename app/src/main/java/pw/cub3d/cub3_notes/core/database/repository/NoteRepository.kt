@@ -30,10 +30,16 @@ class NoteRepository @Inject constructor(
 
     fun getNotes(filter: LiveData<FilterType>, sort: LiveData<SortTypes>, pinned: Boolean, archived: Boolean): Flow<List<NoteAndCheckboxes>> = flow {
 
-        notesDao.getNotes(pinned, archived).collect { notes ->
+//        .collect { notes ->
+            println("Got new notes")
             filter.asFlow().combine(sort.asFlow()) { filter, sort ->
                 NoteAction(filter, sort)
-            }.collect { action ->
+            }.combine(notesDao.getNotes(pinned, archived)) { a, n ->
+                Temp(a, n)
+            }.collect { t ->
+
+                val notes = t.notes
+                val action = t.a
 
                 val sort = action.sort
                 val filter = action.filter
@@ -74,11 +80,16 @@ class NoteRepository @Inject constructor(
             }
         }
     }
-}
+//}
 
 data class NoteAction(
     val filter: FilterType,
     val sort: SortTypes
+)
+
+data class Temp(
+    val a: NoteAction,
+    val notes: List<NoteAndCheckboxes>
 )
 
 enum class FilterType {

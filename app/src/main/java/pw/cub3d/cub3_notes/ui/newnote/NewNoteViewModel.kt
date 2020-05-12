@@ -82,7 +82,7 @@ class NewNoteViewModel @Inject constructor(
         videos = noteAndCheckboxes!!.map { it.videos }.distinctUntilChanged()
         modificationTime = noteAndCheckboxes!!.map { it.note.getLocalModificationTime() }
         pinned = noteAndCheckboxes!!.map { it.note.pinned }
-        colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
+        colour = noteAndCheckboxes!!.map { it.note.getColourId() }
         deletionTime = noteAndCheckboxes!!.map { it.note.deletionTime }
         archived = noteAndCheckboxes!!.map { it.note.archived }
     }
@@ -113,7 +113,7 @@ class NewNoteViewModel @Inject constructor(
         videos = noteAndCheckboxes!!.map { it.videos }.distinctUntilChanged()
         modificationTime = noteAndCheckboxes!!.map { it.note.getLocalModificationTime() }
         pinned = noteAndCheckboxes!!.map { it.note.pinned }
-        colour = noteAndCheckboxes!!.map { Color.parseColor(it.note.colour) }
+        colour = noteAndCheckboxes!!.map { it.note.getColourId() }
         deletionTime = noteAndCheckboxes!!.map { it.note.deletionTime }
         archived = noteAndCheckboxes!!.map { it.note.archived }
     }

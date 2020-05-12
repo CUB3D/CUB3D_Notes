@@ -169,8 +169,6 @@ object Migrations {
             database.execSQL("ALTER TABLE new_notes RENAME TO notes")
 
             database.execSQL("PRAGMA foreign_keys=ON")
-
-            database.execSQL("VACUUM")
         }
     }
 }
