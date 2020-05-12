@@ -13,9 +13,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
@@ -23,7 +20,6 @@ import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.repository.FilterType
 import pw.cub3d.cub3_notes.core.database.repository.SortTypes
 import pw.cub3d.cub3_notes.databinding.FragmentHomeBinding
-import pw.cub3d.cub3_notes.databinding.HomeCheckboxEntryBinding
 import pw.cub3d.cub3_notes.ui.*
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
@@ -39,13 +35,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ToolbarController.setupToolbar(viewModel.settingsManager, this, home_appBar, toolbar, "Search your notes")
+        ToolbarController.setupToolbar(viewModel.settingsManager, this, binding.homeAppBar, binding.toolbar, "Search your notes")
         ToolbarController.setupSideNav(viewModel.settingsManager, this)
 
-        home_pinnedNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
-        home_notes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
+        binding.homePinnedNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
+        binding.homeNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
 
-        requireActivity().nav_view.setNavigationItemSelectedListener {
+        (requireActivity() as MainActivity).binding.navView.setNavigationItemSelectedListener {
             println("Nav item selected: $it")
             when (it.itemId) {
                 R.id.nav_new_label -> findNavController().navigate(R.id.nav_label_edit)
@@ -60,7 +56,7 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.labels.observe(viewLifecycleOwner, Observer {
-            val menu = requireActivity().nav_view.menu.findItem(R.id.hamburger_labels).subMenu
+            val menu = (requireActivity() as MainActivity).binding.navView.menu.findItem(R.id.hamburger_labels).subMenu
             menu.children.filter { it.groupId == R.id.hamburger_group_labels }.forEach { menu.removeItem(it.itemId) }
 
             it.forEach {
@@ -128,50 +124,50 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
             }
         }
-        ItemTouchHelper(pinnedNoteItemTouchHelperCallback).attachToRecyclerView(home_pinnedNotes)
-        ItemTouchHelper(otherNoteItemTouchHelperCallback).attachToRecyclerView(home_notes)
+        ItemTouchHelper(pinnedNoteItemTouchHelperCallback).attachToRecyclerView(binding.homePinnedNotes)
+        ItemTouchHelper(otherNoteItemTouchHelperCallback).attachToRecyclerView(binding.homeNotes)
 
         pinnedAdapter = NotesAdapter(requireContext()) { note, v -> viewModel.newNoteNavigationController.editNote(findNavController(), note, v) }
-        home_pinnedNotes.adapter = pinnedAdapter
+        binding.homePinnedNotes.adapter = pinnedAdapter
 
-        NoteSelectionTrackerFactory.buildTracker("note-pin-selection", home_pinnedNotes).bind(pinnedAdapter)
+        NoteSelectionTrackerFactory.buildTracker("note-pin-selection", binding.homePinnedNotes).bind(pinnedAdapter)
 
         viewModel.pinned.observe(viewLifecycleOwner, Observer {
             if(it.isEmpty()) {
-                home_pinnedNotes.visibility = View.GONE
-                home_pinnedTitle.visibility = View.GONE
-                home_othersTitle.visibility = View.GONE
+                binding.homePinnedNotes.visibility = View.GONE
+                binding.homePinnedTitle.visibility = View.GONE
+                binding.homeOthersTitle.visibility = View.GONE
             } else {
-                home_pinnedNotes.visibility = View.VISIBLE
-                home_pinnedTitle.visibility = View.VISIBLE
-                home_othersTitle.visibility = View.VISIBLE
+                binding.homePinnedNotes.visibility = View.VISIBLE
+                binding.homePinnedTitle.visibility = View.VISIBLE
+                binding.homeOthersTitle.visibility = View.VISIBLE
             }
             pinnedAdapter.updateData(it)
         })
 
         otherAdapter = NotesAdapter(requireContext()) { note, v -> viewModel.newNoteNavigationController.editNote(findNavController(), note, v) }
-        home_notes.adapter = otherAdapter
+        binding.homeNotes.adapter = otherAdapter
 
-        NoteSelectionTrackerFactory.buildTracker("note-selection", home_notes).bind(otherAdapter)
+        NoteSelectionTrackerFactory.buildTracker("note-selection", binding.homeNotes).bind(otherAdapter)
 
         viewModel.unpinned.observe(viewLifecycleOwner, Observer {
             otherAdapter.updateData(it)
         })
 
-        home_more_toggle.setOnClickListener {
-            BottomSheetBehavior.from(home_more_sheet).state = when (BottomSheetBehavior.from(home_more_sheet).state) {
+        binding.homeMoreToggle.setOnClickListener {
+            BottomSheetBehavior.from(binding.homeMoreSheet).state = when (BottomSheetBehavior.from(binding.homeMoreSheet).state) {
                 BottomSheetBehavior.STATE_HIDDEN -> BottomSheetBehavior.STATE_EXPANDED
                 BottomSheetBehavior.STATE_EXPANDED -> BottomSheetBehavior.STATE_HIDDEN
                 else -> BottomSheetBehavior.STATE_HIDDEN
             }
         }
-        BottomSheetBehavior.from(home_more_sheet).state = BottomSheetBehavior.STATE_HIDDEN
+        BottomSheetBehavior.from(binding.homeMoreSheet).state = BottomSheetBehavior.STATE_HIDDEN
 
-        home_more_settings.setOnClickListener { findNavController().navigate(R.id.nav_settings) }
-        home_more_archive.setOnClickListener { findNavController().navigate(R.id.nav_archive) }
-        home_more_deleted.setOnClickListener { findNavController().navigate(R.id.nav_deleted) }
+        binding.homeMoreSettings.setOnClickListener { findNavController().navigate(R.id.nav_settings) }
+        binding.homeMoreArchive.setOnClickListener { findNavController().navigate(R.id.nav_archive) }
+        binding.homeMoreDeleted.setOnClickListener { findNavController().navigate(R.id.nav_deleted) }
 
-        home_search.setOnClickListener { findNavController().navigate(R.id.nav_search) }
+        binding.homeSearch.setOnClickListener { findNavController().navigate(R.id.nav_search) }
 
         viewModel.settingsManager.quickNoteEnabled.observe(viewLifecycleOwner, Observer {
             val v = if(it) View.VISIBLE else View.GONE
@@ -180,20 +176,19 @@ class HomeFragment : Fragment() {
             binding.homeNewVideo.visibility = v
         })
 
-        home_takeNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController()) }
-        home_new_checkNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
+        binding.homeTakeNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController()) }
+        binding.homeNewCheckNote.setOnClickListener { viewModel.newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_CHECKBOX) }
 //        home_new_penNote.setOnClickListener { newNoteNavigationController.navigateNewNote(findNavController(), Note.TYPE_DRAW) }
-        home_new_voiceNote.setOnClickListener {
+        binding.homeNewVoiceNote.setOnClickListener {
             Toast.makeText(requireContext(), "Hold to record", Toast.LENGTH_SHORT).show()
         }
-
-        home_new_voiceNote.setOnLongClickListener {
+        binding.homeNewVoiceNote.setOnLongClickListener {
             lifecycleScope.launch {
                 viewModel.audioManager.startRecording(this@HomeFragment)
             }
             true
         }
-        home_new_voiceNote.setOnTouchListener { _, event ->
+        binding.homeNewVoiceNote.setOnTouchListener { _, event ->
             if(event.action == MotionEvent.ACTION_UP) {
                 viewModel.audioManager.stopRecording()?.let {
                     viewModel.newNoteNavigationController.navigateNewNoteWithAudio(findNavController(), it.name)
@@ -201,22 +196,19 @@ class HomeFragment : Fragment() {
             }
             false
         }
-        home_new_video.setOnClickListener {
-            AddVideoDialog(requireActivity(), viewModel.storageManager).show()
-        }
-        home_new_imgNote.setOnClickListener {
-            AddImageDialog(requireActivity(), viewModel.storageManager).show()
-        }
+
+        binding.homeNewVideo.setOnClickListener { AddVideoDialog(requireActivity(), viewModel.storageManager).show() }
+        binding.homeNewImgNote.setOnClickListener { AddImageDialog(requireActivity(), viewModel.storageManager).show() }
 
         BottomSheetBehavior.from(binding.homeFilterSheet).state = BottomSheetBehavior.STATE_HIDDEN
-        home_filter.setOnClickListener { BottomSheetBehavior.from(binding.homeFilterSheet).state = if(BottomSheetBehavior.from(binding.homeFilterSheet).state == BottomSheetBehavior.STATE_HIDDEN) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN }
-        home_filter_reminder.setOnClickListener { viewModel.filter.postValue(FilterType.REMINDERS) }
-        home_filter_audio.setOnClickListener { viewModel.filter.postValue(FilterType.AUDIO) }
-        home_filter_check.setOnClickListener { viewModel.filter.postValue(FilterType.CHECKBOX) }
-        home_filter_image.setOnClickListener { viewModel.filter.postValue(FilterType.IMAGE) }
-        home_filter_video.setOnClickListener { viewModel.filter.postValue(FilterType.VIDEO) }
-        home_filter_tag.setOnClickListener { viewModel.filter.postValue(FilterType.TAGGED) }
-        home_filter_all.setOnClickListener { viewModel.filter.postValue(FilterType.ALL)}
+        binding.homeFilter.setOnClickListener { BottomSheetBehavior.from(binding.homeFilterSheet).state = if(BottomSheetBehavior.from(binding.homeFilterSheet).state == BottomSheetBehavior.STATE_HIDDEN) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN }
+        binding.homeFilterReminder.setOnClickListener { viewModel.filter.postValue(FilterType.REMINDERS) }
+        binding.homeFilterAudio.setOnClickListener { viewModel.filter.postValue(FilterType.AUDIO) }
+        binding.homeFilterCheck.setOnClickListener { viewModel.filter.postValue(FilterType.CHECKBOX) }
+        binding.homeFilterImage.setOnClickListener { viewModel.filter.postValue(FilterType.IMAGE) }
+        binding.homeFilterVideo.setOnClickListener { viewModel.filter.postValue(FilterType.VIDEO) }
+        binding.homeFilterTag.setOnClickListener { viewModel.filter.postValue(FilterType.TAGGED) }
+        binding.homeFilterAll.setOnClickListener { viewModel.filter.postValue(FilterType.ALL)}
 
 
         BottomSheetBehavior.from(binding.homeSortSheet).state = BottomSheetBehavior.STATE_HIDDEN

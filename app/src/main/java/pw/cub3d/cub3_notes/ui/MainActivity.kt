@@ -24,6 +24,7 @@ import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.manager.Layouts
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
+import pw.cub3d.cub3_notes.databinding.ActivityMainBinding
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
@@ -39,13 +40,13 @@ class MainActivityViewModel @Inject constructor(
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var binding: ActivityMainBinding
     lateinit var appBarConfiguration: AppBarConfiguration
 
     val viewModel: MainActivityViewModel by viewModels { injector.mainViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         // Create notification channels
         (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
@@ -62,7 +63,9 @@ class MainActivity : AppCompatActivity() {
             }.recycle()
         })
 
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
