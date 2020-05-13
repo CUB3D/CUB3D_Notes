@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="label"
             type="pw.cub3d.cub3_notes.core.database.entity.Label" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip4"
-            style="@style/Widget.MaterialComponents.ChipGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@{label.title, default=`School`}"
-            android:textColor="@{label.colourIdChip, default=`#ff0000`}"
-            app:chipStrokeWidth="1dp"
-            app:chipStrokeColor="@{label.colourIdChip, default=`@color/lightGrey`}"
+            android:text="@{label.title}"
+            tools:text="School"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:textColor="@{label.colourIdChip}"
+            tools:textColor="#ff0000"
             app:chipBackgroundColor="@android:color/transparent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:chipStrokeColor="@{label.colourIdChip, default=`@color/lightGrey`}"
+            app:chipStrokeWidth="1dp" />
+    </FrameLayout>
 </layout>

@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes.ui
 
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -10,11 +9,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.activity_main.*
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
 
 object ToolbarController {
     fun setupToolbar(settingsManager: SettingsManager, fragment: Fragment, appBarLayout: AppBarLayout, toolbar: Toolbar, title: String) {
+        settingsManager.toolbarEnabled.observe(fragment.viewLifecycleOwner, Observer {
+            if(it) {
+                toolbar.visibility = View.VISIBLE
+                appBarLayout.visibility = View.VISIBLE
+            } else {
+//                (fragment.requireActivity() as AppCompatActivity).setSupportActionBar(null)
+                toolbar.visibility = View.GONE
+
+                appBarLayout.visibility = View.GONE
+            }
+        })
+
         (fragment.requireActivity() as MainActivity).apply {
             setSupportActionBar(toolbar)
             supportActionBar!!.title = title
@@ -24,15 +34,6 @@ object ToolbarController {
                 appBarConfiguration
             )
         }
-
-        settingsManager.toolbarEnabled.observe(fragment.viewLifecycleOwner, Observer {
-            if(it) {
-                appBarLayout.visibility = View.VISIBLE
-            } else {
-//                (fragment.requireActivity() as AppCompatActivity).setSupportActionBar(null)
-                appBarLayout.visibility = View.GONE
-            }
-        })
     }
 
     fun setupSideNav(
@@ -46,17 +47,17 @@ object ToolbarController {
                         fragment.findNavController(),
                         appBarConfiguration
                     )
-                    nav_view.setupWithNavController(fragment.findNavController())
+                    binding.navView.setupWithNavController(fragment.findNavController())
 
-                    nav_view.menu.getItem(0).isChecked = true;
+                    binding.navView.menu.getItem(0).isChecked = true;
 
-                    drawer_layout.setDrawerLockMode(
+                    binding.drawerLayout.setDrawerLockMode(
                         DrawerLayout.LOCK_MODE_UNLOCKED
                     )
                 }
 
             } else {
-                (fragment.requireActivity() as MainActivity).drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                (fragment.requireActivity() as MainActivity).binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         })
     }

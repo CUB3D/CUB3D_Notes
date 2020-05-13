@@ -84,12 +84,12 @@ class NewNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.type.observe(viewLifecycleOwner, Observer { type ->
-            if(type == Note.TYPE_CHECKBOX) {
+        viewModel.noteAndCheckboxes!!.observe(viewLifecycleOwner, Observer { note ->
+            if(note.checkboxes.isNotEmpty() || note.note.type == Note.TYPE_CHECKBOX) {
                 createNote_text.visibility = View.GONE
                 createNote_checkBoxes.visibility = View.VISIBLE
                 createNote_newItem.visibility = View.VISIBLE
-            } else if(type == Note.TYPE_TEXT) {
+            } else if(note.note.type == Note.TYPE_TEXT) {
                 createNote_text.visibility = View.VISIBLE
                 createNote_checkBoxes.visibility = View.GONE
                 createNote_newItem.visibility = View.GONE
@@ -197,6 +197,8 @@ class NewNoteFragment : Fragment() {
         //TODO sort in room junction
         viewModel.checkboxes.map { it.sortedBy { it.position } }.distinctUntilChangedBy { old, new -> old.map { it.id } == new.map { it.id } }.observe(viewLifecycleOwner, Observer { checkboxes ->
             println("Updating checkboxes: $checkboxes")
+            binding.createNoteCheckBoxes.visibility = View.VISIBLE
+            binding.createNoteAddCheckbox.visibility = View.VISIBLE
             checkBoxAdapter.updateData(checkboxes)
         })
 

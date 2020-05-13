@@ -44,7 +44,7 @@ class SettingsManager @Inject constructor(
         }
     }
 
-    private val _toolbar = MutableLiveData(true)
+    private val _toolbar = MutableLiveData<Boolean>()
     val toolbarEnabled: LiveData<Boolean> = _toolbar
 
     fun setToolbarEnabled(b: Boolean) {

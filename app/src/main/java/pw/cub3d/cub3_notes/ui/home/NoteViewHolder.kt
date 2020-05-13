@@ -42,7 +42,7 @@ class NoteViewHolder(
         }
 
         if(note.checkboxes.isNotEmpty()) {
-            val unticked = note.checkboxes.filterNot { it.checked }.sortedByDescending { it.position }
+            val unticked = note.checkboxes.filterNot { it.checked }.sortedBy { it.position }
 
             view.tickedItemCount = note.checkboxes.size - unticked.size
             view.untickedItemCount = unticked.size
