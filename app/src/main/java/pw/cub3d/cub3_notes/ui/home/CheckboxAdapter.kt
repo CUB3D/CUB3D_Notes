@@ -8,10 +8,10 @@ import pw.cub3d.cub3_notes.core.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.databinding.HomeCheckboxEntryBinding
 
 class HomeCheckboxAdapter(
-    ctx: Context,
-    private val checkboxes: List<CheckboxEntry>
+    ctx: Context
 ): RecyclerView.Adapter<HomeCheckboxViewHolder>() {
     private val inflater = LayoutInflater.from(ctx)
+    private var checkboxes = emptyList<CheckboxEntry>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = HomeCheckboxViewHolder(
         HomeCheckboxEntryBinding.inflate(inflater, parent, false)
@@ -23,6 +23,11 @@ class HomeCheckboxAdapter(
         holder.bind(checkboxes[position])
 
         println("Binding $checkboxes")
+    }
+
+    fun updateData(entries: List<CheckboxEntry>) {
+        this.checkboxes = entries
+        notifyDataSetChanged()
     }
 }
 

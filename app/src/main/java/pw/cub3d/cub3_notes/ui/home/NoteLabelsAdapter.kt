@@ -8,10 +8,11 @@ import pw.cub3d.cub3_notes.core.database.entity.Label
 import pw.cub3d.cub3_notes.databinding.NoteLabelEntryBinding
 
 class NoteLabelsAdapter(
-    ctx: Context,
-    private val labels: List<Label>
+    ctx: Context
 ) : RecyclerView.Adapter<NoteLabelEntry>() {
     private val layoutInflater = LayoutInflater.from(ctx)
+    private var labels = emptyList<Label>()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteLabelEntry(
         NoteLabelEntryBinding.inflate(layoutInflater, parent, false)
@@ -22,6 +23,11 @@ class NoteLabelsAdapter(
     override fun onBindViewHolder(holder: NoteLabelEntry, position: Int) {
         println("Binding label: ${labels[position]}")
         holder.bind(labels[position])
+    }
+
+    fun updateData(entries: List<Label>) {
+        this.labels = entries
+        notifyDataSetChanged()
     }
 }
 

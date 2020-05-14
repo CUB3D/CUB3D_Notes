@@ -22,8 +22,18 @@ class NoteViewHolder(
     private val markwon: Markwon
 ): RecyclerView.ViewHolder(view.root), ProvidesItemDetails {
 
-    fun bind(note: NoteAndCheckboxes) {
+    val checkboxAdapter = HomeCheckboxAdapter(view.root.context)
+    val labelAdapter = NoteLabelsAdapter(view.root.context)
 
+    init {
+        view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
+        view.noteChecks.adapter = checkboxAdapter
+
+        view.noteLabels.layoutManager = LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
+        view.noteLabels.adapter = labelAdapter
+    }
+
+    fun bind(note: NoteAndCheckboxes) {
         view.note = note.note
 
         markwon.setMarkdown(view.noteTitle, note.note.title)
@@ -46,8 +56,7 @@ class NoteViewHolder(
 
             view.tickedItemCount = note.checkboxes.size - unticked.size
             view.untickedItemCount = unticked.size
-            view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
-            view.noteChecks.adapter = HomeCheckboxAdapter(view.root.context, unticked)
+            checkboxAdapter.updateData(unticked)
             view.noteChecks.visibility = View.VISIBLE
         } else {
             view.noteChecks.visibility = View.GONE
@@ -56,9 +65,8 @@ class NoteViewHolder(
         println("Drawing labels: $note")
 
         if(note.labels.isNotEmpty()) {
-            view.noteLabels.layoutManager =
-                LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
-            view.noteLabels.adapter = NoteLabelsAdapter(view.root.context, note.labels)
+            labelAdapter.updateData(note.labels)
+            view.noteLabels.visibility = View.VISIBLE
         } else {
             view.noteLabels.visibility = View.GONE
         }
