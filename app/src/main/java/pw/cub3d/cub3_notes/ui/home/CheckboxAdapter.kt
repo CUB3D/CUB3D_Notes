@@ -21,8 +21,6 @@ class HomeCheckboxAdapter(
 
     override fun onBindViewHolder(holder: HomeCheckboxViewHolder, position: Int) {
         holder.bind(checkboxes[position])
-
-        println("Binding $checkboxes")
     }
 
     fun updateData(entries: List<CheckboxEntry>) {

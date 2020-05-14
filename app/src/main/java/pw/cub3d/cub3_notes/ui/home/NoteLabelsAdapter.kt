@@ -13,7 +13,6 @@ class NoteLabelsAdapter(
     private val layoutInflater = LayoutInflater.from(ctx)
     private var labels = emptyList<Label>()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteLabelEntry(
         NoteLabelEntryBinding.inflate(layoutInflater, parent, false)
     )
@@ -21,7 +20,6 @@ class NoteLabelsAdapter(
     override fun getItemCount() = labels.size
 
     override fun onBindViewHolder(holder: NoteLabelEntry, position: Int) {
-        println("Binding label: ${labels[position]}")
         holder.bind(labels[position])
     }
 

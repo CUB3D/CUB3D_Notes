@@ -40,7 +40,6 @@ class NotesAdapter(
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         holder.pos = position
-//        println("Bind view: $position, selected: ${selectionTracker.isSelected(position.toLong())}")
         holder.bind(notes[position])
     }
 

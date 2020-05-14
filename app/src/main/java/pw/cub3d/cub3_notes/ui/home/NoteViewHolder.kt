@@ -22,8 +22,8 @@ class NoteViewHolder(
     private val markwon: Markwon
 ): RecyclerView.ViewHolder(view.root), ProvidesItemDetails {
 
-    val checkboxAdapter = HomeCheckboxAdapter(view.root.context)
-    val labelAdapter = NoteLabelsAdapter(view.root.context)
+    private val checkboxAdapter = HomeCheckboxAdapter(view.root.context)
+    private val labelAdapter = NoteLabelsAdapter(view.root.context)
 
     init {
         view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
@@ -62,8 +62,6 @@ class NoteViewHolder(
             view.noteChecks.visibility = View.GONE
         }
 
-        println("Drawing labels: $note")
-
         if(note.labels.isNotEmpty()) {
             labelAdapter.updateData(note.labels)
             view.noteLabels.visibility = View.VISIBLE
@@ -99,21 +97,16 @@ class NoteViewHolder(
     }
 
     override fun getItemDetails(key: Long): ItemDetailsLookup.ItemDetails<Long> {
-        println("Get item details for $this")
         return object: ItemDetailsLookup.ItemDetails<Long>() {
             override fun getSelectionKey() = key
             override fun getPosition() = pos
+            //TODO: support for drag handles
             override fun inDragRegion(e: MotionEvent): Boolean {
                 return true
             }
 
-            override fun inSelectionHotspot(e: MotionEvent): Boolean {
-                return false
-            }
-
-            override fun hasSelectionKey(): Boolean {
-                return true
-            }
+            override fun inSelectionHotspot(e: MotionEvent) = false
+            override fun hasSelectionKey() = true
         }
     }
 
