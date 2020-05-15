@@ -18,11 +18,9 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import kotlinx.android.synthetic.main.activity_main.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.dao.ImageDao
-import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import pw.cub3d.cub3_notes.core.database.dao.VideoDao
 import pw.cub3d.cub3_notes.core.database.entity.ImageEntry
 import pw.cub3d.cub3_notes.core.database.entity.VideoEntry
@@ -90,17 +88,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home,
                 R.id.nav_new_note,
                 R.id.nav_new_label
-            ), drawer_layout
+            ), binding.drawerLayout
         )
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
             if(destination.id == R.id.nav_home) {
 //                home_appBar.visibility = View.VISIBLE
-                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
 //                home_appBar.visibility = View.GONE
-                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
 
