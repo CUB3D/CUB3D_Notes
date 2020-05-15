@@ -29,7 +29,8 @@ class NewNoteNavigationController @Inject constructor() {
 
     fun editNote(nav: NavController, note: Note, binding: NoteEntryBinding) {
         editNote(nav, note.id,
-            binding.noteTitle to "${note.id}_title"
+            binding.noteTitle to "${note.id}_title",
+            binding.noteText to "${note.id}_text"
         )
     }
 

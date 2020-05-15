@@ -6,22 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.core.database.entity.Label
 import pw.cub3d.cub3_notes.databinding.LabelEntryBinding
+import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 
 class LabelAdapter(
-    ctx: Context,
-    private val labels: List<Label>
-): RecyclerView.Adapter<LabelViewHolder>() {
-    private val inflater = LayoutInflater.from(ctx)
-
+    ctx: Context
+): BaseAdapter<Label, LabelViewHolder>(ctx) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = LabelViewHolder(
-        LabelEntryBinding.inflate(inflater, parent, false)
+        LabelEntryBinding.inflate(layoutInflater, parent, false)
     )
 
-    override fun getItemCount() = labels.size
-
     override fun onBindViewHolder(holder: LabelViewHolder, position: Int) {
-        holder.bind(labels[position])
+        holder.bind(getItem(position))
     }
 }
 

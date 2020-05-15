@@ -44,7 +44,7 @@ class ColoursFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 if(direction == ItemTouchHelper.RIGHT) {
-                    val it = adapter.colours
+                    val it = adapter.items
                     viewModel.deleteColour(it.find { it.id == viewHolder.itemId }!!)
                 }
             }
@@ -55,7 +55,7 @@ class ColoursFragment : Fragment() {
 
 
         viewModel.colours.observe(viewLifecycleOwner, Observer {
-            adapter.updateData(it)
+            adapter.submitList(it)
         })
 
         binding.coloursAdd.setOnClickListener {

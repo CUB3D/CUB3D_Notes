@@ -6,23 +6,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.core.database.entity.Label
 import pw.cub3d.cub3_notes.databinding.NoteLabelEntryBinding
+import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 
 class SearchLabelsAdapter(
     ctx: Context,
-    private val labels: List<Label>,
     private val callback: (Label)->Unit
-) : RecyclerView.Adapter<NoteLabelEntry>() {
-    private val layoutInflater = LayoutInflater.from(ctx)
+) : BaseAdapter<Label, NoteLabelEntry>(ctx) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteLabelEntry(
         NoteLabelEntryBinding.inflate(layoutInflater, parent, false),
         callback
     )
 
-    override fun getItemCount() = labels.size
-
     override fun onBindViewHolder(holder: NoteLabelEntry, position: Int) {
-        holder.bind(labels[position])
+        holder.bind(getItem(position))
     }
 }
 

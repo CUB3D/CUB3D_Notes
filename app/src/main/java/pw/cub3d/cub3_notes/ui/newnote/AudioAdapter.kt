@@ -8,28 +8,19 @@ import pw.cub3d.cub3_notes.core.database.entity.AudioEntry
 import pw.cub3d.cub3_notes.core.manager.AudioManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.databinding.AudioEntryBinding
+import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 
 
 class AudioAdapter(
-    private val ctx: Context
-): RecyclerView.Adapter<AudioEntryViewHolder>() {
-    var entries = emptyList<AudioEntry>()
-
-    private val layoutInflater = LayoutInflater.from(ctx)
+    ctx: Context
+): BaseAdapter<AudioEntry, AudioEntryViewHolder>(ctx) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = AudioEntryViewHolder(
         AudioEntryBinding.inflate(layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: AudioEntryViewHolder, position: Int) {
-        holder.bind(entries[position])
-    }
-
-    override fun getItemCount() = entries.size
-
-    fun updateData(entries: List<AudioEntry>) {
-        this.entries = entries
-        notifyDataSetChanged()
+        holder.bind(getItem(position))
     }
 }
 

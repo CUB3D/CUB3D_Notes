@@ -14,26 +14,24 @@ import pw.cub3d.cub3_notes.databinding.FragmentNoteLabelEditBinding
 
 class NoteLabelEditFragment : Fragment() {
 
+    private lateinit var binding: FragmentNoteLabelEditBinding
     private val viewModel: NoteLabelEditViewModel by viewModels { injector.noteLabelEditViewModelFactory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        val binding = FragmentNoteLabelEditBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        return binding.root
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        FragmentNoteLabelEditBinding.inflate(inflater, container, false).apply {
+            viewModel = viewModel
+            binding = this
+        }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loadNote(arguments?.getLong(KEY_NOTE_ID, -1) ?: -1)
 
-        viewModel.labels.observe(viewLifecycleOwner, Observer {
-            println("New labels: $it")
-
-            noteLabelEdit_recycler.layoutManager = LinearLayoutManager(requireContext())
-            noteLabelEdit_recycler.adapter = NoteLabelEditAdapter(requireContext(), it, viewModel.labelDao, viewModel.noteId.value!!)
-        })
+        binding.noteLabelEditRecycler.layoutManager = LinearLayoutManager(requireContext())
+        val labelAdapter = NoteLabelEditAdapter(requireContext(), viewModel.labelDao, viewModel.noteId.value!!)
+        binding.noteLabelEditRecycler.adapter = labelAdapter
+        viewModel.labels.observe(viewLifecycleOwner, Observer { labelAdapter.submitList(it) })
     }
 
     companion object {

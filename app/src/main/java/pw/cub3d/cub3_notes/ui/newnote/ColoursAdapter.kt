@@ -9,13 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.database.entity.Colour
 import pw.cub3d.cub3_notes.databinding.ColourEntryBinding
+import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 
 class ColoursAdapter(
     private val frag: Fragment,
-    private val colours: List<Colour>,
     private val viewModel: NewNoteViewModel
-): RecyclerView.Adapter<ColourViewHolder>() {
-    private val layoutInflater = LayoutInflater.from(frag.requireContext())
+): BaseAdapter<Colour, ColourViewHolder>(frag.requireContext()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ColourViewHolder(
         ColourEntryBinding.inflate(layoutInflater, parent, false),
@@ -23,10 +22,8 @@ class ColoursAdapter(
         frag
     )
 
-    override fun getItemCount() = colours.size
-
     override fun onBindViewHolder(holder: ColourViewHolder, position: Int) {
-        holder.bind(colours[position])
+        holder.bind(getItem(position))
     }
 }
 

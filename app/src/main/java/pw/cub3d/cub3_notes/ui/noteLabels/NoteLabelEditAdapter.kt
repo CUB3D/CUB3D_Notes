@@ -11,17 +11,14 @@ import pw.cub3d.cub3_notes.core.database.dao.LabelDao
 import pw.cub3d.cub3_notes.core.database.entity.Label
 import pw.cub3d.cub3_notes.core.database.entity.NoteLabel
 import pw.cub3d.cub3_notes.databinding.NoteLabelEditEntryBinding
+import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 
 class NoteLabelEditAdapter(
     ctx: Context,
-    private val labels: List<Pair<Label, Boolean>>,
     private val dao: LabelDao,
     private val noteId: Long
-): RecyclerView.Adapter<NoteLabelEditViewHolder>() {
+): BaseAdapter<Pair<Label, Boolean>, NoteLabelEditViewHolder>(ctx) {
 
-    private val layoutInflater = LayoutInflater.from(ctx)
-
-    override fun getItemCount() = labels.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteLabelEditViewHolder(
         NoteLabelEditEntryBinding.inflate(layoutInflater, parent, false),
         dao,
@@ -29,7 +26,7 @@ class NoteLabelEditAdapter(
     )
 
     override fun onBindViewHolder(holder: NoteLabelEditViewHolder, position: Int) {
-        holder.bind(labels[position])
+        holder.bind(getItem(position))
     }
 }
 

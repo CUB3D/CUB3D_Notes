@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
                     setIcon(R.drawable.ic_tag)
                     setOnMenuItemClickListener {
                         findNavController().navigate(R.id.nav_search, Bundle().apply {
-                            putString("SEARCH_QUERY", "tag:${it.title}")
+                            putString("SEARCH_QUERY", "${it.title}")
                         })
                         true
                     }
@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
                 viewHolder: ViewHolder,
                 target: ViewHolder
             ): Boolean {
-                val oldList = ArrayList(pinnedAdapter.notes)
+                val oldList = ArrayList(pinnedAdapter.items)
                 val selectedItem = oldList.find { it.note.id == viewHolder.itemId }!!
                 val targetIndex = oldList.indexOf(oldList.find { it.note.id == target.itemId })
                 oldList.remove(selectedItem)
@@ -88,13 +88,11 @@ class HomeFragment : Fragment() {
                     viewModel.upadateNotePosition(it, oldList.indexOf(it).toLong())
                 }
 
-                pinnedAdapter.updateData(oldList)
-
                 return true
             }
 
             override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-                viewModel.archiveNote(pinnedAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)
+                viewModel.archiveNote(pinnedAdapter.items.find { it.note.id ==  viewHolder.itemId}!!)
                 Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
             }
         }
@@ -104,7 +102,7 @@ class HomeFragment : Fragment() {
                 viewHolder: ViewHolder,
                 target: ViewHolder
             ): Boolean {
-                val oldList = ArrayList(otherAdapter.notes)
+                val oldList = ArrayList(otherAdapter.items)
                 val selectedItem = oldList.find { it.note.id == viewHolder.itemId }!!
                 val targetIndex = oldList.indexOf(oldList.find { it.note.id == target.itemId })
                 oldList.remove(selectedItem)
@@ -114,13 +112,11 @@ class HomeFragment : Fragment() {
                     viewModel.upadateNotePosition(it, oldList.indexOf(it).toLong())
                 }
 
-                otherAdapter.updateData(oldList)
-
                 return true
             }
 
             override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-                viewModel.archiveNote(otherAdapter.notes.find { it.note.id ==  viewHolder.itemId}!!)
+                viewModel.archiveNote(otherAdapter.items.find { it.note.id ==  viewHolder.itemId}!!)
                 Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
             }
         }
@@ -144,7 +140,8 @@ class HomeFragment : Fragment() {
                 binding.homePinnedTitle.visibility = View.VISIBLE
                 binding.homeOthersTitle.visibility = View.VISIBLE
             }
-            pinnedAdapter.updateData(it)
+
+            pinnedAdapter.submitList(it)
         })
 
         otherAdapter = NotesAdapter(requireContext()) { note, v -> viewModel.newNoteNavigationController.editNote(findNavController(), note, v) }
@@ -155,7 +152,7 @@ class HomeFragment : Fragment() {
         viewModel.unpinned.observe(viewLifecycleOwner, Observer {
             binding.otherEmpty = it.isEmpty()
 
-            otherAdapter.updateData(it)
+            otherAdapter.submitList(it)
         })
 
         binding.homeMoreToggle.setOnClickListener {

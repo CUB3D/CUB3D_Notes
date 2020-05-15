@@ -40,10 +40,9 @@ class LabelEditFragment : Fragment() {
         }
 
         binding.editLabelRecycler.layoutManager = LinearLayoutManager(requireContext())
-
-        labelEditViewModel.labels.observe(viewLifecycleOwner, Observer {
-            binding.editLabelRecycler.adapter = LabelAdapter(requireContext(), it)
-        })
+        val labelAdapter = LabelAdapter(requireContext())
+        binding.editLabelRecycler.adapter = labelAdapter
+        labelEditViewModel.labels.observe(viewLifecycleOwner, Observer { labelAdapter.submitList(it) })
 
         binding.editLabelNewText.requestFocus()
     }

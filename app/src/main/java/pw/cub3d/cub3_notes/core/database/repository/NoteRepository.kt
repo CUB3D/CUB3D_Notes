@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes.core.database.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import kotlinx.coroutines.flow.*
 import org.threeten.bp.ZonedDateTime
@@ -16,11 +15,6 @@ class NoteRepository @Inject constructor(
     private val notesDao: NotesDao,
     private val checkboxEntryDao: CheckboxEntryDao
 ) {
-    fun getAllUnpinnedNotes() = notesDao.getAllUnpinnedNotes()
-    fun getAllUnpinnedReminders() = notesDao.getAllUnpinnedReminders()
-
-    fun getAllPinnedNotes() = notesDao.getAllPinnedNotes()
-    fun getAllPinnedReminders() = notesDao.getAllPinnedReminders()
 
     suspend fun getAllNotes() = notesDao.getAllNotes()
 
@@ -28,13 +22,11 @@ class NoteRepository @Inject constructor(
 
     suspend fun setNotePosition(id: Long, position: Long) = notesDao.setNotePosition(id, position)
 
-    fun getNotes(filter: LiveData<FilterType>, sort: LiveData<SortTypes>, pinned: Boolean, archived: Boolean): Flow<List<NoteAndCheckboxes>> = flow {
+    fun getNotes(filter: LiveData<FilterType>, sort: LiveData<SortTypes>, pinnedOnly: Boolean, archived: Boolean): Flow<List<NoteAndCheckboxes>> = flow {
 
-//        .collect { notes ->
-            println("Got new notes")
             filter.asFlow().combine(sort.asFlow()) { filter, sort ->
                 NoteAction(filter, sort)
-            }.combine(notesDao.getNotes(pinned, archived)) { a, n ->
+            }.combine(notesDao.getNotes(archived)) { a, n ->
                 Temp(a, n)
             }.collect { t ->
 
@@ -76,11 +68,11 @@ class NoteRepository @Inject constructor(
                             FilterType.CHECKBOX -> it.checkboxes.isNotEmpty()
                             else -> true // Should never happen
                         }
-                    }.let { emit(it) }
+                    }
+                    .filter { if(pinnedOnly) it.note.pinned else true }.let { emit(it) }
             }
         }
     }
-//}
 
 data class NoteAction(
     val filter: FilterType,

@@ -43,7 +43,7 @@ class DeletedNotesFragment : Fragment() {
         NoteSelectionTrackerFactory.buildTracker("deleted-selection", binding.deletedRecycler).bind(adapter)
 
         viewModel.deletedNotes.observe(viewLifecycleOwner, Observer {
-            adapter.updateData(it)
+            adapter.submitList(it)
         })
     }
 }

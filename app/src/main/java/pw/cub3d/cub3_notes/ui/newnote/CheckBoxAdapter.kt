@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.doAfterTextChanged
@@ -9,36 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.core.database.entity.CheckboxEntry
 import pw.cub3d.cub3_notes.core.manager.AutoCompleteManager
 import pw.cub3d.cub3_notes.databinding.CheckboxEntryBinding
+import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 
 class CheckBoxAdapter(
     ctx: Context,
-    var checkboxEntries: List<CheckboxEntry>,
     private val newNoteViewModel: NewNoteViewModel
-) : RecyclerView.Adapter<CheckBoxViewHolder>() {
-    private val layoutInflater = LayoutInflater.from(ctx)
-
-    init {
-        setHasStableIds(true)
-    }
+): BaseAdapter<CheckboxEntry, CheckBoxViewHolder>(ctx) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CheckBoxViewHolder(
         CheckboxEntryBinding.inflate(layoutInflater, parent, false),
         newNoteViewModel
     )
 
-    override fun getItemId(position: Int): Long {
-        return checkboxEntries[position].id
-    }
-
-    override fun getItemCount() = checkboxEntries.size
+    override fun getItemId(position: Int) = getItem(position).id
 
     override fun onBindViewHolder(holder: CheckBoxViewHolder, position: Int) {
-        holder.bind(checkboxEntries[position])
-    }
-
-    fun updateData(checkboxes: List<CheckboxEntry>) {
-        this.checkboxEntries = checkboxes
-        notifyDataSetChanged()
+        holder.bind(getItem(position))
     }
 }
 

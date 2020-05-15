@@ -29,6 +29,7 @@ import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
+import pw.cub3d.cub3_notes.core.utils.GlideApp
 import pw.cub3d.cub3_notes.core.utils.distinctUntilChangedBy
 import pw.cub3d.cub3_notes.core.utils.ignoreFirstValue
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
@@ -125,13 +126,11 @@ class NewNoteFragment : Fragment() {
         binding.createNoteAudio.layoutManager = LinearLayoutManager(requireContext())
         audioAdapter = AudioAdapter(requireContext())
         binding.createNoteAudio.adapter = audioAdapter
-        viewModel.audioClips.observe(viewLifecycleOwner, Observer {
-            audioAdapter.updateData(it)
-        })
+        viewModel.audioClips.observe(viewLifecycleOwner, Observer { audioAdapter.submitList(it) })
 
 
         createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-        checkBoxAdapter = CheckBoxAdapter(requireContext(), emptyList(), viewModel)
+        checkBoxAdapter = CheckBoxAdapter(requireContext(), viewModel)
         createNote_checkBoxes.adapter = checkBoxAdapter
         val callback: ItemTouchHelper.Callback = object: ItemTouchHelper.Callback() {
             override fun getMovementFlags(
@@ -141,7 +140,7 @@ class NewNoteFragment : Fragment() {
                 println("Get chkbox move flags")
 
                 val selectedItem =
-                    checkBoxAdapter.checkboxEntries.find { it.id == viewHolder.itemId }!!
+                    checkBoxAdapter.items.find { it.id == viewHolder.itemId }!!
 
                 return makeMovementFlags(
                     ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),
@@ -155,7 +154,7 @@ class NewNoteFragment : Fragment() {
                 target: RecyclerView.ViewHolder
             ): Boolean {
                 println("On chkbox move")
-                val oldList = ArrayList(checkBoxAdapter.checkboxEntries)
+                val oldList = ArrayList(checkBoxAdapter.items)
                 val selectedItem = oldList.find { it.id == viewHolder.itemId }!!
                 val targetIndex = oldList.indexOf(oldList.find { it.id == target.itemId })
                 oldList.remove(selectedItem)
@@ -177,14 +176,14 @@ class NewNoteFragment : Fragment() {
                 println("on chkbox swip")
                 if (direction == ItemTouchHelper.LEFT) {
                     viewModel.onCheckboxChecked(
-                        checkBoxAdapter.checkboxEntries[viewHolder.adapterPosition],
+                        checkBoxAdapter.items[viewHolder.adapterPosition],
                         true
                     )
                 }
 
                 if (direction == ItemTouchHelper.RIGHT) {
                     viewModel.onCheckboxChecked(
-                        checkBoxAdapter.checkboxEntries[viewHolder.adapterPosition],
+                        checkBoxAdapter.items[viewHolder.adapterPosition],
                         false
                     )
                 }
@@ -199,7 +198,7 @@ class NewNoteFragment : Fragment() {
             println("Updating checkboxes: $checkboxes")
             binding.createNoteCheckBoxes.visibility = View.VISIBLE
             binding.createNoteAddCheckbox.visibility = View.VISIBLE
-            checkBoxAdapter.updateData(checkboxes)
+            checkBoxAdapter.submitList(checkboxes)
         })
 
 //        checkBoxAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -209,14 +208,14 @@ class NewNoteFragment : Fragment() {
 //            }
 //        })
 
-        viewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer {
-            createNote_more_colors.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            createNote_more_colors.adapter = ColoursAdapter(this, it, viewModel)
-        })
+        binding.createNoteMoreColors.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val colorAdapter = ColoursAdapter(this, viewModel)
+        binding.createNoteMoreColors.adapter = colorAdapter
+        viewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer { colorAdapter.submitList(it) })
 
         viewModel.images.observe(viewLifecycleOwner, Observer {
             it.firstOrNull()?.let {
-                Glide.with(this@NewNoteFragment)
+                GlideApp.with(this@NewNoteFragment)
                     .load(it.getFile(requireContext()))
                     .into(createNote_image)
             }

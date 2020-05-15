@@ -47,7 +47,7 @@ class ArchiveFragment : Fragment() {
         NoteSelectionTrackerFactory.buildTracker("archive-selection", archive_recycler).bind(adapter)
 
         viewModel.archivedNotes.observe(viewLifecycleOwner, Observer {
-            adapter.updateData(it)
+            adapter.submitList(it)
         })
     }
 }

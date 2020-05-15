@@ -62,7 +62,9 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/home_pinnedNotes"
@@ -72,7 +74,9 @@
                 android:overScrollMode="never"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_pinnedTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/home_pinnedTitle"
+                tools:itemCount="2"
+                tools:listitem="@layout/note_entry"/>
 
             <TextView
                 android:id="@+id/home_othersTitle"
@@ -85,7 +89,9 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_pinnedNotes" />
+                app:layout_constraintTop_toBottomOf="@+id/home_pinnedNotes"
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/home_notes"

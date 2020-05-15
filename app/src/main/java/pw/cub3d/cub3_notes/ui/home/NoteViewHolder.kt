@@ -12,6 +12,7 @@ import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.core.manager.AudioManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
+import pw.cub3d.cub3_notes.core.utils.GlideApp
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
 class NoteViewHolder(
@@ -44,7 +45,7 @@ class NoteViewHolder(
         if (image != null) {
             view.noteImage.visibility = View.VISIBLE
 
-            Glide.with(view.root)
+            GlideApp.with(view.root)
                 .load(image.getFile(view.root.context))
                 .into(view.noteImage)
         } else {
@@ -56,14 +57,14 @@ class NoteViewHolder(
 
             view.tickedItemCount = note.checkboxes.size - unticked.size
             view.untickedItemCount = unticked.size
-            checkboxAdapter.updateData(unticked)
+            checkboxAdapter.submitList(unticked)
             view.noteChecks.visibility = View.VISIBLE
         } else {
             view.noteChecks.visibility = View.GONE
         }
 
         if(note.labels.isNotEmpty()) {
-            labelAdapter.updateData(note.labels)
+            labelAdapter.submitList(note.labels)
             view.noteLabels.visibility = View.VISIBLE
         } else {
             view.noteLabels.visibility = View.GONE

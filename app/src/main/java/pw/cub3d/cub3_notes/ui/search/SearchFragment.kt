@@ -49,16 +49,15 @@ class SearchFragment : Fragment() {
         search_results.adapter = adapter
 
         NoteSelectionTrackerFactory.buildTracker("search-selection", binding.searchResults).bind(adapter)
-
+        val searchLabelsAdapter = SearchLabelsAdapter(requireContext()) {
+            viewModel.searchQuery.value = it.title
+        }
+        binding.searchLabels.adapter = searchLabelsAdapter
         binding.searchLabels.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        viewModel.labels.observe(viewLifecycleOwner, Observer { labels ->
-            binding.searchLabels.adapter = SearchLabelsAdapter(requireContext(), labels) {
-                viewModel.searchQuery.value = it.title
-            }
-        })
+        viewModel.labels.observe(viewLifecycleOwner, Observer { searchLabelsAdapter.submitList(it) })
 
         viewModel.getSearchResults().observe(viewLifecycleOwner, Observer {
-            adapter.updateData(it)
+            adapter.submitList(it)
         })
     }
 }

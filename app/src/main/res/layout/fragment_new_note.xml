@@ -68,7 +68,8 @@
                         android:outlineProvider="none"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/createNote_image">
+                        app:layout_constraintTop_toBottomOf="@+id/createNote_image"
+                        android:transitionName="@{viewModel.noteId + `_title`}">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/createNote_title"
@@ -77,8 +78,7 @@
                             android:background="@android:color/transparent"
                             android:hint="Title"
                             android:outlineProvider="none"
-                            android:text="@={viewModel.title, default=`Example note title`}"
-                            android:transitionName="@{viewModel.noteId + `_title`}"/>
+                            android:text="@={viewModel.title, default=`Example note title`}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -111,7 +111,9 @@
                         android:textColor="?android:attr/textColorPrimary"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/createNote_checkBoxes" />
+                        app:layout_constraintTop_toBottomOf="@+id/createNote_checkBoxes"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -124,7 +126,8 @@
                         app:layout_constraintBottom_toTopOf="@+id/createNote_lastEdited"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/createNote_newItem">
+                        app:layout_constraintTop_toBottomOf="@+id/createNote_newItem"
+                        android:transitionName="@{viewModel.noteId + `_text`}">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/createNote_text"

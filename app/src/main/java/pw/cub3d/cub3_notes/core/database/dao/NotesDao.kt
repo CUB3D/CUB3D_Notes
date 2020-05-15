@@ -15,25 +15,8 @@ abstract class NotesDao {
     abstract fun getNoteSearchResults(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE pinned = :pinned AND archived = :archived")
-    abstract fun getNotes(pinned: Boolean, archived: Boolean): Flow<List<NoteAndCheckboxes>>
-
-
-    @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL ORDER BY position")
-    abstract fun getAllUnpinnedNotes(): LiveData<List<NoteAndCheckboxes>>
-
-    @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 0 AND archived = 0 AND deletionTime IS NULL AND timeReminder IS NOT NULL ORDER BY position")
-    abstract fun getAllUnpinnedReminders(): LiveData<List<NoteAndCheckboxes>>
-
-    @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime IS NULL ORDER BY position")
-    abstract fun getAllPinnedNotes(): LiveData<List<NoteAndCheckboxes>>
-
-    @Transaction
-    @Query("SELECT * FROM notes WHERE notes.pinned = 1 AND archived = 0 AND deletionTime IS NULL AND timeReminder IS NOT NULL ORDER BY position")
-    abstract fun getAllPinnedReminders(): LiveData<List<NoteAndCheckboxes>>
+    @Query("SELECT * FROM notes WHERE archived = :archived")
+    abstract fun getNotes(archived: Boolean): Flow<List<NoteAndCheckboxes>>
 
     @Transaction
     @Query("SELECT * FROM notes WHERE notes.archived = 1 AND deletionTime IS NULL")
