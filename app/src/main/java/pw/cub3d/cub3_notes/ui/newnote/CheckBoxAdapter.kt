@@ -41,12 +41,12 @@ class CheckBoxViewHolder(
 ): RecyclerView.ViewHolder(view.root) {
 
     init {
-
         view.checkboxEntryText.setAdapter(ArrayAdapter(view.root.context, android.R.layout.simple_list_item_1, AutoCompleteManager(
             view.root.context
         ).food))
 
         view.text = MutableLiveData()
+        view.checked = MutableLiveData()
     }
 
 
@@ -59,18 +59,17 @@ class CheckBoxViewHolder(
         view.text!!.removeObservers(lifecycleOwner)
         view.text = MutableLiveData(checkboxEntry.content)
         view.text!!.observe(lifecycleOwner, Observer {
-            println("Got data $it")
             newNoteViewModel.onCheckboxTextChange(checkboxEntry, it)
         })
 
-        view.checkboxEntryCheck.isChecked = checkboxEntry.checked
+        view.checked!!.removeObservers(lifecycleOwner)
+        view.checked = MutableLiveData(checkboxEntry.checked)
+        view.checked!!.observe(lifecycleOwner, Observer {
+            newNoteViewModel.onCheckboxChecked(checkboxEntry, it)
+        })
 
         view.checkboxEntryDelete.setOnClickListener {
             newNoteViewModel.onCheckboxDelete(checkboxEntry)
-        }
-
-        view.checkboxEntryCheck.setOnCheckedChangeListener { _, isChecked ->
-            newNoteViewModel.onCheckboxChecked(checkboxEntry, isChecked)
         }
     }
 }
