@@ -33,6 +33,7 @@ import pw.cub3d.cub3_notes.core.utils.GlideApp
 import pw.cub3d.cub3_notes.core.utils.distinctUntilChangedBy
 import pw.cub3d.cub3_notes.core.utils.ignoreFirstValue
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
+import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
@@ -311,8 +312,8 @@ class NewNoteFragment : Fragment() {
                 }
             }
         }
-        binding.createNoteAddPhoto.setOnClickListener { AddVideoDialog(requireActivity(), viewModel.storageManager).takeVideo() }
-        binding.createNoteAddImage.setOnClickListener { AddVideoDialog(requireActivity(), viewModel.storageManager).pickVideo() }
+        binding.createNoteAddImage.setOnClickListener { AddImageDialog(requireActivity(), viewModel.storageManager, viewModel.noteId!!).show() }
+        binding.createNoteAddVideo.setOnClickListener { AddVideoDialog(requireActivity(), viewModel.storageManager, viewModel.noteId!!).show() }
         binding.createNoteAddCheckbox.setOnClickListener { viewModel.addCheckbox() }
 
 

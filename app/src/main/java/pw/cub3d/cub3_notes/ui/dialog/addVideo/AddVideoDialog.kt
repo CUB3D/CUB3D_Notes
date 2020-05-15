@@ -15,7 +15,8 @@ import pw.cub3d.cub3_notes.core.manager.StorageManager
 
 class AddVideoDialog(
     private val act: Activity,
-    private val storageManager: StorageManager
+    private val storageManager: StorageManager,
+    private val noteId: Long? = null
 ): Dialog(act) {
 
     companion object {
@@ -23,6 +24,7 @@ class AddVideoDialog(
         const val TAKE_VIDEO = 4
 
         private var lastDialogInstance: AddVideoDialog? = null
+        var lastNoteId: Long? = null
 
         fun closeIfOpen() {
             lastDialogInstance?.dismiss()
@@ -31,6 +33,7 @@ class AddVideoDialog(
 
     init {
         lastDialogInstance = this
+        lastNoteId = noteId
     }
 
     fun pickVideo() {

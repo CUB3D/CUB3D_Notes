@@ -368,7 +368,7 @@
             tools:visibility="invisible">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/createNote_add_photo"
+                android:id="@+id/createNote_add_video"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -377,7 +377,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="start|center_vertical"
-                android:text="Add Photo"
+                android:text="Add Video"
                 android:textColor="?android:attr/textColorPrimary"
                 app:icon="@drawable/ic_camera"
                 app:iconTint="?icon_tint"

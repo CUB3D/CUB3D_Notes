@@ -21,6 +21,11 @@ import androidx.navigation.ui.navigateUp
 import kotlinx.android.synthetic.main.activity_main.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
+import pw.cub3d.cub3_notes.core.database.dao.ImageDao
+import pw.cub3d.cub3_notes.core.database.dao.NotesDao
+import pw.cub3d.cub3_notes.core.database.dao.VideoDao
+import pw.cub3d.cub3_notes.core.database.entity.ImageEntry
+import pw.cub3d.cub3_notes.core.database.entity.VideoEntry
 import pw.cub3d.cub3_notes.core.manager.Layouts
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
@@ -35,8 +40,18 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     val newNoteNavigationController: NewNoteNavigationController,
     val storageManager: StorageManager,
-    val settingsManager: SettingsManager
-): ViewModel()
+    val settingsManager: SettingsManager,
+    private val imageDao: ImageDao,
+    private val videoDao: VideoDao
+): ViewModel() {
+    fun addImageToNote(lastNoteId: Long, uuid: String) {
+        imageDao.insert(ImageEntry(noteId = lastNoteId, imageName = uuid))
+    }
+
+    fun addVideoToNote(lastNoteId: Long, it: String) {
+        videoDao.insert(VideoEntry(noteId = lastNoteId, fileName = it))
+    }
+}
 
 class MainActivity : AppCompatActivity() {
 
@@ -140,16 +155,29 @@ class MainActivity : AppCompatActivity() {
 
                 contentResolver.openInputStream(fileUri)!!.copyTo(outFile.outputStream())
 
-                viewModel.newNoteNavigationController.navigateNewNoteWithImage(findNavController(R.id.nav_host_fragment), uuid)
+                if(AddImageDialog.lastNoteId == null) {
+                    viewModel.newNoteNavigationController.navigateNewNoteWithImage(
+                        findNavController(
+                            R.id.nav_host_fragment
+                        ), uuid
+                    )
+                } else {
+                    viewModel.addImageToNote(AddImageDialog.lastNoteId!!, uuid)
+                }
             }
             if (requestCode == AddImageDialog.TAKE_PHOTO) {
                 println("Take photo")
 
                 // Will always return true, unless app is restarted between images
                 viewModel.storageManager.getLastCameraImageUUID()?.let {
-                    viewModel.newNoteNavigationController.navigateNewNoteWithImage(findNavController(R.id.nav_host_fragment),
-                        it
-                    )
+                    if(AddImageDialog.lastNoteId == null) {
+                        viewModel.newNoteNavigationController.navigateNewNoteWithImage(
+                            findNavController(R.id.nav_host_fragment),
+                            it
+                        )
+                    } else {
+                        viewModel.addImageToNote(AddImageDialog.lastNoteId!!, it)
+                    }
                 }
 
                 AddImageDialog.closeIfOpen()
@@ -167,16 +195,29 @@ class MainActivity : AppCompatActivity() {
 
                 contentResolver.openInputStream(fileUri)!!.copyTo(outFile.outputStream())
 
-                viewModel.newNoteNavigationController.navigateNewNoteWithVideo(findNavController(R.id.nav_host_fragment), uuid)
+                if(AddVideoDialog.lastNoteId == null) {
+                    viewModel.newNoteNavigationController.navigateNewNoteWithVideo(
+                        findNavController(
+                            R.id.nav_host_fragment
+                        ), uuid
+                    )
+                } else {
+                    viewModel.addVideoToNote(AddVideoDialog.lastNoteId!!, uuid)
+                }
             }
             if (requestCode == AddVideoDialog.TAKE_VIDEO) {
                 println("Take video")
 
                 // Will always return true, unless app is restarted between images
                 viewModel.storageManager.getLastCameraVideoUUID()?.let {
-                    viewModel.newNoteNavigationController.navigateNewNoteWithVideo(findNavController(R.id.nav_host_fragment),
-                        it
-                    )
+                    if(AddVideoDialog.lastNoteId == null) {
+                        viewModel.newNoteNavigationController.navigateNewNoteWithVideo(
+                            findNavController(R.id.nav_host_fragment),
+                            it
+                        )
+                    } else {
+                        viewModel.addVideoToNote(AddVideoDialog.lastNoteId!!, it)
+                    }
                 }
 
                 AddVideoDialog.closeIfOpen()

@@ -15,7 +15,8 @@ import pw.cub3d.cub3_notes.core.manager.StorageManager
 
 class AddImageDialog(
     private val act: Activity,
-    private val storageManager: StorageManager
+    private val storageManager: StorageManager,
+    private val noteId: Long? = null
 ): Dialog(act) {
 
     companion object {
@@ -23,6 +24,7 @@ class AddImageDialog(
         const val TAKE_PHOTO = 2
 
         private var lastDialogInstance: AddImageDialog? = null
+        var lastNoteId: Long? = null
 
         fun closeIfOpen() {
             lastDialogInstance?.dismiss()
@@ -31,6 +33,7 @@ class AddImageDialog(
 
     init {
         lastDialogInstance = this
+        lastNoteId = noteId
     }
 
     fun pickImage() {
