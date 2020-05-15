@@ -74,7 +74,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/createNote_title"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:hint="Title"
                             android:outlineProvider="none"
@@ -97,7 +97,8 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
                         tools:itemCount="2"
-                        tools:listitem="@layout/checkbox_entry" />
+                        tools:listitem="@layout/checkbox_entry"
+                        android:overScrollMode="never"/>
 
                     <Button
                         android:id="@+id/createNote_newItem"
@@ -365,7 +366,7 @@
             app:behavior_hideable="true"
             app:behavior_peekHeight="450dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            tools:visibility="invisible">
+            tools:visibility="gone">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/createNote_add_video"

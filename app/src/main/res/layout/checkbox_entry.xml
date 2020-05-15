@@ -2,8 +2,35 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="text"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/checkboxEntry_DeleteAnimation"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_check_square"
+            android:paddingStart="16dp"
+            android:visibility="gone"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/checkboxEntry_CheckAnimation"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_trash_2"
+            android:paddingEnd="16dp"
+            android:layout_gravity="end"
+            android:visibility="gone"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/checkboxEntry_baselayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -13,7 +40,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/checkboxEntry_check"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/checkboxEntry_check"
@@ -46,6 +72,7 @@
 
         <AutoCompleteTextView
             android:hint="Start typing"
+            android:text="@={text}"
             android:id="@+id/checkboxEntry_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -68,4 +95,6 @@
             app:layout_constraintTop_toTopOf="@+id/checkboxEntry_text"
             app:srcCompat="@drawable/ic_x" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
 </layout>

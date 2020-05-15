@@ -139,13 +139,15 @@
                     app:layout_constraintTop_toBottomOf="@+id/note_text"
                     app:layout_constraintVertical_bias="0.0"
                     tools:itemCount="1"
-                    tools:listitem="@layout/checkbox_entry" />
+                    tools:listitem="@layout/checkbox_entry"
+                    android:overScrollMode="never"/>
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:text="@{`+` + tickedItemCount + ` ticked item` + (tickedItemCount > 1 ? `s` : ``), default=`+ 1 ticked item`}"
                     android:visibility="@{tickedItemCount > 0 ? View.VISIBLE : View.GONE, default=visible}"

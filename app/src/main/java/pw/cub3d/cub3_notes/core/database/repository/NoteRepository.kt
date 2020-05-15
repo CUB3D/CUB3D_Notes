@@ -42,10 +42,8 @@ class NoteRepository @Inject constructor(
                         SortTypes.CREATED_ASC, SortTypes.CREATED_DSC -> ZonedDateTime.parse(
                             it.note.creationTime
                         ).toEpochSecond()
-                        SortTypes.MODIFY_ASC, SortTypes.MODIFY_DSC -> ZonedDateTime.parse(it.note.modificationTime)
-                            .toEpochSecond()
-                        SortTypes.VIEW_ASC, SortTypes.VIEW_DSC -> ZonedDateTime.parse(it.note.viewTime)
-                            .toEpochSecond()
+                        SortTypes.MODIFY_ASC, SortTypes.MODIFY_DSC -> it.note.modificationTime.takeIf { it.isNotBlank() }?.let {ZonedDateTime.parse(it).toEpochSecond()} ?: ZonedDateTime.now().toEpochSecond()
+                        SortTypes.VIEW_ASC, SortTypes.VIEW_DSC -> it.note.viewTime.takeIf { it.isNotBlank() }?.let {ZonedDateTime.parse(it).toEpochSecond()} ?: ZonedDateTime.now().toEpochSecond()
                         else -> it.note.id
                     }
                 }

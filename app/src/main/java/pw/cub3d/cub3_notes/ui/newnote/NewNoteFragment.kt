@@ -1,5 +1,6 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
+import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.transition.TransitionInflater
@@ -18,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -39,6 +39,7 @@ import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
 import java.io.File
+import kotlin.math.absoluteValue
 
 
 class NewNoteFragment : Fragment() {
@@ -131,8 +132,9 @@ class NewNoteFragment : Fragment() {
 
 
         createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
-        checkBoxAdapter = CheckBoxAdapter(requireContext(), viewModel)
+        checkBoxAdapter = CheckBoxAdapter(requireContext(), viewModel, this.viewLifecycleOwner)
         createNote_checkBoxes.adapter = checkBoxAdapter
+
         val callback: ItemTouchHelper.Callback = object: ItemTouchHelper.Callback() {
             override fun getMovementFlags(
                 recyclerView: RecyclerView,
@@ -167,9 +169,6 @@ class NewNoteFragment : Fragment() {
 
                 viewModel.upadateCheckboxPosition(newPositions)
 
-                (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyItemChanged(viewHolder.adapterPosition)
-                (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyItemChanged(target.adapterPosition)
-
                 return true
             }
 
@@ -190,6 +189,74 @@ class NewNoteFragment : Fragment() {
                 }
 
                 (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyItemChanged(viewHolder.adapterPosition)
+            }
+
+            override fun onChildDrawOver(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder?,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                super.onChildDrawOver(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+
+                val baseView = (viewHolder as CheckBoxViewHolder).view
+
+                val dXRelative: Float = ((dX / baseView.checkboxEntryBaselayout.width) * 3).coerceAtMost(1f).coerceAtLeast(-1f)
+                println("dx: $dXRelative")
+
+                if(dXRelative < 0) {
+                    val absDx = dXRelative.absoluteValue
+                    baseView.checkboxEntryCheckAnimation
+                        .animate()
+                        .scaleX(absDx)
+                        .scaleY(absDx)
+                        .setDuration(0)
+                        .start()
+                    getDefaultUIUtil().onDrawOver(
+                        c,
+                        recyclerView,
+                        baseView.checkboxEntryCheckAnimation,
+                        dX,
+                        dY,
+                        actionState,
+                        isCurrentlyActive
+                    )
+
+                    baseView.checkboxEntryCheckAnimation.visibility = View.VISIBLE
+                    baseView.checkboxEntryDeleteAnimation.visibility = View.GONE
+                }
+
+                if(dXRelative > 0) {
+                    baseView.checkboxEntryDeleteAnimation
+                        .animate()
+                        .scaleX(dXRelative)
+                        .scaleY(dXRelative)
+                        .setDuration(0)
+                        .start()
+                    getDefaultUIUtil().onDrawOver(
+                        c,
+                        recyclerView,
+                        baseView.checkboxEntryCheckAnimation,
+                        dX,
+                        dY,
+                        actionState,
+                        isCurrentlyActive
+                    )
+
+                    baseView.checkboxEntryCheckAnimation.visibility = View.GONE
+                    baseView.checkboxEntryDeleteAnimation.visibility = View.VISIBLE
+                }
             }
         }
         ItemTouchHelper(callback).attachToRecyclerView(createNote_checkBoxes)
