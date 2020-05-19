@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes.ui.newnote
 
 import android.graphics.Color
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController

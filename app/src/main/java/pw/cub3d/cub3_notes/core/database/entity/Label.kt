@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import com.squareup.moshi.JsonClass
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
-import pw.cub3d.cub3_notes.R
 
 @Entity(tableName = "labels")
 @JsonClass(generateAdapter = true)

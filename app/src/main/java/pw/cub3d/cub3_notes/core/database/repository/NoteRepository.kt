@@ -2,7 +2,10 @@ package pw.cub3d.cub3_notes.core.database.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import org.threeten.bp.ZonedDateTime
 import pw.cub3d.cub3_notes.core.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.core.database.dao.NotesDao
@@ -64,7 +67,6 @@ class NoteRepository @Inject constructor(
                             FilterType.VIDEO -> it.videos.isNotEmpty()
                             FilterType.IMAGE -> it.images.isNotEmpty()
                             FilterType.CHECKBOX -> it.checkboxes.isNotEmpty()
-                            else -> true // Should never happen
                         }
                     }
                     .filter { if(pinnedOnly) it.note.pinned else true }.let { emit(it) }

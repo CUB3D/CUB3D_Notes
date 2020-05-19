@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes.ui.labelEdit
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pw.cub3d.cub3_notes.core.database.entity.Label

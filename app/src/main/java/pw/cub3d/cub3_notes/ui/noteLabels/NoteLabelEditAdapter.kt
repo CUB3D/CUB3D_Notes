@@ -1,7 +1,6 @@
 package pw.cub3d.cub3_notes.ui.noteLabels
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
