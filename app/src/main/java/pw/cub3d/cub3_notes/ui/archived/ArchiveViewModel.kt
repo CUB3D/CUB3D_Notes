@@ -3,7 +3,6 @@ package pw.cub3d.cub3_notes.ui.archived
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import pw.cub3d.cub3_notes.core.database.repository.FilterType
 import pw.cub3d.cub3_notes.core.database.repository.NoteRepository
 import pw.cub3d.cub3_notes.core.database.repository.SortTypes

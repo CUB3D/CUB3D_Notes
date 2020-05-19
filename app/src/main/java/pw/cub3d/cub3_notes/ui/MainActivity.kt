@@ -22,7 +22,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.dao.ImageDao
-import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import pw.cub3d.cub3_notes.core.database.dao.VideoDao
 import pw.cub3d.cub3_notes.core.database.entity.ImageEntry
 import pw.cub3d.cub3_notes.core.database.entity.VideoEntry

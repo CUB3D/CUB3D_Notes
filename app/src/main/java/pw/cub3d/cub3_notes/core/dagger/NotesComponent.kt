@@ -4,7 +4,6 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import pw.cub3d.cub3_notes.core.database.dao.NotesDao
-import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.ui.MainActivityViewModel
 import pw.cub3d.cub3_notes.ui.archived.ArchiveViewModel
 import pw.cub3d.cub3_notes.ui.colours.ColoursViewModel

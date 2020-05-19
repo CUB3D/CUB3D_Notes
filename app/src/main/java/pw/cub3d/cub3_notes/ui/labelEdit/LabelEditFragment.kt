@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
-import kotlinx.android.synthetic.main.fragment_label_edit.*
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentLabelEditBinding
 
