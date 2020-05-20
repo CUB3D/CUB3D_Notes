@@ -3,8 +3,8 @@ package pw.cub3d.cub3_notes.core.dagger
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import pw.cub3d.cub3_notes.core.database.RoomDB
 import javax.inject.Singleton
+import pw.cub3d.cub3_notes.core.database.RoomDB
 
 @Module
 class DatabaseModule {

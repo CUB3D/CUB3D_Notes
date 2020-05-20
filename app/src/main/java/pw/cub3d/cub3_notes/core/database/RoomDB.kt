@@ -10,7 +10,7 @@ import pw.cub3d.cub3_notes.core.database.dao.*
 import pw.cub3d.cub3_notes.core.database.entity.*
 
 object Migrations {
-    val MIGRATE_1_2 = object: Migration(1, 2) {
+    val MIGRATE_1_2 = object : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE notes ADD COLUMN pinned INTEGER NOT NULL DEFAULT 0")
             database.execSQL("ALTER TABLE notes ADD COLUMN archived INTEGER NOT NULL DEFAULT 0")
@@ -18,13 +18,13 @@ object Migrations {
         }
     }
 
-    val MIGRATE_2_3 = object: Migration(2, 3) {
+    val MIGRATE_2_3 = object : Migration(2, 3) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE notes ADD COLUMN type TEXT NOT NULL DEFAULT ''")
         }
     }
 
-    val MIGRATE_3_4 = object: Migration(3, 4) {
+    val MIGRATE_3_4 = object : Migration(3, 4) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("""CREATE TABLE checkbox_entry(
                 id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
@@ -36,13 +36,13 @@ object Migrations {
         }
     }
 
-    val MIGRATE_4_5 = object: Migration(4, 5) {
+    val MIGRATE_4_5 = object : Migration(4, 5) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE notes ADD COLUMN timeReminder TEXT")
         }
     }
 
-    val MIGRATE_5_6 = object: Migration(5, 6) {
+    val MIGRATE_5_6 = object : Migration(5, 6) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("""CREATE TABLE labels(
                                     id INTEGER PRIMARY KEY NOT NULL DEFAULT 0, 
@@ -52,7 +52,7 @@ object Migrations {
         }
     }
 
-    val MIGRATE_6_7 = object: Migration(6, 7) {
+    val MIGRATE_6_7 = object : Migration(6, 7) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("""CREATE TABLE note_label(
                                     id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
@@ -62,7 +62,7 @@ object Migrations {
         }
     }
 
-    val MIGRATE_7_8 = object: Migration(7, 8) {
+    val MIGRATE_7_8 = object : Migration(7, 8) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("""CREATE TABLE card_colour(
                                     id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
@@ -71,19 +71,19 @@ object Migrations {
         }
     }
 
-    val MIGRATE_8_9 = object: Migration(8, 9) {
+    val MIGRATE_8_9 = object : Migration(8, 9) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("INSERT INTO card_colour (hex_colour) VALUES ('#ff0000')")
         }
     }
 
-    val MIGRATE_9_10 = object: Migration(9, 10) {
+    val MIGRATE_9_10 = object : Migration(9, 10) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE notes ADD COLUMN colour TEXT NOT NULL DEFAULT '#ffffff'")
         }
     }
 
-    val MIGRATE_10_11 = object: Migration(10, 11) {
+    val MIGRATE_10_11 = object : Migration(10, 11) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("""CREATE TABLE image(
                                     id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
@@ -94,32 +94,32 @@ object Migrations {
         }
     }
 
-    val MIGRATE_11_12 = object: Migration(11, 12) {
+    val MIGRATE_11_12 = object : Migration(11, 12) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("CREATE INDEX index_note_label ON note_label (note_id, label_id)")
         }
     }
 
-    val MIGRATE_12_13 = object: Migration(12, 13) {
+    val MIGRATE_12_13 = object : Migration(12, 13) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE notes ADD COLUMN deletionTime TEXT")
         }
     }
 
-    val MIGRATE_13_14 = object: Migration(13, 14) {
+    val MIGRATE_13_14 = object : Migration(13, 14) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE checkbox_entry ADD COLUMN position INTEGER DEFAULT 1 NOT NULL")
         }
     }
 
-    val MIGRATE_14_15 = object: Migration(14, 15) {
+    val MIGRATE_14_15 = object : Migration(14, 15) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE notes ADD COLUMN position INTEGER DEFAULT 0 NOT NULL")
             database.execSQL("UPDATE notes SET position = id")
         }
     }
 
-    val MIGRATE_15_16 = object: Migration(15, 16) {
+    val MIGRATE_15_16 = object : Migration(15, 16) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("""CREATE TABLE audio(
                                     id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
@@ -130,7 +130,7 @@ object Migrations {
         }
     }
 
-    val MIGRATE_16_17 = object: Migration(16, 17) {
+    val MIGRATE_16_17 = object : Migration(16, 17) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("""CREATE TABLE video(
                                     id INTEGER PRIMARY KEY NOT NULL DEFAULT 0,
@@ -141,7 +141,7 @@ object Migrations {
         }
     }
 
-    val MIGRATE_17_18 = object: Migration(17, 18) {
+    val MIGRATE_17_18 = object : Migration(17, 18) {
         override fun migrate(database: SupportSQLiteDatabase) {
 
             database.execSQL("PRAGMA foreign_keys=OFF")
@@ -172,7 +172,7 @@ object Migrations {
         }
     }
 
-    val MIGRATE_18_19 = object: Migration(18, 19) {
+    val MIGRATE_18_19 = object : Migration(18, 19) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE labels ADD COLUMN colour TEXT DEFAULT null")
         }
@@ -193,7 +193,7 @@ object Migrations {
     version = 19,
     exportSchema = true
 )
-abstract class RoomDB: RoomDatabase() {
+abstract class RoomDB : RoomDatabase() {
     abstract fun notesDao(): NotesDao
     abstract fun checkboxEntryDao(): CheckboxEntryDao
     abstract fun labelDao(): LabelDao
@@ -236,7 +236,7 @@ abstract class RoomDB: RoomDatabase() {
                     Migrations.MIGRATE_16_17,
                     Migrations.MIGRATE_17_18,
                     Migrations.MIGRATE_18_19
-                //TODO: used for searching for labels, bad, should remove somehow
+                // TODO: used for searching for labels, bad, should remove somehow
                 ).allowMainThreadQueries()
                     .build()
                 INSTANCE = instance

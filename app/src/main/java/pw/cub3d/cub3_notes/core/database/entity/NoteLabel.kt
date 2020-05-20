@@ -11,7 +11,6 @@ data class NoteLabel(
     @PrimaryKey(autoGenerate = true)
     var id: Long,
 
-
     var note_id: Long,
     var label_id: Long
 )

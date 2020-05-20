@@ -4,13 +4,12 @@ import android.content.ContentProviderClient
 import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
-import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import javax.inject.Inject
 import javax.inject.Singleton
+import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 
-
-//https://github.com/dmfs/opentasks/blob/88a57514b90bc3bdfd81b28e7af24ed52078545e/opentasks-contract/src/main/java/org/dmfs/tasks/contract/TaskContract.java
-//https://github.com/dmfs/opentasks/tree/master/opentasks-provider/src/main/java/org/dmfs/provider/tasks
+// https://github.com/dmfs/opentasks/blob/88a57514b90bc3bdfd81b28e7af24ed52078545e/opentasks-contract/src/main/java/org/dmfs/tasks/contract/TaskContract.java
+// https://github.com/dmfs/opentasks/tree/master/opentasks-provider/src/main/java/org/dmfs/provider/tasks
 @Singleton
 class OpenTasksSyncManager @Inject constructor(
     private val context: Context,
@@ -26,7 +25,7 @@ class OpenTasksSyncManager @Inject constructor(
         val t = contentProviderClient!!.query(Uri.parse("content://org.dmfs.tasks/tasklists"), null, null, null, null)!!
 
         println("TEST")
-        while(t.moveToNext()) {
+        while (t.moveToNext()) {
             println(t.columnNames.joinToString(separator = ", ") { it })
             print(t.getString(0) + ", ")
             print(t.getString(1) + ", ")
@@ -35,9 +34,9 @@ class OpenTasksSyncManager @Inject constructor(
         }
         t.close()
 
-        //https://github.com/dmfs/opentasks/blob/88a57514b90bc3bdfd81b28e7af24ed52078545e/opentasks-contract/src/main/java/org/dmfs/tasks/contract/TaskContract.java#L637
+        // https://github.com/dmfs/opentasks/blob/88a57514b90bc3bdfd81b28e7af24ed52078545e/opentasks-contract/src/main/java/org/dmfs/tasks/contract/TaskContract.java#L637
         val tt = contentProviderClient!!.insert(Uri.parse("content://org.dmfs.tasks/tasks"), ContentValues().apply {
-            put("list_id", 11) //TODO: retrieve from abovfe
+            put("list_id", 11) // TODO: retrieve from abovfe
             put("title", "HelloWorld")
             put("description", "description")
         })

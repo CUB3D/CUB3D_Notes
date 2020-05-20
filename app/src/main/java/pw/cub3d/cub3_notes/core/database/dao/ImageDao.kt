@@ -16,7 +16,7 @@ abstract class ImageDao {
 
     @Transaction
     open fun save(imageEntry: ImageEntry) {
-        if(imageEntry.id == 0L) {
+        if (imageEntry.id == 0L) {
             imageEntry.id = insert(imageEntry)
         } else {
             update(imageEntry)

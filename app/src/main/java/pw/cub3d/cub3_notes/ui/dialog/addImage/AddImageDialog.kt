@@ -12,12 +12,11 @@ import pw.cub3d.cub3_notes.BuildConfig
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.manager.StorageManager
 
-
 class AddImageDialog(
     private val act: Activity,
     private val storageManager: StorageManager,
     private val noteId: Long? = null
-): Dialog(act) {
+) : Dialog(act) {
 
     companion object {
         const val PICK_IMAGE = 1

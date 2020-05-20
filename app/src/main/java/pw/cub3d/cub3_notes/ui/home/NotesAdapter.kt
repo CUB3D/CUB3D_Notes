@@ -8,7 +8,6 @@ import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 
-
 class NotesAdapter(
     ctx: Context,
     private val callback: (Note, NoteEntryBinding) -> Unit
@@ -33,4 +32,3 @@ class NotesAdapter(
         holder.bind(getItem(position))
     }
 }
-

@@ -12,7 +12,7 @@ inline fun <X> LiveData<List<X>>.filter(crossinline filter: (X) -> Boolean): Liv
 fun <T> ignoreFirstAssignment(data: LiveData<T>): LiveData<T> = MediatorLiveData<T>().apply {
     var updates = 0
     addSource(data) {
-        if(updates > 0) {
+        if (updates > 0) {
             value = it
         }
         updates += 1
@@ -21,16 +21,16 @@ fun <T> ignoreFirstAssignment(data: LiveData<T>): LiveData<T> = MediatorLiveData
 
 fun <T> distinctUntilLengthChanges(data: LiveData<List<T>>): LiveData<List<T>> = MediatorLiveData<List<T>>().apply {
     addSource(data) {
-        if(value == null || value!!.size != it.size) {
+        if (value == null || value!!.size != it.size) {
             value = it
         }
     }
 }
 
-fun <T> distinctUntilChangedPred(data:  LiveData<T>, predicate: (old: T, new: T)->Boolean) = MediatorLiveData<T>().apply {
+fun <T> distinctUntilChangedPred(data: LiveData<T>, predicate: (old: T, new: T) -> Boolean) = MediatorLiveData<T>().apply {
     addSource(data) {
-        if(value != null && it != null) {
-            if(!predicate(value!!, it)) {
+        if (value != null && it != null) {
+            if (!predicate(value!!, it)) {
                 value = it
             }
         } else {

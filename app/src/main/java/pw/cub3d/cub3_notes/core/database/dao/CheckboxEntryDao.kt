@@ -18,7 +18,7 @@ abstract class CheckboxEntryDao {
 
     fun save(entry: CheckboxEntry) {
         // If the note dose't exist yet
-        if(entry.id == 0L) {
+        if (entry.id == 0L) {
             println("Inserted entry: $entry")
             entry.id = insert(entry)
         } else {

@@ -16,7 +16,7 @@ class NoteLabelEditAdapter(
     ctx: Context,
     private val dao: LabelDao,
     private val noteId: Long
-): BaseAdapter<Pair<Label, Boolean>, NoteLabelEditViewHolder>(ctx) {
+) : BaseAdapter<Pair<Label, Boolean>, NoteLabelEditViewHolder>(ctx) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteLabelEditViewHolder(
         NoteLabelEditEntryBinding.inflate(layoutInflater, parent, false),
@@ -33,7 +33,7 @@ class NoteLabelEditViewHolder(
     private val view: NoteLabelEditEntryBinding,
     private val dao: LabelDao,
     private val noteId: Long
-): RecyclerView.ViewHolder(view.root) {
+) : RecyclerView.ViewHolder(view.root) {
     fun bind(label: Pair<Label, Boolean>) {
         view.model = label.first
 

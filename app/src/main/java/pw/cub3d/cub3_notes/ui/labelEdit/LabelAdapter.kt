@@ -9,7 +9,7 @@ import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 
 class LabelAdapter(
     ctx: Context
-): BaseAdapter<Label, LabelViewHolder>(ctx) {
+) : BaseAdapter<Label, LabelViewHolder>(ctx) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = LabelViewHolder(
         LabelEntryBinding.inflate(layoutInflater, parent, false)
@@ -22,7 +22,7 @@ class LabelAdapter(
 
 class LabelViewHolder(
     private val view: LabelEntryBinding
-): RecyclerView.ViewHolder(view.root) {
+) : RecyclerView.ViewHolder(view.root) {
 
     fun bind(label: Label) {
         view.model = label

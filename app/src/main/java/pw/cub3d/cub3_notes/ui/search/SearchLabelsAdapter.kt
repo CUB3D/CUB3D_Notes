@@ -9,7 +9,7 @@ import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 
 class SearchLabelsAdapter(
     ctx: Context,
-    private val callback: (Label)->Unit
+    private val callback: (Label) -> Unit
 ) : BaseAdapter<Label, NoteLabelEntry>(ctx) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NoteLabelEntry(
@@ -24,8 +24,8 @@ class SearchLabelsAdapter(
 
 class NoteLabelEntry(
     private val noteLabelEntryBinding: NoteLabelEntryBinding,
-    private val callback: (Label)->Unit
-): RecyclerView.ViewHolder(noteLabelEntryBinding.root) {
+    private val callback: (Label) -> Unit
+) : RecyclerView.ViewHolder(noteLabelEntryBinding.root) {
     fun bind(label: Label) {
         noteLabelEntryBinding.label = label
         noteLabelEntryBinding.chip4.setOnClickListener {

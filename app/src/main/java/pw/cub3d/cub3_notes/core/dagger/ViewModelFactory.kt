@@ -2,7 +2,6 @@ package pw.cub3d.cub3_notes.core.dagger
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-
 import javax.inject.Inject
 import javax.inject.Provider
 

@@ -16,7 +16,7 @@ abstract class AudioDao {
 
     @Transaction
     open fun save(entry: AudioEntry) {
-        if(entry.id == 0L) {
+        if (entry.id == 0L) {
             entry.id = insert(entry)
         } else {
             update(entry)

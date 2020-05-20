@@ -68,7 +68,7 @@ class SettingsManager @Inject constructor(
 
     init {
         noteLayout.postValue(Layouts.valueOf(sharedPrefs.getString("NOTE_LAYOUT", Layouts.GRID.name)!!))
-        _theme.postValue(sharedPrefs.getInt("THEME", Themes.SYSTEM.id).let { id -> Themes.values().find { it.id == id }} )
+        _theme.postValue(sharedPrefs.getInt("THEME", Themes.SYSTEM.id).let { id -> Themes.values().find { it.id == id } })
         _sidenav.postValue(sharedPrefs.getBoolean("SIDENAV_ENABLED", false))
         _toolbar.postValue(sharedPrefs.getBoolean("TOOLBAR_ENABLED", false))
         _quicknote.postValue(sharedPrefs.getBoolean("QUICKNOTE_ENABLED", false))

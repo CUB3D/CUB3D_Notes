@@ -11,5 +11,5 @@ data class Colour(
 
     var hex_colour: String
 ) {
-    fun getColourId() = try {Color.parseColor(hex_colour) } catch (e: Exception) {Color.BLACK}
+    fun getColourId() = try { Color.parseColor(hex_colour) } catch (e: Exception) { Color.BLACK }
 }

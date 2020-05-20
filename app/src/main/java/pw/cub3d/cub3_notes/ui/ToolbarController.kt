@@ -14,7 +14,7 @@ import pw.cub3d.cub3_notes.core.manager.SettingsManager
 object ToolbarController {
     fun setupToolbar(settingsManager: SettingsManager, fragment: Fragment, appBarLayout: AppBarLayout, toolbar: Toolbar, title: String) {
         settingsManager.toolbarEnabled.observe(fragment.viewLifecycleOwner, Observer {
-            if(it) {
+            if (it) {
                 toolbar.visibility = View.VISIBLE
                 appBarLayout.visibility = View.VISIBLE
             } else {
@@ -41,7 +41,7 @@ object ToolbarController {
         fragment: Fragment
     ) {
         settingsManager.sideNavEnabled.observe(fragment.viewLifecycleOwner, Observer {
-            if(it) {
+            if (it) {
                 (fragment.requireActivity() as MainActivity).apply {
                     setupActionBarWithNavController(
                         fragment.findNavController(),
@@ -49,13 +49,12 @@ object ToolbarController {
                     )
                     binding.navView.setupWithNavController(fragment.findNavController())
 
-                    binding.navView.menu.getItem(0).isChecked = true;
+                    binding.navView.menu.getItem(0).isChecked = true
 
                     binding.drawerLayout.setDrawerLockMode(
                         DrawerLayout.LOCK_MODE_UNLOCKED
                     )
                 }
-
             } else {
                 (fragment.requireActivity() as MainActivity).binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }

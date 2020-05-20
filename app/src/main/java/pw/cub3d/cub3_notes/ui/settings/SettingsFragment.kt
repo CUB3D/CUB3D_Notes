@@ -1,6 +1,5 @@
 package pw.cub3d.cub3_notes.ui.settings
 
-
 import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
+import java.io.File
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -20,8 +20,6 @@ import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.manager.Themes
 import pw.cub3d.cub3_notes.databinding.FragmentSettingsBinding
-import java.io.File
-
 
 class SettingsFragment : Fragment() {
 
@@ -63,10 +61,10 @@ class SettingsFragment : Fragment() {
                         }
                     }
                     is PermissionResult.ShowRational -> {
-                        requireActivity().runOnUiThread { Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()}
+                        requireActivity().runOnUiThread { Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show() }
                     }
                     is PermissionResult.PermissionDeniedPermanently -> {
-                        requireActivity().runOnUiThread {Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show()}
+                        requireActivity().runOnUiThread { Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show() }
                     }
                 }
             }

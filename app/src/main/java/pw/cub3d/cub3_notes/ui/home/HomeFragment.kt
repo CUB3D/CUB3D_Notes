@@ -24,7 +24,6 @@ import pw.cub3d.cub3_notes.ui.*
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 
-
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels { injector.homeViewModelFactory() }
@@ -72,7 +71,7 @@ class HomeFragment : Fragment() {
             }
         })
 
-        val pinnedNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        val pinnedNoteItemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: ViewHolder,
@@ -92,11 +91,11 @@ class HomeFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-                viewModel.archiveNote(pinnedAdapter.items.find { it.note.id ==  viewHolder.itemId}!!)
+                viewModel.archiveNote(pinnedAdapter.items.find { it.note.id == viewHolder.itemId }!!)
                 Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
             }
         }
-        val otherNoteItemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        val otherNoteItemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: ViewHolder,
@@ -116,7 +115,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-                viewModel.archiveNote(otherAdapter.items.find { it.note.id ==  viewHolder.itemId}!!)
+                viewModel.archiveNote(otherAdapter.items.find { it.note.id == viewHolder.itemId }!!)
                 Toast.makeText(requireContext(), "Archived", Toast.LENGTH_LONG).show()
             }
         }
@@ -131,7 +130,7 @@ class HomeFragment : Fragment() {
         viewModel.pinned.observe(viewLifecycleOwner, Observer {
             binding.pinnedEmpty = it.isEmpty()
 
-            if(it.isEmpty()) {
+            if (it.isEmpty()) {
                 binding.homePinnedNotes.visibility = View.GONE
                 binding.homePinnedTitle.visibility = View.GONE
                 binding.homeOthersTitle.visibility = View.GONE
@@ -171,7 +170,7 @@ class HomeFragment : Fragment() {
         binding.homeSearch.setOnClickListener { findNavController().navigate(R.id.nav_search) }
 
         viewModel.settingsManager.quickNoteEnabled.observe(viewLifecycleOwner, Observer {
-            val v = if(it) View.VISIBLE else View.GONE
+            val v = if (it) View.VISIBLE else View.GONE
             binding.homeNewCheckNote.visibility = v
             binding.homeNewImgNote.visibility = v
             binding.homeNewVideo.visibility = v
@@ -190,7 +189,7 @@ class HomeFragment : Fragment() {
             true
         }
         binding.homeNewVoiceNote.setOnTouchListener { _, event ->
-            if(event.action == MotionEvent.ACTION_UP) {
+            if (event.action == MotionEvent.ACTION_UP) {
                 viewModel.audioManager.stopRecording()?.let {
                     viewModel.newNoteNavigationController.navigateNewNoteWithAudio(findNavController(), it.name)
                 }
@@ -202,18 +201,17 @@ class HomeFragment : Fragment() {
         binding.homeNewImgNote.setOnClickListener { AddImageDialog(requireActivity(), viewModel.storageManager).show() }
 
         BottomSheetBehavior.from(binding.homeFilterSheet).state = BottomSheetBehavior.STATE_HIDDEN
-        binding.homeFilter.setOnClickListener { BottomSheetBehavior.from(binding.homeFilterSheet).state = if(BottomSheetBehavior.from(binding.homeFilterSheet).state == BottomSheetBehavior.STATE_HIDDEN) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN }
+        binding.homeFilter.setOnClickListener { BottomSheetBehavior.from(binding.homeFilterSheet).state = if (BottomSheetBehavior.from(binding.homeFilterSheet).state == BottomSheetBehavior.STATE_HIDDEN) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN }
         binding.homeFilterReminder.setOnClickListener { viewModel.filter.postValue(FilterType.REMINDERS) }
         binding.homeFilterAudio.setOnClickListener { viewModel.filter.postValue(FilterType.AUDIO) }
         binding.homeFilterCheck.setOnClickListener { viewModel.filter.postValue(FilterType.CHECKBOX) }
         binding.homeFilterImage.setOnClickListener { viewModel.filter.postValue(FilterType.IMAGE) }
         binding.homeFilterVideo.setOnClickListener { viewModel.filter.postValue(FilterType.VIDEO) }
         binding.homeFilterTag.setOnClickListener { viewModel.filter.postValue(FilterType.TAGGED) }
-        binding.homeFilterAll.setOnClickListener { viewModel.filter.postValue(FilterType.ALL)}
-
+        binding.homeFilterAll.setOnClickListener { viewModel.filter.postValue(FilterType.ALL) }
 
         BottomSheetBehavior.from(binding.homeSortSheet).state = BottomSheetBehavior.STATE_HIDDEN
-        binding.homeSort.setOnClickListener { BottomSheetBehavior.from(binding.homeSortSheet).state = if(BottomSheetBehavior.from(binding.homeSortSheet).state == BottomSheetBehavior.STATE_HIDDEN) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN }
+        binding.homeSort.setOnClickListener { BottomSheetBehavior.from(binding.homeSortSheet).state = if (BottomSheetBehavior.from(binding.homeSortSheet).state == BottomSheetBehavior.STATE_HIDDEN) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN }
 
         binding.homeSortManual.setOnClickListener { viewModel.sort.postValue(SortTypes.MANUAL) }
         binding.homeSortCreatedAsc.setOnClickListener { viewModel.sort.postValue(SortTypes.CREATED_ASC) }

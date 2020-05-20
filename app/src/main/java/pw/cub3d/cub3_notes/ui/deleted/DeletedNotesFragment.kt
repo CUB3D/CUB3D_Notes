@@ -18,7 +18,6 @@ import pw.cub3d.cub3_notes.ui.NoteSelectionTrackerFactory
 import pw.cub3d.cub3_notes.ui.bind
 import pw.cub3d.cub3_notes.ui.home.NotesAdapter
 
-
 class DeletedNotesFragment : Fragment() {
     val viewModel: DeletedNotesViewModel by viewModels { injector.deleteNoteViewModelFactory() }
 
@@ -27,7 +26,8 @@ class DeletedNotesFragment : Fragment() {
     lateinit var adapter: NotesAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FragmentDeletedNotesBinding.inflate(inflater, container, false).apply { binding = this }.root
 
@@ -37,7 +37,6 @@ class DeletedNotesFragment : Fragment() {
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.deletedToolbar)
         (requireActivity() as AppCompatActivity).setupActionBarWithNavController(findNavController(), (requireActivity() as MainActivity).appBarConfiguration)
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Deleted"
-
 
         binding.deletedRecycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
         adapter = NotesAdapter(requireContext()) { note, v -> viewModel.noteNavigationController.editNote(findNavController(), note, v) }

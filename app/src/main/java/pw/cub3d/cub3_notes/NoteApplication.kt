@@ -6,7 +6,7 @@ import pw.cub3d.cub3_notes.core.dagger.DaggerComponentProvider
 import pw.cub3d.cub3_notes.core.dagger.DaggerNotesComponent
 import pw.cub3d.cub3_notes.core.dagger.NotesComponent
 
-class NoteApplication: Application(), DaggerComponentProvider {
+class NoteApplication : Application(), DaggerComponentProvider {
 
     override fun onCreate() {
         super.onCreate()

@@ -4,19 +4,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
+import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import pw.cub3d.cub3_notes.core.database.dao.LabelDao
 import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import pw.cub3d.cub3_notes.core.utils.filter
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
-import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
     val newNoteNavigationController: NewNoteNavigationController,
     private val notesDao: NotesDao,
     private val labelsDao: LabelDao
-): ViewModel() {
+) : ViewModel() {
     val searchQuery = MutableLiveData<String>()
 
     fun getSearchResults() = flow {

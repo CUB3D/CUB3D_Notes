@@ -17,7 +17,7 @@ class CheckBoxAdapter(
     ctx: Context,
     private val newNoteViewModel: NewNoteViewModel,
     val lifecycleOwner: LifecycleOwner
-): BaseAdapter<CheckboxEntry, CheckBoxViewHolder>(ctx) {
+) : BaseAdapter<CheckboxEntry, CheckBoxViewHolder>(ctx) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CheckBoxViewHolder(
         CheckboxEntryBinding.inflate(layoutInflater, parent, false),
@@ -36,7 +36,7 @@ class CheckBoxViewHolder(
     val view: CheckboxEntryBinding,
     private val newNoteViewModel: NewNoteViewModel,
     val lifecycleOwner: LifecycleOwner
-): RecyclerView.ViewHolder(view.root) {
+) : RecyclerView.ViewHolder(view.root) {
 
     init {
         view.checkboxEntryText.setAdapter(ArrayAdapter(view.root.context, android.R.layout.simple_list_item_1, AutoCompleteManager(
@@ -47,9 +47,8 @@ class CheckBoxViewHolder(
         view.checked = MutableLiveData()
     }
 
-
     fun bind(checkboxEntry: CheckboxEntry) {
-        println("Bound check ${checkboxEntry}")
+        println("Bound check $checkboxEntry")
 
         view.checkboxEntryCheckAnimation.visibility = View.GONE
         view.checkboxEntryDeleteAnimation.visibility = View.GONE

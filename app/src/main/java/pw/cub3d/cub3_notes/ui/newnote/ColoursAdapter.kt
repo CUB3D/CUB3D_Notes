@@ -13,7 +13,7 @@ import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 class ColoursAdapter(
     private val frag: Fragment,
     private val viewModel: NewNoteViewModel
-): BaseAdapter<Colour, ColourViewHolder>(frag.requireContext()) {
+) : BaseAdapter<Colour, ColourViewHolder>(frag.requireContext()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ColourViewHolder(
         ColourEntryBinding.inflate(layoutInflater, parent, false),
@@ -30,9 +30,9 @@ class ColourViewHolder(
     private val view: ColourEntryBinding,
     private val viewModel: NewNoteViewModel,
     private val frag: Fragment
-): RecyclerView.ViewHolder(view.root) {
+) : RecyclerView.ViewHolder(view.root) {
     fun bind(colour: Colour) {
-        if(colour.id == -1L) {
+        if (colour.id == -1L) {
             view.background = Color.WHITE
             view.colourEntryButton.icon = frag.resources.getDrawable(R.drawable.ic_plus)
             view.colourEntryButton.setOnClickListener {

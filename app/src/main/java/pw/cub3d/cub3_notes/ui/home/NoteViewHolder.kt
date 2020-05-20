@@ -20,7 +20,7 @@ class NoteViewHolder(
     var pos: Int,
     private val selectionTracker: SelectionTracker<Long>,
     private val markwon: Markwon
-): RecyclerView.ViewHolder(view.root), ProvidesItemDetails {
+) : RecyclerView.ViewHolder(view.root), ProvidesItemDetails {
 
     private val checkboxAdapter = HomeCheckboxAdapter(view.root.context)
     private val labelAdapter = NoteLabelsAdapter(view.root.context)
@@ -51,7 +51,7 @@ class NoteViewHolder(
             view.noteImage.visibility = View.GONE
         }
 
-        if(note.checkboxes.isNotEmpty()) {
+        if (note.checkboxes.isNotEmpty()) {
             val unticked = note.checkboxes.filterNot { it.checked }.sortedBy { it.position }
 
             view.tickedItemCount = note.checkboxes.size - unticked.size
@@ -62,14 +62,14 @@ class NoteViewHolder(
             view.noteChecks.visibility = View.GONE
         }
 
-        if(note.labels.isNotEmpty()) {
+        if (note.labels.isNotEmpty()) {
             labelAdapter.submitList(note.labels)
             view.noteLabels.visibility = View.VISIBLE
         } else {
             view.noteLabels.visibility = View.GONE
         }
 
-        if(note.audioClips.isNotEmpty()) {
+        if (note.audioClips.isNotEmpty()) {
             view.notePlayAudio.setOnClickListener {
                 AudioManager(StorageManager(view.root.context))
                     .playAudio(note.audioClips.first().fileName)
@@ -79,7 +79,7 @@ class NoteViewHolder(
             view.notePlayAudio.visibility = View.GONE
         }
 
-        if(note.videos.isNotEmpty()) {
+        if (note.videos.isNotEmpty()) {
             view.notePlayAudio.setOnClickListener {
                 AudioManager(StorageManager(view.root.context))
                     .playAudio(note.videos.first().fileName)
@@ -91,16 +91,16 @@ class NoteViewHolder(
 
         view.noteClickRoot.setOnClickListener { callback.invoke(note.note, view) }
 
-        if(note.isEmpty()) {
+        if (note.isEmpty()) {
             view.noteEmptyNotice.visibility = View.VISIBLE
         }
     }
 
     override fun getItemDetails(key: Long): ItemDetailsLookup.ItemDetails<Long> {
-        return object: ItemDetailsLookup.ItemDetails<Long>() {
+        return object : ItemDetailsLookup.ItemDetails<Long>() {
             override fun getSelectionKey() = key
             override fun getPosition() = pos
-            //TODO: support for drag handles
+            // TODO: support for drag handles
             override fun inDragRegion(e: MotionEvent): Boolean {
                 return true
             }

@@ -14,14 +14,14 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentColoursBinding
 
-
 class ColoursFragment : Fragment() {
 
     private val viewModel: ColoursViewModel by viewModels { injector.coloursViewModelFactory() }
     lateinit var binding: FragmentColoursBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentColoursBinding.inflate(inflater, container, false)
@@ -35,7 +35,7 @@ class ColoursFragment : Fragment() {
         val adapter = ColoursAdapter(requireContext())
         binding.coloursRecycler.adapter = adapter
 
-        val itemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -43,7 +43,7 @@ class ColoursFragment : Fragment() {
             ) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                if(direction == ItemTouchHelper.RIGHT) {
+                if (direction == ItemTouchHelper.RIGHT) {
                     val it = adapter.items
                     viewModel.deleteColour(it.find { it.id == viewHolder.itemId }!!)
                 }
@@ -52,7 +52,6 @@ class ColoursFragment : Fragment() {
 
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.coloursRecycler)
-
 
         viewModel.colours.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)

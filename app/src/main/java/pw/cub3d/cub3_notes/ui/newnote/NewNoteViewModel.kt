@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.lifecycle.*
+import javax.inject.Inject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -16,7 +17,6 @@ import pw.cub3d.cub3_notes.ReminderBroadcastReciever
 import pw.cub3d.cub3_notes.core.database.dao.*
 import pw.cub3d.cub3_notes.core.database.entity.*
 import pw.cub3d.cub3_notes.core.manager.StorageManager
-import javax.inject.Inject
 
 class NewNoteViewModel @Inject constructor(
     val storageManager: StorageManager,
@@ -27,7 +27,7 @@ class NewNoteViewModel @Inject constructor(
     private val context: Context,
     private val audioDao: AudioDao,
     private val videoDao: VideoDao
-): ViewModel() {
+) : ViewModel() {
     val defaultNoteColours = colourDao.getAll().map {
         it + Colour(-1, "")
     }
@@ -48,7 +48,6 @@ class NewNoteViewModel @Inject constructor(
     lateinit var deletionTime: LiveData<String?>
     lateinit var archived: LiveData<Boolean>
 
-
     var noteId: Long? = null
 
     fun onPin() {
@@ -61,7 +60,7 @@ class NewNoteViewModel @Inject constructor(
 
     fun setNoteType(it: String) {
         GlobalScope.launch { dao.setType(noteId!!, it) }
-        if(it == Note.TYPE_CHECKBOX) {
+        if (it == Note.TYPE_CHECKBOX) {
             addCheckbox()
         }
     }
@@ -136,7 +135,7 @@ class NewNoteViewModel @Inject constructor(
     }
 
     fun onCheckboxChecked(checkboxEntry: CheckboxEntry, checked: Boolean) {
-        println("Checked: ${checkboxEntry}, $checked")
+        println("Checked: $checkboxEntry, $checked")
         checkboxEntry.checked = checked
         GlobalScope.launch { checkboxEntryDao.setChecked(checkboxEntry.id, checked) }
     }
@@ -159,11 +158,11 @@ class NewNoteViewModel @Inject constructor(
 
             val epoch = zonedDateTime.withZoneSameInstant(ZoneId.of("UTC")).toEpochSecond() * 1000
 
-            //TODO: time is correct but dosent work when phone is locked
+            // TODO: time is correct but dosent work when phone is locked
             setAlarm(context, epoch,
                 PendingIntent.getBroadcast(context, 0, Intent(context, ReminderBroadcastReciever::class.java).apply {
                     putExtra("NOTE_ID", noteId!!)
-                    addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                    addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
                 }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT)
             )
         }

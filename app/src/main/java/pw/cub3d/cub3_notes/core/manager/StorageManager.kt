@@ -9,7 +9,7 @@ import javax.inject.Singleton
 @Singleton
 class StorageManager @Inject constructor(
     private val context: Context
-){
+) {
     private var lastCameraImageFile: File? = null
     private var lastCameraVideoFile: File? = null
 

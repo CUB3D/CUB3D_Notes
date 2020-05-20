@@ -25,7 +25,8 @@ class ArchiveFragment : Fragment() {
     private val viewModel: ArchiveViewModel by viewModels { injector.archiveViewModelFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = ArchiveFragmentBinding.inflate(inflater, container, false)
@@ -40,7 +41,7 @@ class ArchiveFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Archive"
 
         archive_recycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
-        val adapter = NotesAdapter(requireContext()) { note, v  -> viewModel.noteNavigationController.editNote(findNavController(), note, v) }
+        val adapter = NotesAdapter(requireContext()) { note, v -> viewModel.noteNavigationController.editNote(findNavController(), note, v) }
         archive_recycler.adapter = adapter
 
         NoteSelectionTrackerFactory.buildTracker("archive-selection", archive_recycler).bind(adapter)

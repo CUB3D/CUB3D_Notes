@@ -9,10 +9,9 @@ import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.databinding.AudioEntryBinding
 import pw.cub3d.cub3_notes.ui.home.BaseAdapter
 
-
 class AudioAdapter(
     ctx: Context
-): BaseAdapter<AudioEntry, AudioEntryViewHolder>(ctx) {
+) : BaseAdapter<AudioEntry, AudioEntryViewHolder>(ctx) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = AudioEntryViewHolder(
         AudioEntryBinding.inflate(layoutInflater, parent, false)
@@ -23,12 +22,11 @@ class AudioAdapter(
     }
 }
 
-class AudioEntryViewHolder(val binding: AudioEntryBinding): RecyclerView.ViewHolder(binding.root) {
+class AudioEntryViewHolder(val binding: AudioEntryBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(audioEntry: AudioEntry) {
         binding.imageButton2.setOnClickListener {
             AudioManager(StorageManager(binding.root.context))
                 .playAudio(audioEntry.fileName)
         }
     }
-
 }

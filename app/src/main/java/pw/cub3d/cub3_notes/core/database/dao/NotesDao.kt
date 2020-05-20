@@ -37,7 +37,7 @@ abstract class NotesDao {
     abstract fun updateNote(note: Note)
 
     fun save(note: Note) {
-        if(note.title.isEmpty() && note.text.isEmpty() && note.type == Note.TYPE_TEXT) {
+        if (note.title.isEmpty() && note.text.isEmpty() && note.type == Note.TYPE_TEXT) {
             println("Attempt to save empty note")
             return
         }
@@ -45,7 +45,7 @@ abstract class NotesDao {
         note.updateModificationTime()
 
         // If the note dose't exist yet
-        if(note.id == 0L) {
+        if (note.id == 0L) {
             println("Inserted note: $note")
             note.id = insert(note)
         } else {

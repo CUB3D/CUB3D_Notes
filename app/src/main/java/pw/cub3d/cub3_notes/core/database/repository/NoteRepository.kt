@@ -2,6 +2,8 @@ package pw.cub3d.cub3_notes.core.database.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -10,8 +12,6 @@ import org.threeten.bp.ZonedDateTime
 import pw.cub3d.cub3_notes.core.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class NoteRepository @Inject constructor(
@@ -45,8 +45,8 @@ class NoteRepository @Inject constructor(
                         SortTypes.CREATED_ASC, SortTypes.CREATED_DSC -> ZonedDateTime.parse(
                             it.note.creationTime
                         ).toEpochSecond()
-                        SortTypes.MODIFY_ASC, SortTypes.MODIFY_DSC -> it.note.modificationTime.takeIf { it.isNotBlank() }?.let {ZonedDateTime.parse(it).toEpochSecond()} ?: ZonedDateTime.now().toEpochSecond()
-                        SortTypes.VIEW_ASC, SortTypes.VIEW_DSC -> it.note.viewTime.takeIf { it.isNotBlank() }?.let {ZonedDateTime.parse(it).toEpochSecond()} ?: ZonedDateTime.now().toEpochSecond()
+                        SortTypes.MODIFY_ASC, SortTypes.MODIFY_DSC -> it.note.modificationTime.takeIf { it.isNotBlank() }?.let { ZonedDateTime.parse(it).toEpochSecond() } ?: ZonedDateTime.now().toEpochSecond()
+                        SortTypes.VIEW_ASC, SortTypes.VIEW_DSC -> it.note.viewTime.takeIf { it.isNotBlank() }?.let { ZonedDateTime.parse(it).toEpochSecond() } ?: ZonedDateTime.now().toEpochSecond()
                         else -> it.note.id
                     }
                 }
@@ -69,7 +69,7 @@ class NoteRepository @Inject constructor(
                             FilterType.CHECKBOX -> it.checkboxes.isNotEmpty()
                         }
                     }
-                    .filter { if(pinnedOnly) it.note.pinned else true }.let { emit(it) }
+                    .filter { if (pinnedOnly) it.note.pinned else true }.let { emit(it) }
             }
         }
     }
@@ -104,5 +104,4 @@ enum class SortTypes(val reverse: Boolean = false) {
     VIEW_DSC(true),
     TITLE_ALPHABETICAL,
     TITLE_REVERSE_ALPHABETICAL(true),
-
 }

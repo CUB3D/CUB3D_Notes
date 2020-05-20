@@ -22,7 +22,8 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by viewModels { injector.searchViewModelFactory() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)

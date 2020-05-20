@@ -1,13 +1,13 @@
 package pw.cub3d.cub3_notes.ui.noteLabels
 
 import androidx.lifecycle.*
+import javax.inject.Inject
 import pw.cub3d.cub3_notes.core.database.dao.LabelDao
 import pw.cub3d.cub3_notes.core.database.entity.Label
-import javax.inject.Inject
 
 class NoteLabelEditViewModel @Inject constructor(
     val labelDao: LabelDao
-): ViewModel() {
+) : ViewModel() {
     var noteId = MutableLiveData(0L)
 
     fun loadNote(l: Long) {

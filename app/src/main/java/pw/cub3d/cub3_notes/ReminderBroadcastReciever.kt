@@ -10,7 +10,7 @@ import pw.cub3d.cub3_notes.core.dagger.getInjector
 import pw.cub3d.cub3_notes.core.database.dao.NotesDao
 import pw.cub3d.cub3_notes.ui.MainActivity
 
-class ReminderBroadcastReciever: BroadcastReceiver() {
+class ReminderBroadcastReciever : BroadcastReceiver() {
     lateinit var notesDao: NotesDao
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -35,7 +35,6 @@ class ReminderBroadcastReciever: BroadcastReceiver() {
                 (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                     notify(note.id.toInt(), notification)
                 }
-
             } ?: println("Got reminder for invalid note id, deleted?")
         } ?: println("Got reminder without note id, Hmm")
     }

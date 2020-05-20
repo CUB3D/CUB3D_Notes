@@ -18,6 +18,9 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import java.io.File
+import java.util.*
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
@@ -32,9 +35,6 @@ import pw.cub3d.cub3_notes.databinding.ActivityMainBinding
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
-import java.io.File
-import java.util.*
-import javax.inject.Inject
 
 class MainActivityViewModel @Inject constructor(
     val newNoteNavigationController: NewNoteNavigationController,
@@ -42,7 +42,7 @@ class MainActivityViewModel @Inject constructor(
     val settingsManager: SettingsManager,
     private val imageDao: ImageDao,
     private val videoDao: VideoDao
-): ViewModel() {
+) : ViewModel() {
     fun addImageToNote(lastNoteId: Long, uuid: String) {
         imageDao.insert(ImageEntry(noteId = lastNoteId, imageName = uuid))
     }
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
-            if(destination.id == R.id.nav_home) {
+            if (destination.id == R.id.nav_home) {
 //                home_appBar.visibility = View.VISIBLE
                 drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.main_changeLayout) {
+        if (item.itemId == R.id.main_changeLayout) {
             if (viewModel.settingsManager.noteLayout.value!! == Layouts.GRID) {
                 viewModel.settingsManager.noteLayout.postValue(Layouts.LIST)
                 item.icon = resources.getDrawable(R.drawable.ic_rows, theme)
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 
         println("Got main activity result: $requestCode, $resultCode, $data")
 
-        if(resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             if (requestCode == AddImageDialog.PICK_IMAGE) {
                 // Copy the given image to the local storage
                 println("Pick image")
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
 
                 contentResolver.openInputStream(fileUri)!!.copyTo(outFile.outputStream())
 
-                if(AddImageDialog.lastNoteId == null) {
+                if (AddImageDialog.lastNoteId == null) {
                     viewModel.newNoteNavigationController.navigateNewNoteWithImage(
                         findNavController(
                             R.id.nav_host_fragment
@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
 
                 // Will always return true, unless app is restarted between images
                 viewModel.storageManager.getLastCameraImageUUID()?.let {
-                    if(AddImageDialog.lastNoteId == null) {
+                    if (AddImageDialog.lastNoteId == null) {
                         viewModel.newNoteNavigationController.navigateNewNoteWithImage(
                             findNavController(R.id.nav_host_fragment),
                             it
@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
 
                 contentResolver.openInputStream(fileUri)!!.copyTo(outFile.outputStream())
 
-                if(AddVideoDialog.lastNoteId == null) {
+                if (AddVideoDialog.lastNoteId == null) {
                     viewModel.newNoteNavigationController.navigateNewNoteWithVideo(
                         findNavController(
                             R.id.nav_host_fragment
@@ -209,7 +209,7 @@ class MainActivity : AppCompatActivity() {
 
                 // Will always return true, unless app is restarted between images
                 viewModel.storageManager.getLastCameraVideoUUID()?.let {
-                    if(AddVideoDialog.lastNoteId == null) {
+                    if (AddVideoDialog.lastNoteId == null) {
                         viewModel.newNoteNavigationController.navigateNewNoteWithVideo(
                             findNavController(R.id.nav_host_fragment),
                             it

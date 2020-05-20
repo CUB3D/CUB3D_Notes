@@ -45,5 +45,4 @@ class LabelEditFragment : Fragment() {
 
         binding.editLabelNewText.requestFocus()
     }
-
 }

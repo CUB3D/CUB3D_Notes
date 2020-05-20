@@ -1,9 +1,9 @@
 package pw.cub3d.cub3_notes.core.manager
 
 import android.content.Context
-import pw.cub3d.cub3_notes.R
 import javax.inject.Inject
 import javax.inject.Singleton
+import pw.cub3d.cub3_notes.R
 
 @Singleton
 class AutoCompleteManager @Inject constructor(

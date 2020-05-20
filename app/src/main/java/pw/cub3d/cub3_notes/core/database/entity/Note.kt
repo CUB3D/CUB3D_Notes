@@ -48,7 +48,7 @@ data class Note(
         }
     }
 
-    fun getColourId() = colour?.let {Color.parseColor(it) } ?: Color.TRANSPARENT
+    fun getColourId() = colour?.let { Color.parseColor(it) } ?: Color.TRANSPARENT
 
     fun updateModificationTime() {
         modificationTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)

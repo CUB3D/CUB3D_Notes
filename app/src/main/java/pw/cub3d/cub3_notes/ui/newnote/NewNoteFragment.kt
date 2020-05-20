@@ -24,6 +24,8 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import java.io.File
+import kotlin.math.absoluteValue
 import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
@@ -37,9 +39,6 @@ import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import pw.cub3d.cub3_notes.ui.newnote.imagelist.ImageEditAdapter
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
-import java.io.File
-import kotlin.math.absoluteValue
-
 
 class NewNoteFragment : Fragment() {
 
@@ -71,7 +70,6 @@ class NewNoteFragment : Fragment() {
             it.getString(NewNoteNavigationController.KEY_NOTE_VIDEO_PATH)?.let { path -> viewModel.addVideo(path) }
         }
 
-
         binding = FragmentNewNoteBinding.inflate(inflater, container, false)
 
         binding.viewModel = viewModel
@@ -87,11 +85,11 @@ class NewNoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.noteAndCheckboxes!!.observe(viewLifecycleOwner, Observer { note ->
-            if(note.checkboxes.isNotEmpty() || note.note.type == Note.TYPE_CHECKBOX) {
+            if (note.checkboxes.isNotEmpty() || note.note.type == Note.TYPE_CHECKBOX) {
                 binding.createNoteText.visibility = View.GONE
                 binding.createNoteCheckBoxes.visibility = View.VISIBLE
                 binding.createNoteNewItem.visibility = View.VISIBLE
-            } else if(note.note.type == Note.TYPE_TEXT) {
+            } else if (note.note.type == Note.TYPE_TEXT) {
                 binding.createNoteText.visibility = View.VISIBLE
                 binding.createNoteCheckBoxes.visibility = View.GONE
                 binding.createNoteNewItem.visibility = View.GONE
@@ -118,7 +116,7 @@ class NewNoteFragment : Fragment() {
 
                 binding.createNoteVideo.player = player
                 player.prepare(videoSource)
-                //TODO: release the player
+                // TODO: release the player
 
                 binding.createNoteVideo.visibility = View.VISIBLE
             }
@@ -129,12 +127,11 @@ class NewNoteFragment : Fragment() {
         binding.createNoteAudio.adapter = audioAdapter
         viewModel.audioClips.observe(viewLifecycleOwner, Observer { audioAdapter.submitList(it) })
 
-
         binding.createNoteCheckBoxes.layoutManager = LinearLayoutManager(requireContext())
         checkBoxAdapter = CheckBoxAdapter(requireContext(), viewModel, this.viewLifecycleOwner)
         binding.createNoteCheckBoxes.adapter = checkBoxAdapter
 
-        val callback: ItemTouchHelper.Callback = object: ItemTouchHelper.Callback() {
+        val callback: ItemTouchHelper.Callback = object : ItemTouchHelper.Callback() {
             override fun getMovementFlags(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder
@@ -214,7 +211,7 @@ class NewNoteFragment : Fragment() {
                 val dXRelative: Float = ((dX / baseView.checkboxEntryBaselayout.width) * 3).coerceAtMost(1f).coerceAtLeast(-1f)
                 println("dx: $dXRelative")
 
-                if(dXRelative < 0) {
+                if (dXRelative < 0) {
                     val absDx = dXRelative.absoluteValue
                     baseView.checkboxEntryCheckAnimation
                         .animate()
@@ -236,7 +233,7 @@ class NewNoteFragment : Fragment() {
                     baseView.checkboxEntryDeleteAnimation.visibility = View.GONE
                 }
 
-                if(dXRelative > 0) {
+                if (dXRelative > 0) {
                     baseView.checkboxEntryDeleteAnimation
                         .animate()
                         .scaleX(dXRelative)
@@ -260,7 +257,7 @@ class NewNoteFragment : Fragment() {
         }
         ItemTouchHelper(callback).attachToRecyclerView(binding.createNoteCheckBoxes)
 
-        //TODO sort in room junction
+        // TODO sort in room junction
         viewModel.checkboxes.map { it.sortedBy { it.position } }.distinctUntilChangedBy { old, new -> old.map { it.id } == new.map { it.id } }.observe(viewLifecycleOwner, Observer { checkboxes ->
             println("Updating checkboxes: $checkboxes")
             binding.createNoteCheckBoxes.visibility = View.VISIBLE
@@ -294,12 +291,12 @@ class NewNoteFragment : Fragment() {
         })
 
         viewModel.pinned.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
-            Toast.makeText(requireContext(), it.takeIf { it }?.let {  "Pinned" } ?: "Unpinned", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), it.takeIf { it }?.let { "Pinned" } ?: "Unpinned", Toast.LENGTH_SHORT).show()
         })
 
             viewModel.colour.observe(viewLifecycleOwner, Observer {
             println("Ignoring background colour for now $it")
-            //binding.noteColour = it
+            // binding.noteColour = it
         })
 
         binding.createNoteBack.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
@@ -307,7 +304,7 @@ class NewNoteFragment : Fragment() {
         binding.createNotePin.setOnClickListener { viewModel.onPin() }
 
         viewModel.archived.observe(viewLifecycleOwner, Observer { archived ->
-            if(archived) {
+            if (archived) {
                 binding.createNoteArchive.setImageResource(R.drawable.ic_upload)
                 binding.createNoteArchive.setOnClickListener {
                     viewModel.onArchive()
@@ -326,9 +323,8 @@ class NewNoteFragment : Fragment() {
         BottomSheetBehavior.from(binding.createNoteMoreSheet).state = BottomSheetBehavior.STATE_HIDDEN
         BottomSheetBehavior.from(binding.createNoteAddSheet).state = BottomSheetBehavior.STATE_HIDDEN
 
-
             viewModel.deletionTime.observe(viewLifecycleOwner, Observer {
-            if(it == null) {
+            if (it == null) {
                 binding.createNoteMoreShare.visibility = View.VISIBLE
                 binding.createNoteMoreLabels.visibility = View.VISIBLE
                 binding.createNoteMoreColors.visibility = View.VISIBLE
@@ -358,7 +354,7 @@ class NewNoteFragment : Fragment() {
 
         binding.createNoteMore.setOnClickListener {
             BottomSheetBehavior.from(binding.createNoteMoreSheet).apply {
-                state = if(state == BottomSheetBehavior.STATE_HIDDEN) {
+                state = if (state == BottomSheetBehavior.STATE_HIDDEN) {
                     BottomSheetBehavior.STATE_EXPANDED
                 } else {
                     BottomSheetBehavior.STATE_HIDDEN
@@ -368,7 +364,7 @@ class NewNoteFragment : Fragment() {
 
         binding.createNoteAdd.setOnClickListener {
             BottomSheetBehavior.from(binding.createNoteAddSheet).apply {
-                state = if(state == BottomSheetBehavior.STATE_HIDDEN) {
+                state = if (state == BottomSheetBehavior.STATE_HIDDEN) {
                     BottomSheetBehavior.STATE_EXPANDED
                 } else {
                     BottomSheetBehavior.STATE_HIDDEN
@@ -379,12 +375,10 @@ class NewNoteFragment : Fragment() {
         binding.createNoteAddVideo.setOnClickListener { AddVideoDialog(requireActivity(), viewModel.storageManager, viewModel.noteId!!).show() }
         binding.createNoteAddCheckbox.setOnClickListener { viewModel.addCheckbox() }
 
-
         binding.createNoteReminder.setOnClickListener {
             ReminderDialog(requireActivity()) { zonedDateTime ->
                 viewModel.setNoteReminder(zonedDateTime)
             }.simpleDialog()
-
         }
 
         binding.createNoteMoreDelete.setOnClickListener {

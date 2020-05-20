@@ -8,9 +8,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseAdapter<T: Any, VH: RecyclerView.ViewHolder>(
+abstract class BaseAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     private val ctx: Context
-): ListAdapter<T, VH>(KDiffCallback<T>()) {
+) : ListAdapter<T, VH>(KDiffCallback<T>()) {
     val layoutInflater = LayoutInflater.from(ctx)!!
 
     val items: List<T>
