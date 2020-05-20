@@ -24,12 +24,10 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.android.synthetic.main.fragment_new_note.*
 import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
-import pw.cub3d.cub3_notes.core.utils.GlideApp
 import pw.cub3d.cub3_notes.core.utils.distinctUntilChangedBy
 import pw.cub3d.cub3_notes.core.utils.ignoreFirstValue
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
@@ -37,6 +35,7 @@ import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
+import pw.cub3d.cub3_notes.ui.newnote.imagelist.ImageEditAdapter
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
 import java.io.File
 import kotlin.math.absoluteValue
@@ -89,18 +88,18 @@ class NewNoteFragment : Fragment() {
 
         viewModel.noteAndCheckboxes!!.observe(viewLifecycleOwner, Observer { note ->
             if(note.checkboxes.isNotEmpty() || note.note.type == Note.TYPE_CHECKBOX) {
-                createNote_text.visibility = View.GONE
-                createNote_checkBoxes.visibility = View.VISIBLE
-                createNote_newItem.visibility = View.VISIBLE
+                binding.createNoteText.visibility = View.GONE
+                binding.createNoteCheckBoxes.visibility = View.VISIBLE
+                binding.createNoteNewItem.visibility = View.VISIBLE
             } else if(note.note.type == Note.TYPE_TEXT) {
-                createNote_text.visibility = View.VISIBLE
-                createNote_checkBoxes.visibility = View.GONE
-                createNote_newItem.visibility = View.GONE
+                binding.createNoteText.visibility = View.VISIBLE
+                binding.createNoteCheckBoxes.visibility = View.GONE
+                binding.createNoteNewItem.visibility = View.GONE
             }
         })
 
         viewModel.modificationTime.observe(viewLifecycleOwner, Observer {
-            createNote_lastEdited.text = it
+            binding.createNoteLastEdited.text = it
         })
 
         viewModel.videos.observe(viewLifecycleOwner, Observer {
@@ -131,9 +130,9 @@ class NewNoteFragment : Fragment() {
         viewModel.audioClips.observe(viewLifecycleOwner, Observer { audioAdapter.submitList(it) })
 
 
-        createNote_checkBoxes.layoutManager = LinearLayoutManager(requireContext())
+        binding.createNoteCheckBoxes.layoutManager = LinearLayoutManager(requireContext())
         checkBoxAdapter = CheckBoxAdapter(requireContext(), viewModel, this.viewLifecycleOwner)
-        createNote_checkBoxes.adapter = checkBoxAdapter
+        binding.createNoteCheckBoxes.adapter = checkBoxAdapter
 
         val callback: ItemTouchHelper.Callback = object: ItemTouchHelper.Callback() {
             override fun getMovementFlags(
@@ -188,7 +187,7 @@ class NewNoteFragment : Fragment() {
                     )
                 }
 
-                (createNote_checkBoxes.adapter as CheckBoxAdapter).notifyItemChanged(viewHolder.adapterPosition)
+                checkBoxAdapter.notifyItemChanged(viewHolder.adapterPosition)
             }
 
             override fun onChildDrawOver(
@@ -259,7 +258,7 @@ class NewNoteFragment : Fragment() {
                 }
             }
         }
-        ItemTouchHelper(callback).attachToRecyclerView(createNote_checkBoxes)
+        ItemTouchHelper(callback).attachToRecyclerView(binding.createNoteCheckBoxes)
 
         //TODO sort in room junction
         viewModel.checkboxes.map { it.sortedBy { it.position } }.distinctUntilChangedBy { old, new -> old.map { it.id } == new.map { it.id } }.observe(viewLifecycleOwner, Observer { checkboxes ->
@@ -281,13 +280,10 @@ class NewNoteFragment : Fragment() {
         binding.createNoteMoreColors.adapter = colorAdapter
         viewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer { colorAdapter.submitList(it) })
 
-        viewModel.images.observe(viewLifecycleOwner, Observer {
-            it.firstOrNull()?.let {
-                GlideApp.with(this@NewNoteFragment)
-                    .load(it.getFile(requireContext()))
-                    .into(createNote_image)
-            }
-        })
+        binding.createNoteImage.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = ImageEditAdapter(requireContext())
+        binding.createNoteImage.adapter = adapter
+        adapter.bindToLiveData(viewLifecycleOwner, viewModel.images)
 
         viewModel.title.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
             viewModel.onTitleChange(it)
@@ -306,26 +302,26 @@ class NewNoteFragment : Fragment() {
             //binding.noteColour = it
         })
 
-        createNote_back.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
+        binding.createNoteBack.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
 
-        createNote_pin.setOnClickListener { viewModel.onPin() }
+        binding.createNotePin.setOnClickListener { viewModel.onPin() }
 
         viewModel.archived.observe(viewLifecycleOwner, Observer { archived ->
             if(archived) {
-                createNote_archive.setImageResource(R.drawable.ic_upload)
-                createNote_archive.setOnClickListener {
+                binding.createNoteArchive.setImageResource(R.drawable.ic_upload)
+                binding.createNoteArchive.setOnClickListener {
                     viewModel.onArchive()
                 }
             } else {
-                createNote_archive.setImageResource(R.drawable.ic_package)
-                createNote_archive.setOnClickListener {
+                binding.createNoteArchive.setImageResource(R.drawable.ic_package)
+                binding.createNoteArchive.setOnClickListener {
                     viewModel.onArchive()
                     findNavController().popBackStack()
                 }
             }
         })
 
-        createNote_newItem.setOnClickListener { viewModel.addCheckbox() }
+        binding.createNoteNewItem.setOnClickListener { viewModel.addCheckbox() }
 
         BottomSheetBehavior.from(binding.createNoteMoreSheet).state = BottomSheetBehavior.STATE_HIDDEN
         BottomSheetBehavior.from(binding.createNoteAddSheet).state = BottomSheetBehavior.STATE_HIDDEN
@@ -333,21 +329,21 @@ class NewNoteFragment : Fragment() {
 
             viewModel.deletionTime.observe(viewLifecycleOwner, Observer {
             if(it == null) {
-                createNote_more_share.visibility = View.VISIBLE
-                createNote_more_labels.visibility = View.VISIBLE
-                createNote_more_colors.visibility = View.VISIBLE
-                createNote_more_copy.visibility = View.VISIBLE
-                createNote_more_delete.visibility = View.VISIBLE
-                createNote_more_restore.visibility = View.GONE
-                createNote_more_deletePerm.visibility = View.GONE
+                binding.createNoteMoreShare.visibility = View.VISIBLE
+                binding.createNoteMoreLabels.visibility = View.VISIBLE
+                binding.createNoteMoreColors.visibility = View.VISIBLE
+                binding.createNoteMoreCopy.visibility = View.VISIBLE
+                binding.createNoteMoreDelete.visibility = View.VISIBLE
+                binding.createNoteMoreRestore.visibility = View.GONE
+                binding.createNoteMoreDeletePerm.visibility = View.GONE
             } else {
-                createNote_more_share.visibility = View.GONE
-                createNote_more_labels.visibility = View.GONE
-                createNote_more_colors.visibility = View.GONE
-                createNote_more_copy.visibility = View.GONE
-                createNote_more_delete.visibility = View.GONE
-                createNote_more_restore.visibility = View.VISIBLE
-                createNote_more_deletePerm.visibility = View.VISIBLE
+                binding.createNoteMoreShare.visibility = View.GONE
+                binding.createNoteMoreLabels.visibility = View.GONE
+                binding.createNoteMoreColors.visibility = View.GONE
+                binding.createNoteMoreCopy.visibility = View.GONE
+                binding.createNoteMoreDelete.visibility = View.GONE
+                binding.createNoteMoreRestore.visibility = View.VISIBLE
+                binding.createNoteMoreDeletePerm.visibility = View.VISIBLE
             }
         })
 
@@ -360,8 +356,8 @@ class NewNoteFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        createNote_more.setOnClickListener {
-            BottomSheetBehavior.from(createNote_moreSheet).apply {
+        binding.createNoteMore.setOnClickListener {
+            BottomSheetBehavior.from(binding.createNoteMoreSheet).apply {
                 state = if(state == BottomSheetBehavior.STATE_HIDDEN) {
                     BottomSheetBehavior.STATE_EXPANDED
                 } else {
@@ -384,19 +380,19 @@ class NewNoteFragment : Fragment() {
         binding.createNoteAddCheckbox.setOnClickListener { viewModel.addCheckbox() }
 
 
-        createNote_reminder.setOnClickListener {
+        binding.createNoteReminder.setOnClickListener {
             ReminderDialog(requireActivity()) { zonedDateTime ->
                 viewModel.setNoteReminder(zonedDateTime)
             }.simpleDialog()
 
         }
 
-        createNote_more_delete.setOnClickListener {
+        binding.createNoteMoreDelete.setOnClickListener {
             viewModel.onDelete()
             findNavController().popBackStack()
         }
 
-        createNote_more_labels.setOnClickListener {
+        binding.createNoteMoreLabels.setOnClickListener {
             findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit, Bundle().apply {
                 putLong(NoteLabelEditFragment.KEY_NOTE_ID, viewModel.noteAndCheckboxes!!.value!!.note.id)
             })
