@@ -33,7 +33,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setting_export.setOnClickListener {
+        binding.settingExport.setOnClickListener {
             GlobalScope.launch {
                 val permissionRequest = PermissionManager.requestPermissions(
                     this@SettingsFragment,
@@ -70,10 +70,10 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        settings_test_sync.setOnClickListener {
+        binding.settingsTestSync.setOnClickListener {
             viewModel.openTasksSyncManager.test()
         }
-        settings_test_sync.visibility = View.GONE
+        binding.settingsTestSync.visibility = View.GONE
 
         // Theme settings
         binding.settingsThemeSystem.setOnClickListener { viewModel.settingsManager.setTheme(Themes.SYSTEM) }

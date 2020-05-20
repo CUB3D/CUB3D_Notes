@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_search.*
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentSearchBinding
 import pw.cub3d.cub3_notes.ui.NoteSelectionTrackerFactory
@@ -40,9 +39,9 @@ class SearchFragment : Fragment() {
             }
         }
 
-        search_results.layoutManager = LinearLayoutManager(requireContext())
+        binding.searchResults.layoutManager = LinearLayoutManager(requireContext())
         val adapter = NotesAdapter(requireContext()) { note, v -> viewModel.newNoteNavigationController.editNote(findNavController(), note, v) }
-        search_results.adapter = adapter
+        binding.searchResults.adapter = adapter
 
         NoteSelectionTrackerFactory.buildTracker("search-selection", binding.searchResults).bind(adapter)
         val searchLabelsAdapter = SearchLabelsAdapter(requireContext()) {

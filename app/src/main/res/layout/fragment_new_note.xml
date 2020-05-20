@@ -224,7 +224,8 @@
             app:behavior_hideable="true"
             app:behavior_peekHeight="450dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            tools:visibility="invisible">
+            tools:visibility="invisible"
+            style="?attr/bottomSheetStyle">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/createNote_more_delete"

@@ -89,17 +89,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home,
                 R.id.nav_new_note,
                 R.id.nav_new_label
-            ), drawer_layout
+            ), binding.drawerLayout
         )
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
             if (destination.id == R.id.nav_home) {
 //                home_appBar.visibility = View.VISIBLE
-                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
 //                home_appBar.visibility = View.GONE
-                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
 

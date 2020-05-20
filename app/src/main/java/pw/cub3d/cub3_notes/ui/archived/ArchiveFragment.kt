@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import kotlinx.android.synthetic.main.archive_fragment.*
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.ArchiveFragmentBinding
 import pw.cub3d.cub3_notes.ui.MainActivity
@@ -40,11 +39,11 @@ class ArchiveFragment : Fragment() {
         (requireActivity() as AppCompatActivity).setupActionBarWithNavController(findNavController(), (requireActivity() as MainActivity).appBarConfiguration)
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Archive"
 
-        archive_recycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
-        val adapter = NotesAdapter(requireContext()) { note, v -> viewModel.noteNavigationController.editNote(findNavController(), note, v) }
-        archive_recycler.adapter = adapter
+        binding.archiveRecycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
+        val adapter = NotesAdapter(requireContext()) { note, v  -> viewModel.noteNavigationController.editNote(findNavController(), note, v) }
+        binding.archiveRecycler.adapter = adapter
 
-        NoteSelectionTrackerFactory.buildTracker("archive-selection", archive_recycler).bind(adapter)
+        NoteSelectionTrackerFactory.buildTracker("archive-selection", binding.archiveRecycler).bind(adapter)
 
         viewModel.archivedNotes.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)

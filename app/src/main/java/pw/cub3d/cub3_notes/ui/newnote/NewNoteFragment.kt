@@ -183,7 +183,6 @@ class NewNoteFragment : Fragment() {
                         false
                     )
                 }
-
                 checkBoxAdapter.notifyItemChanged(viewHolder.adapterPosition)
             }
 
@@ -276,6 +275,7 @@ class NewNoteFragment : Fragment() {
         val colorAdapter = ColoursAdapter(this, viewModel)
         binding.createNoteMoreColors.adapter = colorAdapter
         viewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer { colorAdapter.submitList(it) })
+
 
         binding.createNoteImage.layoutManager = LinearLayoutManager(requireContext())
         val adapter = ImageEditAdapter(requireContext())
