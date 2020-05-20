@@ -37,16 +37,10 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <ImageView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/createNote_image"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/createNote_back" />
+                        android:layout_height="wrap_content"/>
 
                     <com.google.android.exoplayer2.ui.PlayerView
                         android:id="@+id/createNote_video"

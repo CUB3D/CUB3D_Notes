@@ -28,7 +28,6 @@ import kotlinx.coroutines.runBlocking
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.entity.Note
-import pw.cub3d.cub3_notes.core.utils.GlideApp
 import pw.cub3d.cub3_notes.core.utils.distinctUntilChangedBy
 import pw.cub3d.cub3_notes.core.utils.ignoreFirstValue
 import pw.cub3d.cub3_notes.databinding.FragmentNewNoteBinding
@@ -36,6 +35,7 @@ import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
+import pw.cub3d.cub3_notes.ui.newnote.imagelist.ImageEditAdapter
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
 import java.io.File
 import kotlin.math.absoluteValue
@@ -186,8 +186,7 @@ class NewNoteFragment : Fragment() {
                         false
                     )
                 }
-
-                (binding.createNoteCheckBoxes.adapter as CheckBoxAdapter).notifyItemChanged(viewHolder.adapterPosition)
+                checkBoxAdapter.notifyItemChanged(viewHolder.adapterPosition)
             }
 
             override fun onChildDrawOver(
@@ -280,13 +279,11 @@ class NewNoteFragment : Fragment() {
         binding.createNoteMoreColors.adapter = colorAdapter
         viewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer { colorAdapter.submitList(it) })
 
-        viewModel.images.observe(viewLifecycleOwner, Observer {
-            it.firstOrNull()?.let {
-                GlideApp.with(this@NewNoteFragment)
-                    .load(it.getFile(requireContext()))
-                    .into(binding.createNoteImage)
-            }
-        })
+
+        binding.createNoteImage.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = ImageEditAdapter(requireContext())
+        binding.createNoteImage.adapter = adapter
+        adapter.bindToLiveData(viewLifecycleOwner, viewModel.images)
 
         viewModel.title.distinctUntilChanged().ignoreFirstValue().observe(viewLifecycleOwner, Observer {
             viewModel.onTitleChange(it)
