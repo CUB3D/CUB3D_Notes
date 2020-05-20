@@ -40,7 +40,7 @@ class ArchiveFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar!!.title = "Archive"
 
         binding.archiveRecycler.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
-        val adapter = NotesAdapter(requireContext()) { note, v  -> viewModel.noteNavigationController.editNote(findNavController(), note, v) }
+        val adapter = NotesAdapter(requireContext()) { note, v -> viewModel.noteNavigationController.editNote(findNavController(), note, v) }
         binding.archiveRecycler.adapter = adapter
 
         NoteSelectionTrackerFactory.buildTracker("archive-selection", binding.archiveRecycler).bind(adapter)

@@ -276,7 +276,6 @@ class NewNoteFragment : Fragment() {
         binding.createNoteMoreColors.adapter = colorAdapter
         viewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer { colorAdapter.submitList(it) })
 
-
         binding.createNoteImage.layoutManager = LinearLayoutManager(requireContext())
         val adapter = ImageEditAdapter(requireContext())
         binding.createNoteImage.adapter = adapter
