@@ -25,5 +25,5 @@ data class NoteAndCheckboxes(
     @Relation(parentColumn = "id", entityColumn = "noteId")
     val videos: List<VideoEntry>
 ) {
-    fun isEmpty() = note.title.isEmpty() && note.text.isEmpty() && checkboxes.isEmpty() && images.isEmpty() && audioClips.isEmpty() && videos.isEmpty()
+    fun isEmpty() = note.title.isEmpty() && note.text.isEmpty() && checkboxes.isEmpty() && images.isEmpty() && audioClips.isEmpty() && videos.isEmpty() && labels.isEmpty() && note.timeReminder == null
 }

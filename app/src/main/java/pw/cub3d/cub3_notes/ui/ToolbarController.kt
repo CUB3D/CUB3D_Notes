@@ -12,19 +12,23 @@ import com.google.android.material.appbar.AppBarLayout
 import pw.cub3d.cub3_notes.core.manager.SettingsManager
 
 object ToolbarController {
-    fun setupToolbar(settingsManager: SettingsManager, fragment: Fragment, appBarLayout: AppBarLayout, toolbar: Toolbar, title: String) {
+    fun setupToolbarSettings(fragment: Fragment, settingsManager: SettingsManager, toolbar: Toolbar, appBarLayout: AppBarLayout) {
         settingsManager.toolbarEnabled.observe(fragment.viewLifecycleOwner, Observer {
             if (it) {
                 toolbar.visibility = View.VISIBLE
                 appBarLayout.visibility = View.VISIBLE
             } else {
-//                (fragment.requireActivity() as AppCompatActivity).setSupportActionBar(null)
                 toolbar.visibility = View.GONE
-
                 appBarLayout.visibility = View.GONE
             }
         })
+    }
 
+    fun setupToolbar(
+        fragment: Fragment,
+        toolbar: Toolbar,
+        title: String
+    ) {
         (fragment.requireActivity() as MainActivity).apply {
             setSupportActionBar(toolbar)
             supportActionBar!!.title = title
