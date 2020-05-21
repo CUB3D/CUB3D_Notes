@@ -202,4 +202,8 @@ class NewNoteViewModel @Inject constructor(
     fun addVideo(path: String) {
         GlobalScope.launch { videoDao.save(VideoEntry(0, noteId!!, path)) }
     }
+
+    fun onImageDelete(item: ImageEntry) {
+        viewModelScope.launch { imagesDao.delete(item) }
+    }
 }

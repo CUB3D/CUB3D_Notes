@@ -38,6 +38,7 @@ import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 import pw.cub3d.cub3_notes.ui.dialog.reminderdialog.ReminderDialog
 import pw.cub3d.cub3_notes.ui.nav.NewNoteNavigationController
 import pw.cub3d.cub3_notes.ui.newnote.imagelist.ImageEditAdapter
+import pw.cub3d.cub3_notes.ui.newnote.imagelist.ImageEditViewHolderCallbacks
 import pw.cub3d.cub3_notes.ui.noteLabels.NoteLabelEditFragment
 
 class NewNoteFragment : Fragment() {
@@ -264,20 +265,13 @@ class NewNoteFragment : Fragment() {
             checkBoxAdapter.submitList(checkboxes)
         })
 
-//        checkBoxAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-//                val vh = binding.createNoteCheckBoxes.findViewHolderForAdapterPosition((binding.createNoteCheckBoxes.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()) as CheckBoxViewHolder
-//                vh.view.checkboxEntryText.requestFocus()
-//            }
-//        })
-
         binding.createNoteMoreColors.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         val colorAdapter = ColoursAdapter(this, viewModel)
         binding.createNoteMoreColors.adapter = colorAdapter
         viewModel.defaultNoteColours.observe(viewLifecycleOwner, Observer { colorAdapter.submitList(it) })
 
         binding.createNoteImage.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = ImageEditAdapter(requireContext())
+        val adapter = ImageEditAdapter(requireContext(), ImageEditViewHolderCallbacks(viewModel))
         binding.createNoteImage.adapter = adapter
         adapter.bindToLiveData(viewLifecycleOwner, viewModel.images)
 
@@ -293,7 +287,7 @@ class NewNoteFragment : Fragment() {
             Toast.makeText(requireContext(), it.takeIf { it }?.let { "Pinned" } ?: "Unpinned", Toast.LENGTH_SHORT).show()
         })
 
-            viewModel.colour.observe(viewLifecycleOwner, Observer {
+        viewModel.colour.observe(viewLifecycleOwner, Observer {
             println("Ignoring background colour for now $it")
             // binding.noteColour = it
         })
