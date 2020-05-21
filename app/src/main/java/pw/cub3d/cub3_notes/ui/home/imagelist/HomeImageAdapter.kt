@@ -1,4 +1,4 @@
-package pw.cub3d.cub3_notes.ui.newnote.imagelist
+package pw.cub3d.cub3_notes.ui.home.imagelist
 
 import android.content.Context
 import android.view.ViewGroup
@@ -7,9 +7,8 @@ import pw.cub3d.cub3_notes.core.database.entity.ImageEntry
 import pw.cub3d.cub3_notes.core.utils.GlideApp
 import pw.cub3d.cub3_notes.databinding.ImageEntryBinding
 import pw.cub3d.cub3_notes.ui.home.BaseAdapter
-import pw.cub3d.cub3_notes.ui.home.imagelist.ImageViewHolder
 
-class ImageEditAdapter(private val ctx: Context) : BaseAdapter<ImageEntry, ImageViewHolder>(ctx) {
+class HomeImageAdapter(private val ctx: Context) : BaseAdapter<ImageEntry, ImageViewHolder>(ctx) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ImageViewHolder(
         ImageEntryBinding.inflate(layoutInflater, parent, false)
     )

@@ -6,6 +6,7 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.noties.markwon.Markwon
 import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
@@ -13,6 +14,7 @@ import pw.cub3d.cub3_notes.core.manager.AudioManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
 import pw.cub3d.cub3_notes.core.utils.GlideApp
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
+import pw.cub3d.cub3_notes.ui.home.imagelist.HomeImageAdapter
 
 class NoteViewHolder(
     private val view: NoteEntryBinding,
@@ -24,6 +26,7 @@ class NoteViewHolder(
 
     private val checkboxAdapter = HomeCheckboxAdapter(view.root.context)
     private val labelAdapter = NoteLabelsAdapter(view.root.context)
+    private val imageAdapter = HomeImageAdapter(view.root.context)
 
     init {
         view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
@@ -31,6 +34,9 @@ class NoteViewHolder(
 
         view.noteLabels.layoutManager = LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
         view.noteLabels.adapter = labelAdapter
+
+        view.noteImage.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+        view.noteImage.adapter = imageAdapter
     }
 
     fun bind(note: NoteAndCheckboxes) {
@@ -39,17 +45,8 @@ class NoteViewHolder(
         markwon.setMarkdown(view.noteTitle, note.note.title)
         markwon.setMarkdown(view.noteText, note.note.text)
 
-        val image = note.images.firstOrNull()
-
-        if (image != null) {
-            view.noteImage.visibility = View.VISIBLE
-
-            GlideApp.with(view.root)
-                .load(image.getFile(view.root.context))
-                .into(view.noteImage)
-        } else {
-            view.noteImage.visibility = View.GONE
-        }
+        imageAdapter.submitList(note.images)
+        view.noteImage.visibility = if(note.images.isEmpty()) View.GONE else View.VISIBLE
 
         if (note.checkboxes.isNotEmpty()) {
             val unticked = note.checkboxes.filterNot { it.checked }.sortedBy { it.position }
