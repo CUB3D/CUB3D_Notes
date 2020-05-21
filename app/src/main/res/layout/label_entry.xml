@@ -27,11 +27,10 @@
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:backgroundTint="@{model.colourId, default=`#ff0000`}"
-            android:visibility="@{model.colour == null ? View.GONE : View.VISIBLE}"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
@@ -42,7 +41,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded" />
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded"
+            app:strokeColor="?icon_tint"
+            app:strokeWidth="2dp" />
 
         <TextView
             android:id="@+id/textView2"
