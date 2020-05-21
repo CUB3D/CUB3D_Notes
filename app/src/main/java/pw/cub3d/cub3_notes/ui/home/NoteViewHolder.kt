@@ -31,7 +31,7 @@ class NoteViewHolder(
         view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
         view.noteChecks.adapter = checkboxAdapter
 
-        view.noteLabels.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)//LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
+        view.noteLabels.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL) // LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
         view.noteLabels.adapter = labelAdapter
 
         view.noteImage.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
