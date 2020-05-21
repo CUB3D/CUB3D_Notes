@@ -15,7 +15,7 @@ abstract class NotesDao {
     abstract fun getNoteSearchResults(): LiveData<List<NoteAndCheckboxes>>
 
     @Transaction
-    @Query("SELECT * FROM notes WHERE archived = :archived")
+    @Query("SELECT * FROM notes WHERE archived = :archived AND deletionTime IS NULL")
     abstract fun getNotes(archived: Boolean): Flow<List<NoteAndCheckboxes>>
 
     @Transaction
