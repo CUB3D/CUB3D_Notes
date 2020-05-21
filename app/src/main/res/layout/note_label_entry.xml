@@ -17,14 +17,13 @@
             android:id="@+id/chip4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="@{label.title}"
-            tools:text="School"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
             android:textColor="@{label.colourIdChip}"
-            tools:textColor="#ff0000"
             app:chipBackgroundColor="@android:color/transparent"
             app:chipStrokeColor="@{label.colourIdChip, default=`@color/lightGrey`}"
-            app:chipStrokeWidth="1dp" />
+            app:chipStrokeWidth="1dp"
+            tools:text="School"
+            tools:textColor="#ff0000" />
     </FrameLayout>
 </layout>

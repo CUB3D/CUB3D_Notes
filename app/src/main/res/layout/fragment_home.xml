@@ -111,27 +111,25 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/home_appBar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/home_appBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fitsSystemWindows="true"
+        android:background="@drawable/bg_app_bar"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:background="@drawable/background_toolbar_home"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:fitsSystemWindows="true"
-            android:background="@drawable/bg_app_bar"
-            app:elevation="0dp">
-
-            <androidx.appcompat.widget.Toolbar
-                android:background="@drawable/background_toolbar_home"
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways"
-                android:elevation="4dp"
-                android:layout_margin="4dp"/>
-        </com.google.android.material.appbar.AppBarLayout>
-
-
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:elevation="4dp"
+            android:layout_margin="4dp"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bar"
@@ -229,14 +227,14 @@
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            app:tint="?icon_tint"
-            app:backgroundTint="?attr/colorSurface"
-            android:src="@drawable/ic_plus"
-            android:id="@+id/home_takeNote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/bar" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        app:tint="?icon_tint"
+        app:backgroundTint="?attr/colorSurface"
+        android:src="@drawable/ic_plus"
+        android:id="@+id/home_takeNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/bar" />
 
     <LinearLayout
         android:id="@+id/home_filter_sheet"
@@ -246,7 +244,9 @@
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="450dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:visibility="gone">
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/home_filter_all"
             style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -319,7 +319,9 @@
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="450dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:visibility="gone">
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/home_sort_manual"
             style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -402,8 +404,6 @@
             app:icon="@drawable/ic_check_square" />
     </LinearLayout>
 
-
-
     <LinearLayout
         android:id="@+id/home_more_sheet"
         android:layout_width="match_parent"
@@ -412,7 +412,8 @@
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="450dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:visibility="gone">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/home_more_archive"

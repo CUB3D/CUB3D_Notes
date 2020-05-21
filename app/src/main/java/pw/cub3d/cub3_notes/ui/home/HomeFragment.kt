@@ -31,6 +31,7 @@ class HomeFragment : Fragment() {
     lateinit var pinnedAdapter: NotesAdapter
     lateinit var otherAdapter: NotesAdapter
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
