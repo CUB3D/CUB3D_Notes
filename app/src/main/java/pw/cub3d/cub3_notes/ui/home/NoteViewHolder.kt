@@ -12,7 +12,6 @@ import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.core.manager.AudioManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
-import pw.cub3d.cub3_notes.core.utils.GlideApp
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
 import pw.cub3d.cub3_notes.ui.home.imagelist.HomeImageAdapter
 
@@ -46,7 +45,7 @@ class NoteViewHolder(
         markwon.setMarkdown(view.noteText, note.note.text)
 
         imageAdapter.submitList(note.images)
-        view.noteImage.visibility = if(note.images.isEmpty()) View.GONE else View.VISIBLE
+        view.noteImage.visibility = if (note.images.isEmpty()) View.GONE else View.VISIBLE
 
         if (note.checkboxes.isNotEmpty()) {
             val unticked = note.checkboxes.filterNot { it.checked }.sortedBy { it.position }

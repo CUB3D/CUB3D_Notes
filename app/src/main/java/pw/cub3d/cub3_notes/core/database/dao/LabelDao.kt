@@ -30,7 +30,6 @@ abstract class LabelDao {
     @Query("DELETE FROM note_label WHERE note_id = :noteId AND label_id = :labelId")
     abstract fun deleteNoteLabel(noteId: Long, labelId: Long)
 
-
     @Query("UPDATE labels SET colour = :s WHERE id = :id")
     abstract fun updateColor(id: Long, s: String?)
 }

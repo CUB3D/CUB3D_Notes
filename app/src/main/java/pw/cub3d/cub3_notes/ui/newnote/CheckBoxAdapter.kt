@@ -28,7 +28,7 @@ class CheckBoxAdapter(
     override fun getItemId(position: Int) = getItem(position).id
 
     override fun onBindViewHolder(holder: CheckBoxViewHolder, position: Int) {
-        val lastItem = position == itemCount-1
+        val lastItem = position == itemCount - 1
         holder.bind(getItem(position), lastItem)
     }
 }
@@ -71,7 +71,7 @@ class CheckBoxViewHolder(
             newNoteViewModel.onCheckboxDelete(checkboxEntry)
         }
 
-        if(lastItem) {
+        if (lastItem) {
             view.checkboxEntryText.requestFocus()
         }
     }
