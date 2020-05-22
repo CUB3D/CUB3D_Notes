@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import pw.cub3d.cub3_notes.core.dagger.injector
@@ -33,15 +32,14 @@ class LabelEditFragment : Fragment() {
                 labelEditViewModel.saveNewLabel("#${Integer.toHexString(color)}")
             }
             cp.setOnDismissListener {
-                println("Dismiss")
                 labelEditViewModel.saveNewLabel(null)
             }
         }
 
         binding.editLabelRecycler.layoutManager = LinearLayoutManager(requireContext())
-        val labelAdapter = LabelAdapter(requireContext())
+        val labelAdapter = LabelAdapter(requireContext(), LabelViewHolderCallbacks(labelEditViewModel, requireActivity()))
         binding.editLabelRecycler.adapter = labelAdapter
-        labelEditViewModel.labels.observe(viewLifecycleOwner, Observer { labelAdapter.submitList(it) })
+        labelAdapter.bindToLiveData(viewLifecycleOwner, labelEditViewModel.labels)
 
         binding.editLabelNewText.requestFocus()
     }

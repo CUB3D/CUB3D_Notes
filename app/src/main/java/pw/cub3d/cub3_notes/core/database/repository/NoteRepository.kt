@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import org.threeten.bp.ZonedDateTime
 import pw.cub3d.cub3_notes.core.database.dao.CheckboxEntryDao
 import pw.cub3d.cub3_notes.core.database.dao.NotesDao
@@ -27,12 +24,13 @@ class NoteRepository @Inject constructor(
 
     fun getNotes(filter: LiveData<FilterType>, sort: LiveData<SortTypes>, pinnedOnly: Boolean, archived: Boolean): Flow<List<NoteAndCheckboxes>> = flow {
 
-            filter.asFlow().combine(sort.asFlow()) { filter, sort ->
-                NoteAction(filter, sort)
-            }.combine(notesDao.getNotes(archived)) { a, n ->
-                Temp(a, n)
-            }.collect { t ->
+        val filterFlow = filter.asFlow()
+        val sortFlow = sort.asFlow()
+        val notesFlow = notesDao.getNotes(archived)
 
+        combine(filterFlow, sortFlow, notesFlow) { filter, sort, n ->
+                Temp(NoteAction(filter, sort), n)
+        }.collect { t ->
                 val notes = t.notes
                 val action = t.a
 

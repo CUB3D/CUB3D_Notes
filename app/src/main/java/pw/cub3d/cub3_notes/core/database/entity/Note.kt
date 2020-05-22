@@ -32,7 +32,9 @@ data class Note(
     var position: Long = 0,
 
     var creationTime: String = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
-    var viewTime: String = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+    var viewTime: String = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME),
+
+    val hiddenContent: Boolean = false
 
 ) {
     fun getLocalModificationTime(): String {

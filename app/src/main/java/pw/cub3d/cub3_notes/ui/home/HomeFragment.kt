@@ -34,8 +34,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ToolbarController.setupToolbar(viewModel.settingsManager, this, binding.homeAppBar, binding.toolbar, "Search your notes")
+        ToolbarController.setupToolbar(
+            this,
+            binding.toolbar,
+            "Search your notes"
+        )
         ToolbarController.setupSideNav(viewModel.settingsManager, this)
+        ToolbarController.setupToolbarSettings(this, viewModel.settingsManager, binding.toolbar, binding.homeAppBar)
 
         binding.homePinnedNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
         binding.homeNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)

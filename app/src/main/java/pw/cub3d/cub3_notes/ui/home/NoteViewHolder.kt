@@ -6,13 +6,14 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.noties.markwon.Markwon
 import pw.cub3d.cub3_notes.core.database.entity.Note
 import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
 import pw.cub3d.cub3_notes.core.manager.AudioManager
 import pw.cub3d.cub3_notes.core.manager.StorageManager
-import pw.cub3d.cub3_notes.core.utils.GlideApp
 import pw.cub3d.cub3_notes.databinding.NoteEntryBinding
+import pw.cub3d.cub3_notes.ui.home.imagelist.HomeImageAdapter
 
 class NoteViewHolder(
     private val view: NoteEntryBinding,
@@ -24,32 +25,40 @@ class NoteViewHolder(
 
     private val checkboxAdapter = HomeCheckboxAdapter(view.root.context)
     private val labelAdapter = NoteLabelsAdapter(view.root.context)
+    private val imageAdapter = HomeImageAdapter(view.root.context)
 
     init {
         view.noteChecks.layoutManager = LinearLayoutManager(view.root.context)
         view.noteChecks.adapter = checkboxAdapter
 
-        view.noteLabels.layoutManager = LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
+        view.noteLabels.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL) // LinearLayoutManager(view.root.context, LinearLayoutManager.HORIZONTAL, false)
         view.noteLabels.adapter = labelAdapter
+
+        view.noteImage.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+        view.noteImage.adapter = imageAdapter
     }
 
     fun bind(note: NoteAndCheckboxes) {
         view.note = note.note
 
         markwon.setMarkdown(view.noteTitle, note.note.title)
+
+        if(note.note.hiddenContent) {
+            view.noteChecks.visibility = View.GONE
+            view.notePlayAudio.visibility = View.GONE
+            view.noteEmptyNotice.visibility = View.GONE
+            view.noteImage.visibility = View.GONE
+
+            view.noteHiddenNotice.visibility = View.VISIBLE
+            return
+        } else {
+            view.noteHiddenNotice.visibility = View.GONE
+        }
+
         markwon.setMarkdown(view.noteText, note.note.text)
 
-        val image = note.images.firstOrNull()
-
-        if (image != null) {
-            view.noteImage.visibility = View.VISIBLE
-
-            GlideApp.with(view.root)
-                .load(image.getFile(view.root.context))
-                .into(view.noteImage)
-        } else {
-            view.noteImage.visibility = View.GONE
-        }
+        imageAdapter.submitList(note.images)
+        view.noteImage.visibility = if (note.images.isEmpty()) View.GONE else View.VISIBLE
 
         if (note.checkboxes.isNotEmpty()) {
             val unticked = note.checkboxes.filterNot { it.checked }.sortedBy { it.position }
@@ -62,12 +71,8 @@ class NoteViewHolder(
             view.noteChecks.visibility = View.GONE
         }
 
-        if (note.labels.isNotEmpty()) {
-            labelAdapter.submitList(note.labels)
-            view.noteLabels.visibility = View.VISIBLE
-        } else {
-            view.noteLabels.visibility = View.GONE
-        }
+        labelAdapter.submitList(note.labels)
+        view.noteLabels.visibility = if (note.labels.isNotEmpty()) View.VISIBLE else View.GONE
 
         if (note.audioClips.isNotEmpty()) {
             view.notePlayAudio.setOnClickListener {
@@ -94,6 +99,7 @@ class NoteViewHolder(
         if (note.isEmpty()) {
             view.noteEmptyNotice.visibility = View.VISIBLE
         }
+
     }
 
     override fun getItemDetails(key: Long): ItemDetailsLookup.ItemDetails<Long> {

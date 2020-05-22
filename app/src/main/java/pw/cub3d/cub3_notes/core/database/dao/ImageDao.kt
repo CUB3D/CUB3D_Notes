@@ -25,4 +25,7 @@ abstract class ImageDao {
 
     @Query("SELECT * FROM image")
     abstract fun getAll(): List<ImageEntry>
+
+    @Delete
+    abstract fun delete(item: ImageEntry)
 }

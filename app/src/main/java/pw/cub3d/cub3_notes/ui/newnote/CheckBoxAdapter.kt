@@ -28,7 +28,8 @@ class CheckBoxAdapter(
     override fun getItemId(position: Int) = getItem(position).id
 
     override fun onBindViewHolder(holder: CheckBoxViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val lastItem = position == itemCount - 1
+        holder.bind(getItem(position), lastItem)
     }
 }
 
@@ -47,9 +48,10 @@ class CheckBoxViewHolder(
         view.checked = MutableLiveData()
     }
 
-    fun bind(checkboxEntry: CheckboxEntry) {
-        println("Bound check $checkboxEntry")
-
+    fun bind(
+        checkboxEntry: CheckboxEntry,
+        lastItem: Boolean
+    ) {
         view.checkboxEntryCheckAnimation.visibility = View.GONE
         view.checkboxEntryDeleteAnimation.visibility = View.GONE
 
@@ -67,6 +69,10 @@ class CheckBoxViewHolder(
 
         view.checkboxEntryDelete.setOnClickListener {
             newNoteViewModel.onCheckboxDelete(checkboxEntry)
+        }
+
+        if (lastItem) {
+            view.checkboxEntryText.requestFocus()
         }
     }
 }

@@ -24,4 +24,8 @@ class LabelEditViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateLabelColour(label: Label, s: String) {
+        labelDao.updateColor(label.id, s)
+    }
 }
