@@ -42,6 +42,19 @@ class NoteViewHolder(
         view.note = note.note
 
         markwon.setMarkdown(view.noteTitle, note.note.title)
+
+        if(note.note.hiddenContent) {
+            view.noteChecks.visibility = View.GONE
+            view.notePlayAudio.visibility = View.GONE
+            view.noteEmptyNotice.visibility = View.GONE
+            view.noteImage.visibility = View.GONE
+
+            view.noteHiddenNotice.visibility = View.VISIBLE
+            return
+        } else {
+            view.noteHiddenNotice.visibility = View.GONE
+        }
+
         markwon.setMarkdown(view.noteText, note.note.text)
 
         imageAdapter.submitList(note.images)
@@ -86,6 +99,7 @@ class NoteViewHolder(
         if (note.isEmpty()) {
             view.noteEmptyNotice.visibility = View.VISIBLE
         }
+
     }
 
     override fun getItemDetails(key: Long): ItemDetailsLookup.ItemDetails<Long> {
