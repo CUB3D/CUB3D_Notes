@@ -62,7 +62,7 @@ dependencies {
 
     // Navigation
     implementation 'androidx.navigation:navigation-ui:2.2.2'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
 
     // Room
