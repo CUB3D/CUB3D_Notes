@@ -88,7 +88,7 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
 
     //Dagger
-    def daggerVersion = '2.29.1'
+    def daggerVersion = '2.31.2'
     api "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
@@ -116,7 +116,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.11.4'
 
     //Markwon
-    final def markwon_version = '4.6.0'
+    final def markwon_version = '4.6.1'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:editor:$markwon_version"
     implementation "io.noties.markwon:ext-latex:$markwon_version"
