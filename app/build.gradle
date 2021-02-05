@@ -113,7 +113,7 @@ dependencies {
     implementation 'com.pes.materialcolorpicker:library:1.2.5'
 
     // Video playback
-    implementation 'com.google.android.exoplayer:exoplayer:2.11.4'
+    implementation 'com.google.android.exoplayer:exoplayer:2.13.0'
 
     //Markwon
     final def markwon_version = '4.6.1'
