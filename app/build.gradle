@@ -94,7 +94,7 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     // Sentry
-    implementation 'io.sentry:sentry-android:3.2.1'
+    implementation 'io.sentry:sentry-android:4.3.0'
 
     // Moshi
     implementation("com.squareup.moshi:moshi:1.11.0")
