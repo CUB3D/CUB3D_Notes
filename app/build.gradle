@@ -57,7 +57,7 @@ dependencies {
 
 
     // Paging
-    def paging_version = "2.1.2"
+    def paging_version = "3.0.0"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // Navigation
