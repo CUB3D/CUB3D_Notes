@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.sentry.android.gradle'
+apply plugin: 'org.jetbrains.dokka'
 
 android {
     compileSdkVersion 31
@@ -9,7 +10,7 @@ android {
     defaultConfig {
         applicationId "pw.cub3d.cub3_notes"
         minSdkVersion 22
-        targetSdkVersion 31
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -23,6 +24,7 @@ android {
     }
     buildFeatures {
         dataBinding = true
+        compose = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -34,9 +36,13 @@ android {
     }
     buildTypes {
         release {
+            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
     }
 }
 
@@ -132,6 +138,31 @@ dependencies {
 
     // Detect memory leaks
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+
+
+    // Jetpack compose
+    implementation "androidx.compose.ui:ui:$compose_version"
+    // Tooling support (Previews, etc.)
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation "androidx.compose.foundation:foundation:$compose_version"
+    // Material Design
+    implementation "androidx.compose.material:material:$compose_version"
+    // Material design icons
+    implementation "androidx.compose.material:material-icons-core:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    // Integration with activities
+    implementation "androidx.activity:activity-compose:1.4.0-alpha01"
+    // Integration with ViewModels
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+    // Integration with observables
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+
+    // UI Tests
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+
+    // Accompanist
+    implementation "com.google.accompanist:accompanist-glide:0.11.1"
 }
 
 kotlin {

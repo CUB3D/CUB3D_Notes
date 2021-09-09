@@ -45,19 +45,19 @@ class HomeFragment : Fragment() {
         binding.homePinnedNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
         binding.homeNotes.layoutManager = NoteLayoutManager(viewLifecycleOwner, viewModel.settingsManager)
 
-        (requireActivity() as MainActivity).binding.navView.setNavigationItemSelectedListener {
-            println("Nav item selected: $it")
-            when (it.itemId) {
-                R.id.nav_new_label -> findNavController().navigate(R.id.nav_label_edit)
-                R.id.sidenav_settings -> findNavController().navigate(R.id.nav_settings)
-                R.id.sidenav_archived -> findNavController().navigate(R.id.nav_archive)
-                R.id.sidenav_deleted -> findNavController().navigate(R.id.nav_deleted)
-                R.id.sidenav_reminders -> viewModel.setShowOnlyReminders(true)
-                R.id.sidenav_notes -> viewModel.setShowOnlyReminders(false)
-            }
-
-            true
-        }
+//        (requireActivity() as MainActivity).binding.navView.setNavigationItemSelectedListener {
+//            println("Nav item selected: $it")
+//            when (it.itemId) {
+//                R.id.nav_new_label -> findNavController().navigate(R.id.nav_label_edit)
+//                R.id.sidenav_settings -> findNavController().navigate(R.id.nav_settings)
+//                R.id.sidenav_archived -> findNavController().navigate(R.id.nav_archive)
+//                R.id.sidenav_deleted -> findNavController().navigate(R.id.nav_deleted)
+//                R.id.sidenav_reminders -> viewModel.setShowOnlyReminders(true)
+//                R.id.sidenav_notes -> viewModel.setShowOnlyReminders(false)
+//            }
+//
+//            true
+//        }
 
         viewModel.labels.observe(viewLifecycleOwner, Observer {
             val menu = (requireActivity() as MainActivity).binding.navView.menu.findItem(R.id.hamburger_labels).subMenu

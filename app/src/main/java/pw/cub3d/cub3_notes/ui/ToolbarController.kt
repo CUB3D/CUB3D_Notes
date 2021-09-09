@@ -33,10 +33,10 @@ object ToolbarController {
             setSupportActionBar(toolbar)
             supportActionBar!!.title = title
 
-            setupActionBarWithNavController(
-                fragment.findNavController(),
-                appBarConfiguration
-            )
+//            setupActionBarWithNavController(
+//                fragment.findNavController(),
+//                appBarConfiguration
+//            )
         }
     }
 
