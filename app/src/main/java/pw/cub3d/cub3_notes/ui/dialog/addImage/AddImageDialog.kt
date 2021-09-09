@@ -7,10 +7,11 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Window
 import androidx.core.content.FileProvider
-import kotlinx.android.synthetic.main.dialog_add_image.*
+import androidx.databinding.DataBindingUtil
 import pw.cub3d.cub3_notes.BuildConfig
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.manager.StorageManager
+import pw.cub3d.cub3_notes.databinding.DialogAddImageBinding
 
 class AddImageDialog(
     private val act: Activity,
@@ -66,13 +67,14 @@ class AddImageDialog(
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        setContentView(R.layout.dialog_add_image)
-
-        addImage_chooseImage.setOnClickListener {
+        val v: DialogAddImageBinding = DataBindingUtil.inflate(layoutInflater, R.layout.dialog_add_image, null, false)
+        setContentView(v.root)
+        
+        v.addImageChooseImage.setOnClickListener {
             pickImage()
         }
 
-        addImage_takePhoto.setOnClickListener {
+        v.addImageTakePhoto.setOnClickListener {
             takePhoto()
         }
     }

@@ -11,17 +11,18 @@ import android.view.View
 import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
 import java.util.*
-import kotlinx.android.synthetic.main.dialog_reminder.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import pw.cub3d.cub3_notes.R
+import pw.cub3d.cub3_notes.databinding.DialogReminderBinding
 
 class ReminderDialog(
     private val act: FragmentActivity,
@@ -98,11 +99,12 @@ class ReminderDialog(
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        setContentView(R.layout.dialog_reminder)
+        val v: DialogReminderBinding = DataBindingUtil.inflate(layoutInflater, R.layout.dialog_reminder, null, false)
+        setContentView(v.root)
 
-        reminder_cancel.setOnClickListener { dismiss() }
+        v.reminderCancel.setOnClickListener { dismiss() }
 
-        reminder_save.setOnClickListener {
+        v.reminderSave.setOnClickListener {
 //            val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
 //            setAlarm(context, ZonedDateTime.now().plusSeconds(10).toEpochSecond(),
@@ -116,9 +118,9 @@ class ReminderDialog(
                 TODO("SET THE SELECTED DATE")
             }
 
-        reminder_date.adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, dateOptions.map { it.first }.toTypedArray())
+        v.reminderDate.adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, dateOptions.map { it.first }.toTypedArray())
 
-        reminder_date.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        v.reminderDate.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }

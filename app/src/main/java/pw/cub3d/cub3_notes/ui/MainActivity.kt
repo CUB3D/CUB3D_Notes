@@ -21,7 +21,6 @@ import androidx.navigation.ui.navigateUp
 import java.io.File
 import java.util.*
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.activity_main.*
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.core.database.dao.ImageDao
