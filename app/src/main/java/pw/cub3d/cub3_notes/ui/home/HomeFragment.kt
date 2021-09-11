@@ -3,6 +3,8 @@ package pw.cub3d.cub3_notes.ui.home
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,14 +23,16 @@ import pw.cub3d.cub3_notes.core.database.repository.FilterType
 import pw.cub3d.cub3_notes.core.database.repository.SortTypes
 import pw.cub3d.cub3_notes.databinding.FragmentHomeBinding
 import pw.cub3d.cub3_notes.ui.*
+import pw.cub3d.cub3_notes.ui.common.NoteListCompose
+import pw.cub3d.cub3_notes.ui.common.NoteListComposeLive
 import pw.cub3d.cub3_notes.ui.dialog.addImage.AddImageDialog
 import pw.cub3d.cub3_notes.ui.dialog.addVideo.AddVideoDialog
 
 class HomeFragment : Fragment() {
-    private lateinit var binding: FragmentHomeBinding
+//    private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels { injector.homeViewModelFactory() }
 
-    lateinit var pinnedAdapter: NotesAdapter
+    /*lateinit var pinnedAdapter: NotesAdapter
     lateinit var otherAdapter: NotesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -229,15 +233,19 @@ class HomeFragment : Fragment() {
         binding.homeSortAlphaReverse.setOnClickListener { viewModel.sort.postValue(SortTypes.TITLE_REVERSE_ALPHABETICAL) }
 
         binding.homeLabels.setOnClickListener { findNavController().navigate(R.id.nav_label_edit) }
-    }
+    }*/
 
+    @ExperimentalFoundationApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentHomeBinding.inflate(inflater, container, false).apply {
+    ) = /*FragmentHomeBinding.inflate(inflater, container, false).apply {
         binding = this
         pinnedEmpty = false
         otherEmpty = false
-    }.root
+    }.root*/
+        ComposeView(requireContext()).apply {
+            setContent { NoteListComposeLive(liveNotes = viewModel.unpinned) }
+        }
 }

@@ -1,16 +1,13 @@
 package pw.cub3d.cub3_notes.ui.common
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,22 +19,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.LiveData
 import pw.cub3d.cub3_notes.R
-import pw.cub3d.cub3_notes.core.database.entity.CheckboxEntry
-import pw.cub3d.cub3_notes.core.database.entity.Note
-import pw.cub3d.cub3_notes.core.database.entity.NoteAndCheckboxes
+import pw.cub3d.cub3_notes.core.database.entity.*
 
 @Composable
 fun Chip(
     text: String,
     icon: Painter? = null,
     icon_desc: String? = null,
+    color: Color = Color.White
 ) {
     Surface(
-        modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
+        modifier = Modifier.padding(end = 8.dp, bottom = 0.dp),
         elevation = 8.dp,
         shape = RoundedCornerShape(16.dp),
-        color = colorResource(R.color.mdtp_light_gray)
+        color = colorResource(R.color.mdtp_light_gray),
+        border = BorderStroke(1.dp, color),
     ) {
         Row() {
             icon?.let {
@@ -48,44 +46,94 @@ fun Chip(
             Text(
                 text = text,
                 style = MaterialTheme.typography.body2,
-                color = Color.White,
+                color = color,
                 modifier = Modifier.padding(8.dp)
             )
         }
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
-fun NoteEntryCompose(note: NoteAndCheckboxes) {
-    val bg = note.note.colour?.let { Color(android.graphics.Color.parseColor(it)) } ?: Color.Transparent
-    Card(modifier = Modifier
-        .padding(16.dp)
-        .border(1.dp, Color.LightGray, RoundedCornerShape(16.dp)), elevation = 0.dp, backgroundColor = bg, shape = RoundedCornerShape(16.dp)) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)) {
+fun NoteListCompose(notes: List<NoteAndCheckboxes>) {
+    LazyVerticalGrid(cells = GridCells.Fixed(2), content = {
+        items(notes) {
+            NoteEntryCompose(note = it)
+        }
+    })
+}
+
+@ExperimentalFoundationApi
+@Composable
+fun NoteListComposeLive(liveNotes: LiveData<List<NoteAndCheckboxes>>) {
+    val notes = liveNotes.observeAsState()
+    NoteTheme(darkTheme = true) {
+        NoteListCompose(notes.value ?: emptyList())
+    }
+}
+
+@ExperimentalFoundationApi
+@Preview
+@Composable
+fun NoteListComposePreview() {
+    NoteTheme(darkTheme = true) {
+        NoteListCompose(notes = listOf(
+            NoteAndCheckboxes(Note(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
+            NoteAndCheckboxes(Note(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
+            NoteAndCheckboxes(Note(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
+            NoteAndCheckboxes(Note(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
+        ))
+    }
+}
+
+@Composable
+fun NoteEntryCompose(
+    note: NoteAndCheckboxes,
+    modifier: Modifier = Modifier.fillMaxWidth()
+) {
+    val bg =
+        note.note.colour?.let { Color(android.graphics.Color.parseColor(it)) } ?: Color.Transparent
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .border(1.dp, Color.LightGray, RoundedCornerShape(16.dp)),
+        elevation = 0.dp,
+        backgroundColor = bg,
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = modifier
+                .padding(16.dp)
+        ) {
             if (note.isEmpty()) {
-                Text(text = "Empty Note", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = Color.LightGray, fontSize = 20.sp)
+                Text(
+                    text = "Empty Note",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    color = Color.LightGray,
+                    fontSize = 20.sp
+                )
             } else {
                 if (note.images.isNotEmpty()) {
-                    LazyColumn(content = {
-                        items(note.images, key=null) {
+                    Column() {
+                        note.images.forEach {
                             Text("Image here")
                         }
-                    })
+                    }
                 }
 
-                Text(text = note.note.title, color = Color.White)
+                if (note.note.title.isNotEmpty()) {
+                    Text(text = note.note.title, color = Color.White)
+                }
                 if (!note.note.hiddenContent) {
-                    Text(text = note.note.text)
+                    if (note.note.text.isNotEmpty()) {
+                        Text(text = note.note.text)
+                    }
                 }
 
                 if (note.checkboxes.isNotEmpty()) {
-                    LazyColumn(content = {
-                        items(
-                            note.checkboxes.filterNot { it.checked }.sortedBy { it.position },
-                            key = null
-                        ) {
+                    Column() {
+                        note.checkboxes.filterNot { it.checked }.sortedBy { it.position }.forEach {
                             Box(modifier = Modifier.fillMaxWidth()) {
                                 Row() {
                                     Checkbox(checked = it.checked, onCheckedChange = {
@@ -97,10 +145,9 @@ fun NoteEntryCompose(note: NoteAndCheckboxes) {
                                         modifier = Modifier.fillMaxWidth()
                                     )
                                 }
-//                                Icon(painter = painterResource(id = R.drawable.ic_x), contentDescription = "Close", modifier = Modifier.align(Alignment.CenterEnd))
                             }
                         }
-                    })
+                    }
                     val ticked = note.checkboxes.count { it.checked }
                     if (ticked > 0) {
                         val postfix = if (ticked == 1) {
@@ -108,36 +155,41 @@ fun NoteEntryCompose(note: NoteAndCheckboxes) {
                         } else {
                             "items"
                         }
-                        Row {
-                            Text("+ $ticked $postfix")
-                            LinearProgressIndicator(progress = (ticked.toFloat() / note.checkboxes.size.toFloat()) * 100.0f)
+                        Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+                            Text(text = "+ $ticked ticked $postfix", color = Color.LightGray)
+                            LinearProgressIndicator(
+                                progress = (ticked.toFloat() / note.checkboxes.size.toFloat()) * 100.0f,
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .width(18.dp)
+                                    .padding(start = 16.dp)
+                            )
                         }
                     }
                 }
 
                 if (note.audioClips.isNotEmpty()) {
-                    LazyColumn(content = {
-                        items(note.images, key=null) {
+                    Column() {
+                        note.audioClips.forEach {
                             Text("Audio here")
                         }
-                    })
+                    }
                 }
 
-                LazyRow(content = {
+                Column() {
                     if (note.note.timeReminder != null) {
-                        item {
-                            Chip(
-                                text = note.note.formattedReminderTime()!!,
-                                icon = painterResource(id = R.drawable.ic_clock)
-                            )
-                        }
+                        Chip(
+                            text = note.note.formattedReminderTime()!!,
+                            icon = painterResource(id = R.drawable.ic_clock)
+                        )
                     }
-                    items(note.labels) {
-                        Chip(text = it.title)
+                    note.labels.forEach {
+                        Chip(
+                            text = it.title,
+                            color = Color(android.graphics.Color.parseColor(it.colour))
+                        )
                     }
-                })
-
-
+                }
             }
         }
     }
@@ -170,5 +222,46 @@ fun BackgroundCheckboxNoteEntryComposePreview() {
                     },
                 ), emptyList(), emptyList(), emptyList(), emptyList())
             )
+    }
+}
+
+@Preview
+@Composable
+fun CheckboxCheckedNoteEntryComposePreview() {
+    NoteTheme(darkTheme = true) {
+        NoteEntryCompose(note = NoteAndCheckboxes(
+            Note(),
+            listOf(
+                CheckboxEntry().apply {
+                    checked = true
+                },
+                CheckboxEntry().apply {
+                    checked = true
+                },
+                CheckboxEntry().apply {
+                    checked = true
+                },
+                CheckboxEntry().apply {
+                    checked = true
+                },
+            ), emptyList(), emptyList(), emptyList(), emptyList())
+        )
+    }
+}
+
+@Preview
+@Composable
+fun LabelNoteEntryComposePreview() {
+    NoteTheme(darkTheme = true) {
+        NoteEntryCompose(note = NoteAndCheckboxes(
+            Note().apply {
+                title = "# Important"
+                text = "**DONT** forget to be happy :)"
+                colour = "#FF0050"
+            },
+            emptyList(), listOf(Label(title = "c", colour = "#00FF00"), Label(title = "test2", colour = "#FF0000"), Label(title = "test3", colour = "#0000FF")), listOf(
+                ImageEntry()
+            ), emptyList(), emptyList())
+        )
     }
 }
