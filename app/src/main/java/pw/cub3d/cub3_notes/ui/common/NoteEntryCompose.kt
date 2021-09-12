@@ -1,6 +1,5 @@
 package pw.cub3d.cub3_notes.ui.common
 
-import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -8,6 +7,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,10 +19,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColorInt
 import androidx.lifecycle.LiveData
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderState
+import org.burnoutcrew.reorderable.reorderable
 import pw.cub3d.cub3_notes.R
 import pw.cub3d.cub3_notes.core.database.entity.*
+import pw.cub3d.cub3_notes.ui.home.HomeViewModel
 
 @Composable
 fun Chip(
@@ -55,20 +59,57 @@ fun Chip(
 
 @ExperimentalFoundationApi
 @Composable
-fun NoteListCompose(notes: List<NoteAndCheckboxes>) {
-    LazyVerticalGrid(cells = GridCells.Fixed(2), content = {
-        items(notes) {
-            NoteEntryCompose(note = it)
+fun NoteListCompose(
+    notes: List<NoteAndCheckboxes>,
+    noteMoved: (NoteAndCheckboxes, Int) -> Unit,
+    newNoteCallback: ()->Unit = {},
+) {
+
+    Column() {
+        val state = rememberReorderState()
+        LazyColumn(state = state.listState, modifier = Modifier
+            .reorderable(
+                state = state,
+                onMove = { from, to ->
+                    println("Moving from $from to $to")
+                    noteMoved(notes[from], to)
+                },
+                canDragOver = { _ -> true }
+            )
+            .detectReorderAfterLongPress(state)) {
+            items(notes, key = { it.note.id }) {
+                NoteTheme(darkTheme = true) {
+                    NoteEntryCompose(note = it)
+                }
+            }
         }
-    })
+        BottomAppBar() {
+            FloatingActionButton(onClick = { newNoteCallback() }) {
+            }
+        }
+    }
+
+//    LazyVerticalGrid(cells = GridCells.Fixed(2), content = {
+//        items(notes) {
+//            NoteEntryCompose(note = it)
+//        }
+//    })
 }
 
 @ExperimentalFoundationApi
 @Composable
-fun NoteListComposeLive(liveNotes: LiveData<List<NoteAndCheckboxes>>) {
+fun NoteListComposeLive(
+    liveNotes: LiveData<List<NoteAndCheckboxes>>,
+    noteMoved: (NoteAndCheckboxes, Int) -> Unit,
+    newNoteCallback: ()->Unit = {},
+    ) {
     val notes = liveNotes.observeAsState()
     NoteTheme(darkTheme = true) {
-        NoteListCompose(notes.value ?: emptyList())
+        NoteListCompose(
+            notes = notes.value ?: emptyList(),
+            noteMoved = noteMoved,
+            newNoteCallback = newNoteCallback,
+        )
     }
 }
 
@@ -76,13 +117,22 @@ fun NoteListComposeLive(liveNotes: LiveData<List<NoteAndCheckboxes>>) {
 @Preview
 @Composable
 fun NoteListComposePreview() {
+    val (noteList, setNoteList) = remember { mutableStateOf(listOf(
+        NoteAndCheckboxes(Note(id = 0).apply { title = "Hello, world!" }, emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
+        NoteAndCheckboxes(Note(id = 1), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
+        NoteAndCheckboxes(Note(id = 2), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
+        NoteAndCheckboxes(Note(id = 3), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
+    ))}
+
     NoteTheme(darkTheme = true) {
-        NoteListCompose(notes = listOf(
-            NoteAndCheckboxes(Note(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
-            NoteAndCheckboxes(Note(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
-            NoteAndCheckboxes(Note(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
-            NoteAndCheckboxes(Note(), emptyList(), emptyList(), emptyList(), emptyList(), emptyList()),
-        ))
+        NoteListCompose(
+            notes = noteList, noteMoved = { note,pos ->
+                val newNoteList = noteList.toMutableList()
+                newNoteList.remove(note)
+                newNoteList.add(pos, note)
+                setNoteList(newNoteList)
+            }
+        )
     }
 }
 

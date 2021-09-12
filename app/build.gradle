@@ -163,6 +163,9 @@ dependencies {
 
     // Accompanist
     implementation "com.google.accompanist:accompanist-glide:0.11.1"
+
+    // Reorderable list
+    implementation "org.burnoutcrew.composereorderable:reorderable:0.6.2"
 }
 
 kotlin {

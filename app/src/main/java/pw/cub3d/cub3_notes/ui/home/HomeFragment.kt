@@ -246,6 +246,12 @@ class HomeFragment : Fragment() {
         otherEmpty = false
     }.root*/
         ComposeView(requireContext()).apply {
-            setContent { NoteListComposeLive(liveNotes = viewModel.unpinned) }
+            setContent {
+                NoteListComposeLive(
+                    liveNotes = viewModel.unpinned,
+                    noteMoved = {note, pos -> viewModel.upadateNotePosition(note, pos.toLong())},
+                    newNoteCallback = {viewModel.newNoteNavigationController.navigateNewNote(findNavController())}
+                )
+            }
         }
 }
