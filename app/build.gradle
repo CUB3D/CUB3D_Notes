@@ -133,7 +133,7 @@ dependencies {
     implementation "com.sagar:coroutinespermission:$easypermission_version"
 
     // Detect memory leaks
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }
 
 kotlin {
