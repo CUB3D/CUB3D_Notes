@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -292,7 +291,7 @@ class NewNoteFragment : Fragment() {
             // binding.noteColour = it
         })
 
-        binding.createNoteBack.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
+        binding.createNoteBack.setOnClickListener { findNavController().navigate(R.id.nav_home) }
 
         binding.createNotePin.setOnClickListener { viewModel.onPin() }
 
@@ -380,7 +379,7 @@ class NewNoteFragment : Fragment() {
         }
 
         binding.createNoteMoreLabels.setOnClickListener {
-            findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit, Bundle().apply {
+            findNavController().navigate(R.id.action_nav_new_note_to_nav_note_label_edit, Bundle().apply {
                 putLong(NoteLabelEditFragment.KEY_NOTE_ID, viewModel.noteAndCheckboxes!!.value!!.note.id)
             })
         }

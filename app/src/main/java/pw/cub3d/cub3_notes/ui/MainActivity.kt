@@ -107,6 +107,8 @@ class MainActivity : AppCompatActivity() {
         intent.getLongExtra("NOTE_ID", -1).takeIf { it > 0 }?.let {
             viewModel.newNoteNavigationController.editNote(navController, it)
         }
+
+        navController.navigate(R.id.nav_home)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

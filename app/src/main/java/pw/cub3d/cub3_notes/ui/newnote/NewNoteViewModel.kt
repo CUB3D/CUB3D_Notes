@@ -131,7 +131,7 @@ class NewNoteViewModel @Inject constructor(
     }
 
     fun addCheckbox() {
-        GlobalScope.launch { checkboxEntryDao.insert(CheckboxEntry(noteId = noteId!!, position = (checkboxes.value?.maxBy { it.position }?.position?.plus(1) ?: 1))) }
+        GlobalScope.launch { checkboxEntryDao.insert(CheckboxEntry(noteId = noteId!!, position = (checkboxes.value?.maxByOrNull { it.position }?.position?.plus(1) ?: 1))) }
     }
 
     fun onCheckboxChecked(checkboxEntry: CheckboxEntry, checked: Boolean) {
