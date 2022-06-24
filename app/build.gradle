@@ -128,7 +128,7 @@ dependencies {
 //    implementation  "io.noties.markwon:syntax-highlight:$markwon_version"
 
     // Permissions
-    def easypermission_version = "2.0.2"
+    def easypermission_version = "2.0.3"
     implementation "com.sagar:coroutinespermission:$easypermission_version"
 
     // Detect memory leaks
