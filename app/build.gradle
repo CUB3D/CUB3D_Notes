@@ -105,7 +105,7 @@ dependencies {
 
     // Moshi
     implementation "com.squareup.moshi:moshi:1.15.0"
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.15.0"
 
     // Calendar
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
@@ -140,7 +140,7 @@ dependencies {
     implementation "com.sagar:coroutinespermission:$easypermission_version"
 
     // Detect memory leaks
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.13'
 
 
     // Jetpack compose
@@ -155,11 +155,11 @@ dependencies {
     implementation "androidx.compose.material:material-icons-core:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.activity:activity-compose:1.8.2'
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
     // Integration with observables
-    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:1.6.0"
 
     // UI Tests
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"

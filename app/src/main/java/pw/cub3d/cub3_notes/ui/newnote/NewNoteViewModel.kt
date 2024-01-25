@@ -163,7 +163,7 @@ class NewNoteViewModel @Inject constructor(
                 PendingIntent.getBroadcast(context, 0, Intent(context, ReminderBroadcastReciever::class.java).apply {
                     putExtra("NOTE_ID", noteId!!)
                     addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
-                }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT)
+                }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
             )
         }
     }

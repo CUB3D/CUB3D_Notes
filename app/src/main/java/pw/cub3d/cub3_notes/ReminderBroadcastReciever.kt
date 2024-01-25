@@ -30,7 +30,7 @@ class ReminderBroadcastReciever : BroadcastReceiver() {
                     priority = NotificationCompat.PRIORITY_DEFAULT
                     setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java).apply {
                         putExtra("NOTE_ID", id)
-                    }, 0))
+                    }, PendingIntent.FLAG_IMMUTABLE))
                 }.build()
                 (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
                     notify(note.id.toInt(), notification)
