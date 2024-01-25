@@ -24,7 +24,7 @@ class NoteLabelEditViewModel @Inject constructor(
 
     val searchText = MutableLiveData<String>("")
 
-    val filteredLabels = Transformations.map(searchText) {
+    val filteredLabels = searchText.map {
         labelDao.findByTitle("%$it%")
     }
 

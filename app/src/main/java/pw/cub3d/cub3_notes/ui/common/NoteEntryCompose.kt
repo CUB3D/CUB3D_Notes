@@ -38,7 +38,7 @@ fun Chip(
         modifier = Modifier.padding(end = 8.dp, bottom = 0.dp),
         elevation = 8.dp,
         shape = RoundedCornerShape(16.dp),
-        color = colorResource(R.color.mdtp_light_gray),
+        color = colorResource(com.wdullaer.materialdatetimepicker.R.color.mdtp_light_gray),
         border = BorderStroke(1.dp, color),
     ) {
         Row() {
@@ -57,7 +57,6 @@ fun Chip(
     }
 }
 
-@ExperimentalFoundationApi
 @Composable
 fun NoteListCompose(
     notes: List<NoteAndCheckboxes>,

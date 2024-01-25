@@ -14,11 +14,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -74,7 +74,7 @@ class NewNoteFragment : Fragment() {
         binding = FragmentNewNoteBinding.inflate(inflater, container, false)
 
         binding.viewModel = viewModel
-        requireContext().obtainStyledAttributes(intArrayOf(R.attr.colorSurface)).apply {
+        requireContext().obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurface)).apply {
             binding.noteColour = this.getColor(0, Color.WHITE)
         }.recycle()
         binding.lifecycleOwner = this
@@ -112,7 +112,7 @@ class NewNoteFragment : Fragment() {
                 )
                 val videoSource =
                     ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(
-                        File(viewModel.storageManager.getVideoDir(), v.fileName).toUri()
+                        MediaItem.fromUri(File(viewModel.storageManager.getVideoDir(), v.fileName).toUri())
                     )
 
                 binding.createNoteVideo.player = player
@@ -292,7 +292,7 @@ class NewNoteFragment : Fragment() {
             // binding.noteColour = it
         })
 
-        binding.createNoteBack.setOnClickListener { findNavController(this@NewNoteFragment).navigate(R.id.nav_home) }
+        binding.createNoteBack.setOnClickListener { findNavController().navigate(R.id.nav_home) }
 
         binding.createNotePin.setOnClickListener { viewModel.onPin() }
 
@@ -380,7 +380,7 @@ class NewNoteFragment : Fragment() {
         }
 
         binding.createNoteMoreLabels.setOnClickListener {
-            findNavController(this@NewNoteFragment).navigate(R.id.action_nav_new_note_to_nav_note_label_edit, Bundle().apply {
+            findNavController().navigate(R.id.action_nav_new_note_to_nav_note_label_edit, Bundle().apply {
                 putLong(NoteLabelEditFragment.KEY_NOTE_ID, viewModel.noteAndCheckboxes!!.value!!.note.id)
             })
         }
