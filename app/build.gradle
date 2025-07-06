@@ -16,7 +16,7 @@ android {
         applicationId "pw.cub3d.cub3_notes"
         minSdkVersion 22
         targetSdkVersion 36
-        versionCode 6
+        versionCode 7
         versionName "1.0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
