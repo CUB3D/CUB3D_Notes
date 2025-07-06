@@ -9,8 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.eazypermissions.common.model.PermissionResult
-import com.eazypermissions.coroutinespermission.PermissionManager
+//import com.eazypermissions.common.model.PermissionResult
+//import com.eazypermissions.coroutinespermission.PermissionManager
 import java.io.File
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,7 +34,8 @@ class SettingsFragment : Fragment() {
 
         binding.settingExport.setOnClickListener {
             GlobalScope.launch {
-                val permissionRequest = PermissionManager.requestPermissions(
+                Toast.makeText(this@SettingsFragment.requireContext(), "Permissions are broken, pending new lib", Toast.LENGTH_SHORT).show();
+                /*val permissionRequest = PermissionManager.requestPermissions(
                     this@SettingsFragment,
                     1,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -65,7 +66,7 @@ class SettingsFragment : Fragment() {
                     is PermissionResult.PermissionDeniedPermanently -> {
                         requireActivity().runOnUiThread { Toast.makeText(requireContext(), "Storage permission needed", Toast.LENGTH_LONG).show() }
                     }
-                }
+                }*/
             }
         }
 

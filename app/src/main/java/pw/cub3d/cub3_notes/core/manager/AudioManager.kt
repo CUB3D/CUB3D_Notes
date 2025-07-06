@@ -5,8 +5,8 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.eazypermissions.common.model.PermissionResult
-import com.eazypermissions.coroutinespermission.PermissionManager
+//import com.eazypermissions.common.model.PermissionResult
+//import com.eazypermissions.coroutinespermission.PermissionManager
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,7 +22,8 @@ class AudioManager @Inject constructor(
     private var outputFile: File? = null
 
     suspend fun startRecording(frag: Fragment) = withContext(Dispatchers.IO) {
-
+        Toast.makeText(frag.requireContext(), "Permissions are broken, pending new lib", Toast.LENGTH_SHORT).show();
+        /*
         val permissionResult = PermissionManager.requestPermissions(
             frag,
             2,
@@ -54,6 +55,7 @@ class AudioManager @Inject constructor(
                 frag.requireActivity().runOnUiThread { Toast.makeText(frag.requireContext(), "Mic permission needed", Toast.LENGTH_SHORT).show() }
             }
         }
+         */
     }
 
     fun stopRecording(): File? {

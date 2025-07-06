@@ -5,7 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.pes.androidmaterialcolorpickerdialog.ColorPicker
+import com.github.evilbunny2008.androidmaterialcolorpickerdialog.ColorPicker
 import pw.cub3d.cub3_notes.core.database.entity.Label
 import pw.cub3d.cub3_notes.databinding.LabelEntryBinding
 import pw.cub3d.cub3_notes.ui.home.BaseAdapter

@@ -1,3 +1,7 @@
+plugins {
+    id 'com.google.devtools.ksp'
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -6,14 +10,13 @@ apply plugin: 'org.jetbrains.dokka'
 
 android {
     namespace "pw.cub3d.cub3_notes"
-    compileSdk 34
-    buildToolsVersion "34.0.0"
+    compileSdk 35
     defaultConfig {
         applicationId "pw.cub3d.cub3_notes"
         minSdkVersion 22
-        targetSdkVersion 34
-        versionCode 3
-        versionName "1.0.2"
+        targetSdkVersion 35
+        versionCode 5
+        versionName "1.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // For room migrations
@@ -51,36 +54,36 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.core:core-ktx:1.15.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
     // Selection
     implementation 'androidx.recyclerview:recyclerview-selection:1.1.0'
 
 
     // Paging
-    def paging_version = '3.2.1'
+    def paging_version = '3.3.2'
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // Navigation
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.6'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.6'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.8.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.3'
 
     // Room
     def roomVersion = '2.6.1'
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
+    ksp "androidx.room:room-compiler:$roomVersion"
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
 
     // Lifecycle
-    def lifecycle_version = '2.7.0'
+    def lifecycle_version = '2.8.7'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -89,10 +92,10 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.2.0"
 
     // Workmanager:
-    def work_version = '2.9.0'
+    def work_version = '2.10.0'
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.3.0'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.4.7'
 
     //Dagger
     def daggerVersion = '2.47'
@@ -101,23 +104,23 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     // Sentry
-    implementation 'io.sentry:sentry-android:7.2.0'
+    implementation 'io.sentry:sentry-android:7.16.0'
 
     // Moshi
-    implementation "com.squareup.moshi:moshi:1.15.0"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.15.0"
+    implementation "com.squareup.moshi:moshi:1.15.1"
+    ksp "com.squareup.moshi:moshi-kotlin-codegen:1.15.1"
 
     // Calendar
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 
     // JSoup for parsing opengraph for link info
-    implementation 'org.jsoup:jsoup:1.17.2'
+    implementation 'org.jsoup:jsoup:1.18.1'
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.16.0'
-    kapt 'com.github.bumptech.glide:compiler:4.16.0'
+    ksp 'com.github.bumptech.glide:compiler:4.16.0'
 
-    implementation 'com.pes.materialcolorpicker:library:1.2.5'
+    implementation 'com.github.evilbunny2008:android-material-color-picker-dialog:1.3.7'
 
     // Video playback
     implementation 'com.google.android.exoplayer:exoplayer:2.19.1'
@@ -136,36 +139,36 @@ dependencies {
 //    implementation  "io.noties.markwon:syntax-highlight:$markwon_version"
 
     // Permissions
-    def easypermission_version = "2.0.2"
-    implementation "com.sagar:coroutinespermission:$easypermission_version"
+//    def easypermission_version = "2.0.2"
+//    implementation "com.sagar:coroutinespermission:$easypermission_version"
 
     // Detect memory leaks
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.13'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 
 
     // Jetpack compose
-    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui:1.7.5"
     // Tooling support (Previews, etc.)
-    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:1.7.5"
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation "androidx.compose.foundation:foundation:$compose_version"
+    implementation "androidx.compose.foundation:foundation:1.7.5"
     // Material Design
-    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.material:material:1.7.5"
     // Material design icons
-    implementation "androidx.compose.material:material-icons-core:$compose_version"
-    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "androidx.compose.material:material-icons-core:1.7.5"
+    implementation "androidx.compose.material:material-icons-extended:1.7.5"
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.8.2'
+    implementation 'androidx.activity:activity-compose:1.9.3'
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7'
     // Integration with observables
-    implementation "androidx.compose.runtime:runtime-livedata:1.6.0"
+    implementation "androidx.compose.runtime:runtime-livedata:1.7.5"
 
     // UI Tests
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+//    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
     // Accompanist
-    implementation "com.google.accompanist:accompanist-glide:0.11.1"
+    implementation "com.google.accompanist:accompanist-glide:0.15.0"
 
     // Reorderable list
     implementation "org.burnoutcrew.composereorderable:reorderable:0.6.2"

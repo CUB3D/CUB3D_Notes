@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.pes.androidmaterialcolorpickerdialog.ColorPicker
+import com.github.evilbunny2008.androidmaterialcolorpickerdialog.ColorPicker
 import pw.cub3d.cub3_notes.core.dagger.injector
 import pw.cub3d.cub3_notes.databinding.FragmentColoursBinding
 
