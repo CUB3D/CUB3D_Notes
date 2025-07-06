@@ -10,25 +10,25 @@ import pw.cub3d.cub3_notes.core.database.RoomDB
 class DatabaseModule {
     @Singleton
     @Provides
-    fun RoomDB.provideNotesDao() = notesDao()
+    fun provideNotesDao(r: RoomDB) = r.notesDao()
     @Singleton
     @Provides
-    fun RoomDB.provideCheckboxEntityDao() = checkboxEntryDao()
+    fun provideCheckboxEntityDao(r: RoomDB) = r.checkboxEntryDao()
     @Singleton
     @Provides
-    fun RoomDB.provideLabelDao() = labelDao()
+    fun provideLabelDao(r: RoomDB) = r.labelDao()
     @Singleton
     @Provides
-    fun RoomDB.provideColoursDao() = colourDao()
+    fun provideColoursDao(r: RoomDB) = r.colourDao()
     @Singleton
     @Provides
-    fun RoomDB.provideImageDao() = imageDao()
+    fun provideImageDao(r: RoomDB) = r.imageDao()
     @Singleton
     @Provides
-    fun RoomDB.provideAudioDao() = audioDao()
+    fun provideAudioDao(r: RoomDB) = r.audioDao()
     @Singleton
     @Provides
-    fun RoomDB.provideVideoDao() = videoDao()
+    fun provideVideoDao(r: RoomDB) = r.videoDao()
 
     @Singleton
     @Provides

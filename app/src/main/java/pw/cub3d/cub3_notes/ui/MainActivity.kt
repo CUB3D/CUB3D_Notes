@@ -13,6 +13,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.res.ResourcesCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
@@ -64,17 +65,17 @@ class MainActivity : AppCompatActivity() {
         // Create notification channels
         (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                createNotificationChannel(NotificationChannel("default", "Defualt", NotificationManager.IMPORTANCE_LOW))
+                createNotificationChannel(NotificationChannel("default", "Default", NotificationManager.IMPORTANCE_LOW))
             }
         }
 
-        viewModel.settingsManager.theme.observe(this, androidx.lifecycle.Observer {
+        viewModel.settingsManager.theme.observe(this) {
             AppCompatDelegate.setDefaultNightMode(it.nightMode)
 
             obtainStyledAttributes(intArrayOf(R.attr.status_color)).apply {
                 window.statusBarColor = this.getColor(0, Color.RED)
             }.recycle()
-        })
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
@@ -118,11 +119,11 @@ class MainActivity : AppCompatActivity() {
         if (item.itemId == R.id.main_changeLayout) {
             if (viewModel.settingsManager.noteLayout.value!! == Layouts.GRID) {
                 viewModel.settingsManager.noteLayout.postValue(Layouts.LIST)
-                item.icon = resources.getDrawable(R.drawable.ic_rows, theme)
+                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_rows, theme)
             }
             if (viewModel.settingsManager.noteLayout.value!! == Layouts.LIST) {
                 viewModel.settingsManager.noteLayout.postValue(Layouts.GRID)
-                item.icon = resources.getDrawable(R.drawable.ic_grid, theme)
+                item.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_grid, theme)
             }
             return true
         }
@@ -134,6 +135,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
