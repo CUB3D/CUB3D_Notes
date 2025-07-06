@@ -2,8 +2,9 @@
 
 buildscript {
     // keep syncd https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-    ext.kotlin_version = '1.9.24'
-    ext.compose_version = '1.5.14'
+    ext.kotlin_version = '1.9.25'
+    ext.compose_version = '1.5.15'
+    ext.ksp_version = "1.9.25-1.0.20"
 
     repositories {
         mavenCentral()
@@ -24,7 +25,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.google.devtools.ksp' version '1.9.0-1.0.13' apply false
+    id 'com.google.devtools.ksp' version "$ksp_version" apply false
 }
 
 allprojects {

@@ -14,9 +14,9 @@ android {
     defaultConfig {
         applicationId "pw.cub3d.cub3_notes"
         minSdkVersion 22
-        targetSdkVersion 35
-        versionCode 5
-        versionName "1.0.4"
+        targetSdkVersion 36
+        versionCode 6
+        versionName "1.0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // For room migrations
@@ -54,28 +54,29 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.core:core-ktx:1.16.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
     // Selection
-    implementation 'androidx.recyclerview:recyclerview-selection:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview-selection:1.2.0'
 
 
     // Paging
-    def paging_version = '3.3.2'
+    def paging_version = '3.3.6'
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // Navigation
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.3'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.3'
+    def nav = '2.9.1'
+    implementation "androidx.navigation:navigation-ui-ktx:$nav'"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav"
 
-    // Room
+    // Room TODO: update kotlin first!!!
     def roomVersion = '2.6.1'
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
@@ -83,8 +84,7 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
 
     // Lifecycle
-    def lifecycle_version = '2.8.7'
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    def lifecycle_version = '2.9.1'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
@@ -92,7 +92,7 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.2.0"
 
     // Workmanager:
-    def work_version = '2.10.0'
+    def work_version = '2.10.2'
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.4.7'
@@ -104,11 +104,11 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     // Sentry
-    implementation 'io.sentry:sentry-android:7.16.0'
+    implementation 'io.sentry:sentry-android:8.16.0'
 
     // Moshi
-    implementation "com.squareup.moshi:moshi:1.15.1"
-    ksp "com.squareup.moshi:moshi-kotlin-codegen:1.15.1"
+    implementation "com.squareup.moshi:moshi:1.15.2"
+    ksp "com.squareup.moshi:moshi-kotlin-codegen:1.15.2"
 
     // Calendar
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
@@ -147,22 +147,22 @@ dependencies {
 
 
     // Jetpack compose
-    implementation "androidx.compose.ui:ui:1.7.5"
+    implementation "androidx.compose.ui:ui:1.8.3"
     // Tooling support (Previews, etc.)
-    implementation "androidx.compose.ui:ui-tooling:1.7.5"
+    implementation "androidx.compose.ui:ui-tooling:1.8.3"
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation "androidx.compose.foundation:foundation:1.7.5"
+    implementation "androidx.compose.foundation:foundation:1.8.3"
     // Material Design
-    implementation "androidx.compose.material:material:1.7.5"
+    implementation "androidx.compose.material:material:1.8.3"
     // Material design icons
-    implementation "androidx.compose.material:material-icons-core:1.7.5"
-    implementation "androidx.compose.material:material-icons-extended:1.7.5"
+    implementation "androidx.compose.material:material-icons-core:1.7.8"
+    implementation "androidx.compose.material:material-icons-extended:1.7.8"
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.9.3'
+    implementation 'androidx.activity:activity-compose:1.10.1'
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1'
     // Integration with observables
-    implementation "androidx.compose.runtime:runtime-livedata:1.7.5"
+    implementation "androidx.compose.runtime:runtime-livedata:1.8.3"
 
     // UI Tests
 //    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"

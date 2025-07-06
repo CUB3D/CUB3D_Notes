@@ -7,6 +7,7 @@ import com.squareup.moshi.JsonClass
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import androidx.core.graphics.toColorInt
 
 @Entity(tableName = "notes")
 @JsonClass(generateAdapter = true)
@@ -50,13 +51,13 @@ data class Note(
         }
     }
 
-    fun getColourId() = colour?.let { Color.parseColor(it) } ?: Color.TRANSPARENT
+    fun getColourId() = colour?.toColorInt() ?: Color.TRANSPARENT
 
     fun updateModificationTime() {
         modificationTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
     }
 
-    fun getReminderTimeZoned() = timeReminder?.let { ZonedDateTime.parse(timeReminder) }
+    private fun getReminderTimeZoned() = timeReminder?.let { ZonedDateTime.parse(timeReminder) }
 
     fun formattedReminderTime() = getReminderTimeZoned()?.format(DateTimeFormatter.ofPattern("dd MMM YYYY, HH:mm"))
 
