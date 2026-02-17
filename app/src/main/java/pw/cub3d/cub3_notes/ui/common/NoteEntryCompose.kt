@@ -71,7 +71,7 @@ fun NoteListCompose(
                 state = state,
                 onMove = { from, to ->
                     println("Moving from $from to $to")
-                    noteMoved(notes[from], to)
+                    noteMoved(notes[from.index], to.index)
                 },
                 canDragOver = { _ -> true }
             )
