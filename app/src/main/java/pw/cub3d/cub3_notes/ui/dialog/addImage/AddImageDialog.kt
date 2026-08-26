@@ -52,7 +52,7 @@ class AddImageDialog(
 
         val uri = FileProvider.getUriForFile(
             context,
-            BuildConfig.APPLICATION_ID.toString() + ".provider",
+            BuildConfig.APPLICATION_ID + ".provider",
             file
         )
 
