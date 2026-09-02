@@ -96,8 +96,8 @@ dependencies {
     implementation 'io.sentry:sentry-android:3.2.1'
 
     // Moshi
-    implementation("com.squareup.moshi:moshi:1.13.0")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.13.0")
+    implementation("com.squareup.moshi:moshi:1.15.2")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 
     // Calendar
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
